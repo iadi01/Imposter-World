@@ -4,6 +4,7 @@
   "sideEffects": false,
   "type": "module",
   "scripts": {
+    "start": "tsx server/index.ts",
     "dev": "vite dev",
     "server": "tsx server/index.ts",
     "build": "vite build",
