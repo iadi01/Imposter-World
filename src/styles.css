@@ -1,0 +1,111 @@
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --font-display: "Caveat Brush", cursive;
+  --font-hand: "Kalam", cursive;
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-highlight: var(--highlight);
+  --color-margin: var(--margin);
+  --color-line: var(--line);
+}
+
+:root {
+  --radius: 0.5rem;
+  --background: oklch(0.97 0.025 90);
+  --foreground: oklch(0.25 0.05 260);
+  --card: oklch(0.99 0.012 95);
+  --card-foreground: oklch(0.25 0.05 260);
+  --popover: oklch(0.99 0.012 95);
+  --popover-foreground: oklch(0.25 0.05 260);
+  --primary: oklch(0.42 0.14 260);
+  --primary-foreground: oklch(0.98 0.01 95);
+  --secondary: oklch(0.92 0.04 90);
+  --secondary-foreground: oklch(0.25 0.05 260);
+  --muted: oklch(0.93 0.03 90);
+  --muted-foreground: oklch(0.48 0.04 260);
+  --accent: oklch(0.6 0.2 25);
+  --accent-foreground: oklch(0.98 0.01 95);
+  --destructive: oklch(0.58 0.22 27);
+  --destructive-foreground: oklch(0.98 0.01 95);
+  --border: oklch(0.3 0.05 260);
+  --input: oklch(0.3 0.05 260);
+  --ring: oklch(0.6 0.2 25);
+  --highlight: oklch(0.92 0.16 100);
+  --margin: oklch(0.68 0.18 20);
+  --line: oklch(0.8 0.06 240 / 0.45);
+}
+
+@layer base {
+  * { border-color: var(--color-border); }
+  body {
+    background-color: var(--color-background);
+    background-image:
+      radial-gradient(ellipse at 50% 0%, rgba(255, 255, 255, 0.65) 0%, transparent 60%),
+      linear-gradient(rgba(45, 55, 72, 0.045) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(45, 55, 72, 0.045) 1px, transparent 1px);
+    background-size: 100% 100%, 20px 20px, 20px 20px;
+    background-position: top center, 0 0, 0 0;
+    color: var(--color-foreground);
+    font-family: var(--font-hand);
+    min-height: 100vh;
+  }
+  h1, h2, h3 { font-family: var(--font-display); }
+}
+
+@utility notebook {
+  background-color: var(--card);
+  background-image:
+    linear-gradient(90deg, transparent 2.9rem, var(--margin) 2.9rem, var(--margin) 3rem, transparent 3rem),
+    repeating-linear-gradient(transparent 0 1.95rem, var(--line) 1.95rem 2rem);
+  box-shadow: 4px 6px 0 var(--foreground);
+  border: 2px solid var(--foreground);
+}
+
+@utility sketch {
+  border: 2px solid var(--foreground);
+  border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+  box-shadow: 3px 4px 0 var(--foreground);
+}
+
+@utility marker {
+  background: linear-gradient(transparent 45%, var(--highlight) 45% 90%, transparent 90%);
+}
+
+@utility tape {
+  background: oklch(0.9 0.08 90 / 0.75);
+}
+
+@media (max-width: 640px) {
+  .notebook {
+    background-image:
+      linear-gradient(90deg, transparent 1.15rem, var(--margin) 1.15rem, var(--margin) 1.25rem, transparent 1.25rem),
+      repeating-linear-gradient(transparent 0 1.95rem, var(--line) 1.95rem 2rem);
+    box-shadow: 3px 4px 0 var(--foreground);
+  }
+}

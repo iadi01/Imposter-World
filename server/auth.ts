@@ -1,0 +1,314 @@
+import { Router, Request, Response } from "express";
+import jwt from "jsonwebtoken";
+import { User, IUser } from "./models/User";
+import { isUserAdmin, authLimiter, isValidObjectId, sanitizeText } from "./security";
+
+const router = Router();
+router.use(authLimiter);
+
+const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID || "";
+const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET || "";
+const GOOGLE_REDIRECT_URI =
+  process.env.GOOGLE_REDIRECT_URI || "http://localhost:8080/api/auth/google/callback";
+const JWT_SECRET = process.env.JWT_SECRET || "imposter-world-secret-jwt-key-2026";
+
+export function generateToken(user: {
+  _id: string;
+  email: string;
+  displayName: string;
+  avatarUrl?: string;
+  isGuest?: boolean;
+}): string {
+  return jwt.sign(
+    {
+      userId: user._id,
+      email: user.email,
+      displayName: user.displayName,
+      avatarUrl: user.avatarUrl || "",
+      isGuest: Boolean(user.isGuest),
+    },
+    JWT_SECRET,
+    { expiresIn: "7d" }
+  );
+}
+
+// 1. Get Google OAuth URL
+router.get("/google/url", (req: Request, res: Response) => {
+  const rootUrl = "https://accounts.google.com/o/oauth2/v2/auth";
+  const options = {
+    redirect_uri: GOOGLE_REDIRECT_URI,
+    client_id: GOOGLE_CLIENT_ID,
+    access_type: "offline",
+    response_type: "code",
+    prompt: "consent",
+    scope: [
+      "https://www.googleapis.com/auth/userinfo.profile",
+      "https://www.googleapis.com/auth/userinfo.email",
+    ].join(" "),
+  };
+
+  const qs = new URLSearchParams(options).toString();
+  res.json({ url: `${rootUrl}?${qs}` });
+});
+
+// Shared Google Auth Code Exchanger
+async function exchangeGoogleAuthCode(code: string, redirectUriOverride?: string) {
+  const tokenUrl = "https://oauth2.googleapis.com/token";
+  const redirectUri = redirectUriOverride || GOOGLE_REDIRECT_URI;
+  const values = {
+    code,
+    client_id: GOOGLE_CLIENT_ID,
+    client_secret: GOOGLE_CLIENT_SECRET,
+    redirect_uri: redirectUri,
+    grant_type: "authorization_code",
+  };
+
+  const tokenRes = await fetch(tokenUrl, {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: new URLSearchParams(values).toString(),
+  });
+
+  const tokenData = await tokenRes.json();
+  if (!tokenRes.ok || !tokenData.access_token) {
+    console.error("[Auth] Google token exchange failed:", tokenData);
+    throw new Error(
+      tokenData.error_description || tokenData.error || "Failed to exchange Google token"
+    );
+  }
+
+  const userRes = await fetch("https://www.googleapis.com/oauth2/v3/userinfo", {
+    headers: { Authorization: `Bearer ${tokenData.access_token}` },
+  });
+  const googleUser = await userRes.json();
+
+  if (!googleUser.email) {
+    throw new Error("Could not retrieve verified email from Google");
+  }
+
+  let user = await User.findOne({ email: googleUser.email.toLowerCase() });
+  if (!user) {
+    user = await User.create({
+      googleId: googleUser.sub,
+      email: googleUser.email.toLowerCase(),
+      displayName: googleUser.name || googleUser.given_name || "Detective",
+      avatarUrl: googleUser.picture || "",
+      country: "India",
+      state: "Maharashtra",
+      city: "Mumbai",
+      matchesPlayed: 0,
+      wins: 0,
+      imposterWins: 0,
+      winRate: 0,
+      isGuest: false,
+    });
+  } else {
+    user.displayName = googleUser.name || user.displayName;
+    user.avatarUrl = googleUser.picture || user.avatarUrl;
+    user.isGuest = false;
+    await user.save();
+  }
+
+  const token = generateToken({
+    _id: user._id.toString(),
+    email: user.email,
+    displayName: user.displayName,
+    avatarUrl: user.avatarUrl,
+    isGuest: false,
+  });
+
+  return { user, token };
+}
+
+// 2. Handle Google OAuth Callback (POST - from frontend proxy/client)
+router.post("/google/callback", async (req: Request, res: Response): Promise<any> => {
+  const { code } = req.body;
+  if (!code) {
+    return res.status(400).json({ error: "Authorization code missing" });
+  }
+
+  try {
+    const { user, token } = await exchangeGoogleAuthCode(code);
+
+    res.cookie("session_token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
+
+    return res.json({
+      success: true,
+      token,
+      user: {
+        id: user._id.toString(),
+        displayName: user.displayName,
+        username: user.username,
+        email: user.email,
+        avatarUrl: user.avatarUrl,
+        country: user.country || "India",
+        state: user.state || "Maharashtra",
+        city: user.city || "Mumbai",
+        matchesPlayed: user.matchesPlayed,
+        wins: user.wins,
+        imposterWins: user.imposterWins,
+        winRate: user.winRate,
+        isGuest: false,
+      },
+    });
+  } catch (error: any) {
+    console.error("[Auth] Google Callback Error:", error);
+    return res.status(500).json({ error: error.message || "Google Authentication failed" });
+  }
+});
+
+// 2b. Handle Google OAuth Callback (GET - direct browser redirect fallback)
+router.get("/google/callback", async (req: Request, res: Response): Promise<any> => {
+  const code = typeof req.query.code === "string" ? req.query.code : "";
+  const error = typeof req.query.error === "string" ? req.query.error : "";
+
+  if (error || !code) {
+    return res.redirect(`http://localhost:8080/?login=error&message=${encodeURIComponent(error || "Missing auth code")}`);
+  }
+
+  try {
+    const { token } = await exchangeGoogleAuthCode(code);
+
+    res.cookie("session_token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
+
+    return res.redirect("http://localhost:8080/?login=success");
+  } catch (err: any) {
+    console.error("[Auth] Direct Google GET Callback Error:", err);
+    return res.redirect(`http://localhost:8080/?login=error&message=${encodeURIComponent(err.message || "Auth failed")}`);
+  }
+});
+
+// 3. Guest Login (Instant Play with Unique ID & Anti-Collision)
+router.post("/guest", async (req: Request, res: Response): Promise<any> => {
+  const { name } = req.body;
+  const rawName = (name || "").trim().slice(0, 30);
+  const guestNumber = Math.floor(1000 + Math.random() * 9000);
+
+  try {
+    let finalDisplayName = rawName;
+
+    if (!finalDisplayName || finalDisplayName.toLowerCase() === "detective") {
+      finalDisplayName = `Guest_${guestNumber}`;
+    } else {
+      // Prevent guests from claiming/spoofing a registered user's name or handle
+      const registeredConflict = await User.findOne({
+        isGuest: false,
+        $or: [
+          { displayName: { $regex: new RegExp(`^${finalDisplayName.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}$`, "i") } },
+          { username: finalDisplayName.toLowerCase() },
+        ],
+      });
+
+      if (registeredConflict) {
+        finalDisplayName = `${finalDisplayName} (Guest #${guestNumber})`;
+      }
+    }
+
+    const guestUser = await User.create({
+      email: `guest_${Date.now()}_${guestNumber}@imposterworld.local`,
+      displayName: finalDisplayName,
+      avatarUrl: "",
+      country: "India",
+      state: "Maharashtra",
+      city: "Mumbai",
+      matchesPlayed: 0,
+      wins: 0,
+      imposterWins: 0,
+      winRate: 0,
+      isGuest: true,
+    });
+
+    const token = generateToken({
+      _id: guestUser._id.toString(),
+      email: guestUser.email,
+      displayName: guestUser.displayName,
+      isGuest: true,
+    });
+
+    res.cookie("session_token", token, {
+      httpOnly: true,
+      sameSite: "lax",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
+
+    return res.json({
+      success: true,
+      token,
+      user: {
+        id: guestUser._id.toString(),
+        displayName: guestUser.displayName,
+        username: guestUser.username,
+        email: guestUser.email,
+        avatarUrl: "",
+        country: guestUser.country || "India",
+        state: guestUser.state || "Maharashtra",
+        city: guestUser.city || "Mumbai",
+        matchesPlayed: 0,
+        wins: 0,
+        imposterWins: 0,
+        winRate: 0,
+        isGuest: true,
+      },
+    });
+  } catch (err: any) {
+    return res.status(500).json({ error: "Failed to create guest user" });
+  }
+});
+
+// 4. Get Current User (/me)
+router.get("/me", async (req: Request, res: Response): Promise<any> => {
+  const token = req.cookies?.session_token || req.headers.authorization?.replace("Bearer ", "");
+  if (!token) {
+    return res.status(401).json({ user: null });
+  }
+
+  try {
+    const decoded = jwt.verify(token, JWT_SECRET) as any;
+    if (!decoded || !isValidObjectId(decoded.userId)) {
+      return res.status(401).json({ user: null });
+    }
+    const user = await User.findById(decoded.userId);
+    if (!user) {
+      return res.status(404).json({ user: null });
+    }
+
+    return res.json({
+      user: {
+        id: user._id.toString(),
+        displayName: user.displayName,
+        username: user.username,
+        email: user.email,
+        avatarUrl: user.avatarUrl,
+        country: user.country || "India",
+        state: user.state || "Maharashtra",
+        city: user.city || "Mumbai",
+        matchesPlayed: user.matchesPlayed,
+        wins: user.wins,
+        imposterWins: user.imposterWins,
+        winRate: user.winRate,
+        isGuest: user.isGuest,
+        isAdmin: isUserAdmin(user.email),
+      },
+    });
+  } catch (err) {
+    return res.status(401).json({ user: null });
+  }
+});
+
+// 5. Logout
+router.post("/logout", (req: Request, res: Response) => {
+  res.clearCookie("session_token");
+  res.json({ success: true });
+});
+
+export default router;
