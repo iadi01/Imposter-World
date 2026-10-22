@@ -61,39 +61,37 @@ function consumeLastCapturedError() {
 	lastCapturedError = void 0;
 	return error;
 }
-function renderErrorPage() {
+function renderErrorPage(err) {
 	return `<!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>This page didn't load</title>
+    <title>Application Error — Imposter World</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <style>
-      body { font: 15px/1.5 system-ui, -apple-system, sans-serif; background: #fafafa; color: #111; display: grid; place-items: center; min-height: 100vh; margin: 0; padding: 1.5rem; }
-      .card { max-width: 28rem; width: 100%; text-align: center; padding: 2rem; }
-      h1 { font-size: 1.25rem; margin: 0 0 0.5rem; }
-      p { color: #4b5563; margin: 0 0 1.5rem; }
-      .actions { display: flex; gap: 0.5rem; justify-content: center; flex-wrap: wrap; }
-      a, button { padding: 0.5rem 1rem; border-radius: 0.375rem; font: inherit; cursor: pointer; text-decoration: none; border: 1px solid transparent; }
-      .primary { background: #111; color: #fff; }
-      .secondary { background: #fff; color: #111; border-color: #d1d5db; }
+      body { font: 14px/1.6 system-ui, -apple-system, sans-serif; background: #0f172a; color: #f8fafc; padding: 2rem; }
+      .card { max-width: 48rem; margin: 0 auto; background: #1e293b; border-radius: 0.75rem; border: 1px solid #334155; padding: 2rem; }
+      h1 { font-size: 1.5rem; margin: 0 0 1rem; color: #f87171; }
+      pre { background: #090d16; color: #38bdf8; padding: 1rem; border-radius: 0.5rem; overflow: auto; font-size: 12px; }
+      button { background: #3b82f6; color: white; border: none; padding: 0.5rem 1rem; border-radius: 0.375rem; cursor: pointer; }
     </style>
   </head>
   <body>
     <div class="card">
-      <h1>This page didn't load</h1>
-      <p>Something went wrong on our end. You can try refreshing or head back home.</p>
-      <div class="actions">
-        <button class="primary" onclick="location.reload()">Try again</button>
-        <a class="secondary" href="/">Go home</a>
-      </div>
+      <h1>[Imposter World] Server Rendering Error</h1>
+      <p>Diagnostic details for debugging:</p>
+      <pre>${escapeHtml(err instanceof Error ? err.stack || err.message : typeof err === "object" ? JSON.stringify(err, null, 2) : String(err || "Unknown SSR Error"))}</pre>
+      <button onclick="location.reload()">Reload Page</button>
     </div>
   </body>
 </html>`;
 }
+function escapeHtml(str) {
+	return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
 var serverEntryPromise;
 async function getServerEntry() {
-	if (!serverEntryPromise) serverEntryPromise = import("./server-DY12IDRd.mjs").then((m) => m.default ?? m);
+	if (!serverEntryPromise) serverEntryPromise = import("./server-CO7fEW3Y.mjs").then((m) => m.default ?? m);
 	return serverEntryPromise;
 }
 async function normalizeCatastrophicSsrResponse(response) {
@@ -101,8 +99,9 @@ async function normalizeCatastrophicSsrResponse(response) {
 	if (!(response.headers.get("content-type") ?? "").includes("application/json")) return response;
 	const body = await response.clone().text();
 	if (!isH3SwallowedErrorBody(body)) return response;
-	console.error(consumeLastCapturedError() ?? /* @__PURE__ */ new Error(`h3 swallowed SSR error: ${body}`));
-	return new Response(renderErrorPage(), {
+	const lastErr = consumeLastCapturedError() ?? /* @__PURE__ */ new Error(`h3 swallowed SSR error: ${body}`);
+	console.error(lastErr);
+	return new Response(renderErrorPage(lastErr), {
 		status: 500,
 		headers: { "content-type": "text/html; charset=utf-8" }
 	});

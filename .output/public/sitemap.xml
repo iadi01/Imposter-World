@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  
+  <!-- Homepage -->
+  <url>
+    <loc>https://imposterworld.xyz/</loc>
+    <lastmod>2026-10-22</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://imposterworld.xyz/detective.png</image:loc>
+      <image:title>Imposter World Detective Mascot</image:title>
+      <image:caption>Cute child detective mascot for Imposter World multiplayer party word game</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://imposterworld.xyz/classroom-bg.jpg</image:loc>
+      <image:title>Nostalgic 3D School Classroom Background</image:title>
+      <image:caption>Immersive school classroom background setting for Imposter World game</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://imposterworld.xyz/trophy-gold.png</image:loc>
+      <image:title>Imposter World Gold Trophy</image:title>
+      <image:caption>Champion trophy badge for top classroom detectives</image:caption>
+    </image:image>
+  </url>
+
+  <!-- How to Play Guide -->
+  <url>
+    <loc>https://imposterworld.xyz/how-to-play</loc>
+    <lastmod>2026-10-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://imposterworld.xyz/how-to-step1.jpg</image:loc>
+      <image:title>Step 1: Secret Word Reveal</image:title>
+      <image:caption>Peek secretly at your assigned classroom word</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://imposterworld.xyz/how-to-step2.jpg</image:loc>
+      <image:title>Step 2: Give Clues (Draw, Write, Speak)</image:title>
+      <image:caption>Give clever clues without making the imposter obvious</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://imposterworld.xyz/how-to-step3.jpg</image:loc>
+      <image:title>Step 3: Classroom Debate and Interrogation</image:title>
+      <image:caption>Discuss suspicious hints and cross-examine bluffers</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://imposterworld.xyz/how-to-step4.jpg</image:loc>
+      <image:title>Step 4: Voting and Imposter Reveal</image:title>
+      <image:caption>Vote out the imposter and celebrate detective victory</image:caption>
+    </image:image>
+  </url>
+
+  <!-- SEO Landing Pages -->
+  <url>
+    <loc>https://imposterworld.xyz/imposter-game-online</loc>
+    <lastmod>2026-10-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://imposterworld.xyz/detective-waving.png</image:loc>
+      <image:title>Play Imposter Game Online Free</image:title>
+    </image:image>
+  </url>
+
+  <url>
+    <loc>https://imposterworld.xyz/imposter-game-with-friends</loc>
+    <lastmod>2026-10-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://imposterworld.xyz/detective-drawing.png</image:loc>
+      <image:title>Play Imposter Game With Friends Online</image:title>
+    </image:image>
+  </url>
+
+  <url>
+    <loc>https://imposterworld.xyz/imposter-word-list</loc>
+    <lastmod>2026-10-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://imposterworld.xyz/clue-magnifier.png</image:loc>
+      <image:title>Imposter Word List and Pairs</image:title>
+    </image:image>
+  </url>
+
+  <url>
+    <loc>https://imposterworld.xyz/imposter-game-questions</loc>
+    <lastmod>2026-10-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://imposterworld.xyz/stamp-confidential.png</image:loc>
+      <image:title>Imposter Game Questions, Hints and Tips</image:title>
+    </image:image>
+  </url>
+
+  <url>
+    <loc>https://imposterworld.xyz/faq</loc>
+    <lastmod>2026-10-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Community & Trust Pages -->
+  <url>
+    <loc>https://imposterworld.xyz/notice-board</loc>
+    <lastmod>2026-10-22</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://imposterworld.xyz/support</loc>
+    <lastmod>2026-10-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://imposterworld.xyz/privacy</loc>
+    <lastmod>2026-10-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+
+  <url>
+    <loc>https://imposterworld.xyz/terms</loc>
+    <lastmod>2026-10-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+
+</urlset>

@@ -1,0 +1,971 @@
+import { b as Link } from "../_libs/@tanstack/react-router+[...].mjs";
+import { t as require_jsx_dev_runtime } from "../_libs/react.mjs";
+import { nt as ArrowLeft } from "../_libs/lucide-react.mjs";
+//#region node_modules/.nitro/vite/services/ssr/assets/terms-DGJXOJy4.js
+var import_jsx_dev_runtime = require_jsx_dev_runtime();
+var _jsxFileName = "/Users/aadi/Downloads/f8225c15-5378-482e-bfe4-be001f84d384/src/routes/terms.tsx?tsr-split=component";
+function TermsPage() {
+	return /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("main", {
+		className: "min-h-screen px-3 py-6 md:px-8 md:py-10",
+		children: /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", {
+			className: "mx-auto max-w-4xl space-y-6",
+			children: [/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("nav", {
+				className: "flex items-center gap-2 text-sm font-hand text-muted-foreground",
+				children: [
+					/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(Link, {
+						to: "/",
+						className: "text-primary hover:underline flex items-center gap-1 font-bold",
+						children: [/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(ArrowLeft, { className: "h-4 w-4" }, void 0, false, {
+							fileName: _jsxFileName,
+							lineNumber: 9,
+							columnNumber: 13
+						}, this), " Home"]
+					}, void 0, true, {
+						fileName: _jsxFileName,
+						lineNumber: 8,
+						columnNumber: 11
+					}, this),
+					/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("span", { children: "/" }, void 0, false, {
+						fileName: _jsxFileName,
+						lineNumber: 11,
+						columnNumber: 11
+					}, this),
+					/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("span", {
+						className: "text-foreground font-bold",
+						children: "Terms of Use"
+					}, void 0, false, {
+						fileName: _jsxFileName,
+						lineNumber: 12,
+						columnNumber: 11
+					}, this)
+				]
+			}, void 0, true, {
+				fileName: _jsxFileName,
+				lineNumber: 7,
+				columnNumber: 9
+			}, this), /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("article", {
+				className: "notebook relative p-6 sm:p-10 shadow-lg space-y-6 font-hand text-foreground leading-relaxed",
+				children: [
+					/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", { className: "tape absolute -top-3 left-1/2 h-6 w-36 -translate-x-1/2 rotate-[-1deg]" }, void 0, false, {
+						fileName: _jsxFileName,
+						lineNumber: 17,
+						columnNumber: 11
+					}, this),
+					/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("header", {
+						className: "border-b-2 border-foreground/20 pb-4 space-y-2",
+						children: [
+							/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("span", {
+								className: "inline-block bg-highlight px-2.5 py-0.5 rounded text-xs font-bold border border-foreground/30",
+								children: "Notice"
+							}, void 0, false, {
+								fileName: _jsxFileName,
+								lineNumber: 20,
+								columnNumber: 13
+							}, this),
+							/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("h1", {
+								className: "text-4xl sm:text-5xl font-display text-foreground font-bold",
+								children: "Terms of Use"
+							}, void 0, false, {
+								fileName: _jsxFileName,
+								lineNumber: 23,
+								columnNumber: 13
+							}, this),
+							/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("p", {
+								className: "text-lg text-primary font-bold",
+								children: "The contract for using Imposter World."
+							}, void 0, false, {
+								fileName: _jsxFileName,
+								lineNumber: 26,
+								columnNumber: 13
+							}, this),
+							/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("p", {
+								className: "text-xs text-muted-foreground",
+								children: "Effective 24 August 2026 · Last updated 21 October 2026"
+							}, void 0, false, {
+								fileName: _jsxFileName,
+								lineNumber: 29,
+								columnNumber: 13
+							}, this),
+							/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("p", {
+								className: "text-sm pt-2",
+								children: "These Terms of Use (“Terms”) form a legally binding agreement between you and the publisher of the website and real-time multiplayer application known as Imposter World (“Service”)."
+							}, void 0, false, {
+								fileName: _jsxFileName,
+								lineNumber: 32,
+								columnNumber: 13
+							}, this)
+						]
+					}, void 0, true, {
+						fileName: _jsxFileName,
+						lineNumber: 19,
+						columnNumber: 11
+					}, this),
+					/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", {
+						className: "sketch bg-white/70 p-4 space-y-2 text-xs sm:text-sm",
+						children: [/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", {
+							className: "font-bold font-display text-base text-primary",
+							children: "Sections Overview:"
+						}, void 0, false, {
+							fileName: _jsxFileName,
+							lineNumber: 39,
+							columnNumber: 13
+						}, this), /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", {
+							className: "grid grid-cols-1 sm:grid-cols-2 gap-1.5 text-primary",
+							children: [
+								/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("a", {
+									href: "#s1",
+									className: "hover:underline",
+									children: "1. Parties and the Service"
+								}, void 0, false, {
+									fileName: _jsxFileName,
+									lineNumber: 41,
+									columnNumber: 15
+								}, this),
+								/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("a", {
+									href: "#s2",
+									className: "hover:underline",
+									children: "2. Definitions"
+								}, void 0, false, {
+									fileName: _jsxFileName,
+									lineNumber: 42,
+									columnNumber: 15
+								}, this),
+								/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("a", {
+									href: "#s3",
+									className: "hover:underline",
+									children: "3. Acceptance and changes"
+								}, void 0, false, {
+									fileName: _jsxFileName,
+									lineNumber: 43,
+									columnNumber: 15
+								}, this),
+								/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("a", {
+									href: "#s4",
+									className: "hover:underline",
+									children: "4. Eligibility"
+								}, void 0, false, {
+									fileName: _jsxFileName,
+									lineNumber: 44,
+									columnNumber: 15
+								}, this),
+								/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("a", {
+									href: "#s5",
+									className: "hover:underline",
+									children: "5. Licence to use the Service"
+								}, void 0, false, {
+									fileName: _jsxFileName,
+									lineNumber: 45,
+									columnNumber: 15
+								}, this),
+								/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("a", {
+									href: "#s6",
+									className: "hover:underline",
+									children: "6. Accounts and authentication"
+								}, void 0, false, {
+									fileName: _jsxFileName,
+									lineNumber: 46,
+									columnNumber: 15
+								}, this),
+								/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("a", {
+									href: "#s7",
+									className: "hover:underline",
+									children: "7. Virtual items and progression"
+								}, void 0, false, {
+									fileName: _jsxFileName,
+									lineNumber: 47,
+									columnNumber: 15
+								}, this),
+								/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("a", {
+									href: "#s8",
+									className: "hover:underline",
+									children: "8. User Content"
+								}, void 0, false, {
+									fileName: _jsxFileName,
+									lineNumber: 48,
+									columnNumber: 15
+								}, this),
+								/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("a", {
+									href: "#s9",
+									className: "hover:underline",
+									children: "9. Multiplayer rooms"
+								}, void 0, false, {
+									fileName: _jsxFileName,
+									lineNumber: 49,
+									columnNumber: 15
+								}, this),
+								/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("a", {
+									href: "#s10",
+									className: "hover:underline",
+									children: "10. Acceptable use (IT Rules 2021)"
+								}, void 0, false, {
+									fileName: _jsxFileName,
+									lineNumber: 50,
+									columnNumber: 15
+								}, this),
+								/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("a", {
+									href: "#s11",
+									className: "hover:underline",
+									children: "11. Fair play & Anti-cheat"
+								}, void 0, false, {
+									fileName: _jsxFileName,
+									lineNumber: 51,
+									columnNumber: 15
+								}, this),
+								/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("a", {
+									href: "#s12",
+									className: "hover:underline",
+									children: "12. Advertising"
+								}, void 0, false, {
+									fileName: _jsxFileName,
+									lineNumber: 52,
+									columnNumber: 15
+								}, this),
+								/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("a", {
+									href: "#s13",
+									className: "hover:underline",
+									children: "13. Third-party services"
+								}, void 0, false, {
+									fileName: _jsxFileName,
+									lineNumber: 53,
+									columnNumber: 15
+								}, this),
+								/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("a", {
+									href: "#s14",
+									className: "hover:underline",
+									children: "14. Intellectual property"
+								}, void 0, false, {
+									fileName: _jsxFileName,
+									lineNumber: 54,
+									columnNumber: 15
+								}, this),
+								/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("a", {
+									href: "#s15",
+									className: "hover:underline",
+									children: "15. Feedback"
+								}, void 0, false, {
+									fileName: _jsxFileName,
+									lineNumber: 55,
+									columnNumber: 15
+								}, this),
+								/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("a", {
+									href: "#s16",
+									className: "hover:underline",
+									children: "16. Availability and modifications"
+								}, void 0, false, {
+									fileName: _jsxFileName,
+									lineNumber: 56,
+									columnNumber: 15
+								}, this),
+								/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("a", {
+									href: "#s17",
+									className: "hover:underline",
+									children: "17. Suspension and termination"
+								}, void 0, false, {
+									fileName: _jsxFileName,
+									lineNumber: 57,
+									columnNumber: 15
+								}, this),
+								/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("a", {
+									href: "#s18",
+									className: "hover:underline",
+									children: "18. Disclaimers"
+								}, void 0, false, {
+									fileName: _jsxFileName,
+									lineNumber: 58,
+									columnNumber: 15
+								}, this),
+								/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("a", {
+									href: "#s19",
+									className: "hover:underline",
+									children: "19. Limitation of liability"
+								}, void 0, false, {
+									fileName: _jsxFileName,
+									lineNumber: 59,
+									columnNumber: 15
+								}, this),
+								/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("a", {
+									href: "#s20",
+									className: "hover:underline",
+									children: "20. Indemnity"
+								}, void 0, false, {
+									fileName: _jsxFileName,
+									lineNumber: 60,
+									columnNumber: 15
+								}, this),
+								/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("a", {
+									href: "#s21",
+									className: "hover:underline",
+									children: "21. Privacy & DPDP Act"
+								}, void 0, false, {
+									fileName: _jsxFileName,
+									lineNumber: 61,
+									columnNumber: 15
+								}, this),
+								/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("a", {
+									href: "#s22",
+									className: "hover:underline",
+									children: "22. Governing law and disputes"
+								}, void 0, false, {
+									fileName: _jsxFileName,
+									lineNumber: 62,
+									columnNumber: 15
+								}, this),
+								/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("a", {
+									href: "#s23",
+									className: "hover:underline",
+									children: "23. General & Sound credits"
+								}, void 0, false, {
+									fileName: _jsxFileName,
+									lineNumber: 63,
+									columnNumber: 15
+								}, this),
+								/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("a", {
+									href: "#s24",
+									className: "hover:underline",
+									children: "24. Contact and grievances"
+								}, void 0, false, {
+									fileName: _jsxFileName,
+									lineNumber: 64,
+									columnNumber: 15
+								}, this)
+							]
+						}, void 0, true, {
+							fileName: _jsxFileName,
+							lineNumber: 40,
+							columnNumber: 13
+						}, this)]
+					}, void 0, true, {
+						fileName: _jsxFileName,
+						lineNumber: 38,
+						columnNumber: 11
+					}, this),
+					/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("section", {
+						id: "s1",
+						className: "space-y-2 pt-2",
+						children: [
+							/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("h2", {
+								className: "text-2xl font-display font-bold text-foreground",
+								children: "1. Parties and the Service"
+							}, void 0, false, {
+								fileName: _jsxFileName,
+								lineNumber: 70,
+								columnNumber: 13
+							}, this),
+							/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("p", {
+								className: "text-sm",
+								children: "1.1 These Terms govern access to and use of the real-time social deduction party game known as Imposter World, including related pages, game rooms, API endpoints, and invite links issued by us."
+							}, void 0, false, {
+								fileName: _jsxFileName,
+								lineNumber: 71,
+								columnNumber: 13
+							}, this),
+							/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("p", {
+								className: "text-sm",
+								children: "1.2 In these Terms, “we”, “us” and “our” mean the publisher and operator of Imposter World. “You” and “your” mean the individual who accesses or uses the Service."
+							}, void 0, false, {
+								fileName: _jsxFileName,
+								lineNumber: 74,
+								columnNumber: 13
+							}, this),
+							/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("p", {
+								className: "text-sm",
+								children: "1.3 Imposter World is an online multiplayer social deduction game where players receive secret words and try to unmask the imposter through text, drawings, and voice hints. The service is offered for personal recreational entertainment."
+							}, void 0, false, {
+								fileName: _jsxFileName,
+								lineNumber: 77,
+								columnNumber: 13
+							}, this),
+							/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("p", {
+								className: "text-sm",
+								children: "1.4 The Service is currently offered free of charge. If optional premium cosmetic features are introduced in the future, clear notice will be provided before any charges apply."
+							}, void 0, false, {
+								fileName: _jsxFileName,
+								lineNumber: 80,
+								columnNumber: 13
+							}, this)
+						]
+					}, void 0, true, {
+						fileName: _jsxFileName,
+						lineNumber: 69,
+						columnNumber: 11
+					}, this),
+					/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("section", {
+						id: "s2",
+						className: "space-y-2 pt-2",
+						children: [/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("h2", {
+							className: "text-2xl font-display font-bold text-foreground",
+							children: "2. Definitions"
+						}, void 0, false, {
+							fileName: _jsxFileName,
+							lineNumber: 87,
+							columnNumber: 13
+						}, this), /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("p", {
+							className: "text-sm",
+							children: [
+								/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("strong", { children: "“Display Name”" }, void 0, false, {
+									fileName: _jsxFileName,
+									lineNumber: 89,
+									columnNumber: 15
+								}, this),
+								" means the name you enter for use on public leaderboards, game rooms, and match records.",
+								/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("br", {}, void 0, false, {
+									fileName: _jsxFileName,
+									lineNumber: 89,
+									columnNumber: 134
+								}, this),
+								/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("strong", { children: "“Match Record”" }, void 0, false, {
+									fileName: _jsxFileName,
+									lineNumber: 90,
+									columnNumber: 15
+								}, this),
+								" means a completed multiplayer match written to our database for scoring, leaderboards, and statistics.",
+								/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("br", {}, void 0, false, {
+									fileName: _jsxFileName,
+									lineNumber: 90,
+									columnNumber: 149
+								}, this),
+								/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("strong", { children: "“Player Record”" }, void 0, false, {
+									fileName: _jsxFileName,
+									lineNumber: 91,
+									columnNumber: 15
+								}, this),
+								" means the unique account or guest identifier associated with your device or Google sign-in.",
+								/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("br", {}, void 0, false, {
+									fileName: _jsxFileName,
+									lineNumber: 91,
+									columnNumber: 139
+								}, this),
+								/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("strong", { children: "“Privacy Policy”" }, void 0, false, {
+									fileName: _jsxFileName,
+									lineNumber: 92,
+									columnNumber: 15
+								}, this),
+								" means the notice at ",
+								/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(Link, {
+									to: "/privacy",
+									className: "text-primary underline",
+									children: "/privacy"
+								}, void 0, false, {
+									fileName: _jsxFileName,
+									lineNumber: 92,
+									columnNumber: 69
+								}, this),
+								", which describes personal data handling under the Digital Personal Data Protection Act, 2023.",
+								/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("br", {}, void 0, false, {
+									fileName: _jsxFileName,
+									lineNumber: 92,
+									columnNumber: 233
+								}, this),
+								/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("strong", { children: "“User Content”" }, void 0, false, {
+									fileName: _jsxFileName,
+									lineNumber: 93,
+									columnNumber: 15
+								}, this),
+								" means hints (text, sketches, or voice recordings), chat messages, or display names submitted during a game session.",
+								/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("br", {}, void 0, false, {
+									fileName: _jsxFileName,
+									lineNumber: 93,
+									columnNumber: 162
+								}, this),
+								/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("strong", { children: "“Virtual Items”" }, void 0, false, {
+									fileName: _jsxFileName,
+									lineNumber: 94,
+									columnNumber: 15
+								}, this),
+								" means in-game points, badges, leaderboard ranks, and trophies that exist solely inside the Service."
+							]
+						}, void 0, true, {
+							fileName: _jsxFileName,
+							lineNumber: 88,
+							columnNumber: 13
+						}, this)]
+					}, void 0, true, {
+						fileName: _jsxFileName,
+						lineNumber: 86,
+						columnNumber: 11
+					}, this),
+					/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("section", {
+						id: "s3",
+						className: "space-y-2 pt-2",
+						children: [
+							/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("h2", {
+								className: "text-2xl font-display font-bold text-foreground",
+								children: "3. Acceptance and changes"
+							}, void 0, false, {
+								fileName: _jsxFileName,
+								lineNumber: 100,
+								columnNumber: 13
+							}, this),
+							/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("p", {
+								className: "text-sm",
+								children: "3.1 By accessing the Service, joining a room, playing as guest, or signing in, you agree to these Terms and the Privacy Policy. If you do not agree, you must not use the Service."
+							}, void 0, false, {
+								fileName: _jsxFileName,
+								lineNumber: 101,
+								columnNumber: 13
+							}, this),
+							/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("p", {
+								className: "text-sm",
+								children: "3.2 Continued use after the effective date constitutes acceptance of amended Terms. Changes do not retroactively alter legitimate completed Match Records."
+							}, void 0, false, {
+								fileName: _jsxFileName,
+								lineNumber: 104,
+								columnNumber: 13
+							}, this),
+							/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("p", {
+								className: "text-sm",
+								children: "3.3 Pursuant to Rule 3(1) of the Information Technology (Intermediary Guidelines and Digital Media Ethics Code) Rules, 2021 (“IT Rules, 2021”), users are informed annually that non-compliance with these Terms may result in immediate account suspension or termination."
+							}, void 0, false, {
+								fileName: _jsxFileName,
+								lineNumber: 107,
+								columnNumber: 13
+							}, this)
+						]
+					}, void 0, true, {
+						fileName: _jsxFileName,
+						lineNumber: 99,
+						columnNumber: 11
+					}, this),
+					/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("section", {
+						id: "s4",
+						className: "space-y-2 pt-2",
+						children: [
+							/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("h2", {
+								className: "text-2xl font-display font-bold text-foreground",
+								children: "4. Eligibility"
+							}, void 0, false, {
+								fileName: _jsxFileName,
+								lineNumber: 114,
+								columnNumber: 13
+							}, this),
+							/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("p", {
+								className: "text-sm",
+								children: "4.1 The Service is directed at persons 18 years of age or older, or minors playing under parental or classroom supervisor guidance."
+							}, void 0, false, {
+								fileName: _jsxFileName,
+								lineNumber: 115,
+								columnNumber: 13
+							}, this),
+							/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("p", {
+								className: "text-sm",
+								children: "4.2 You are responsible for ensuring that your access and use of the Service is lawful under the jurisdiction from which you access it."
+							}, void 0, false, {
+								fileName: _jsxFileName,
+								lineNumber: 118,
+								columnNumber: 13
+							}, this)
+						]
+					}, void 0, true, {
+						fileName: _jsxFileName,
+						lineNumber: 113,
+						columnNumber: 11
+					}, this),
+					/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("section", {
+						id: "s5",
+						className: "space-y-2 pt-2",
+						children: [/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("h2", {
+							className: "text-2xl font-display font-bold text-foreground",
+							children: "5. Licence to use the Service"
+						}, void 0, false, {
+							fileName: _jsxFileName,
+							lineNumber: 125,
+							columnNumber: 13
+						}, this), /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("p", {
+							className: "text-sm",
+							children: "We grant you a personal, revocable, non-exclusive, non-transferable licence to play Imposter World for your private, non-commercial enjoyment. You agree not to reverse engineer, scrape, frame, or automate interactions with the game servers."
+						}, void 0, false, {
+							fileName: _jsxFileName,
+							lineNumber: 126,
+							columnNumber: 13
+						}, this)]
+					}, void 0, true, {
+						fileName: _jsxFileName,
+						lineNumber: 124,
+						columnNumber: 11
+					}, this),
+					/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("section", {
+						id: "s6",
+						className: "space-y-2 pt-2",
+						children: [
+							/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("h2", {
+								className: "text-2xl font-display font-bold text-foreground",
+								children: "6. Accounts and authentication"
+							}, void 0, false, {
+								fileName: _jsxFileName,
+								lineNumber: 132,
+								columnNumber: 13
+							}, this),
+							/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("p", {
+								className: "text-sm",
+								children: "6.1 You may play as a Guest without registration, or sign in via Google OAuth to preserve your stats, win records, and leaderboard rankings across devices."
+							}, void 0, false, {
+								fileName: _jsxFileName,
+								lineNumber: 133,
+								columnNumber: 13
+							}, this),
+							/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("p", {
+								className: "text-sm",
+								children: "6.2 We do not store Google passwords. Authentication is handled securely through Google's OAuth2 endpoints."
+							}, void 0, false, {
+								fileName: _jsxFileName,
+								lineNumber: 136,
+								columnNumber: 13
+							}, this)
+						]
+					}, void 0, true, {
+						fileName: _jsxFileName,
+						lineNumber: 131,
+						columnNumber: 11
+					}, this),
+					/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("section", {
+						id: "s7",
+						className: "space-y-2 pt-2",
+						children: [/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("h2", {
+							className: "text-2xl font-display font-bold text-foreground",
+							children: "7. Virtual items and game progression"
+						}, void 0, false, {
+							fileName: _jsxFileName,
+							lineNumber: 143,
+							columnNumber: 13
+						}, this), /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("p", {
+							className: "text-sm",
+							children: "Imposter World is a game of skill and deduction. There is no real-money wagering, gambling, or cash prizes. In-game points and rankings have zero monetary value."
+						}, void 0, false, {
+							fileName: _jsxFileName,
+							lineNumber: 144,
+							columnNumber: 13
+						}, this)]
+					}, void 0, true, {
+						fileName: _jsxFileName,
+						lineNumber: 142,
+						columnNumber: 11
+					}, this),
+					/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("section", {
+						id: "s8",
+						className: "space-y-2 pt-2",
+						children: [/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("h2", {
+							className: "text-2xl font-display font-bold text-foreground",
+							children: "8. User Content & Clues"
+						}, void 0, false, {
+							fileName: _jsxFileName,
+							lineNumber: 150,
+							columnNumber: 13
+						}, this), /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("p", {
+							className: "text-sm",
+							children: "You retain ownership of clues and drawings you submit. You grant us a temporary licence to transmit these items in real-time to other players in your game room. Clues and chat messages must comply with community standards."
+						}, void 0, false, {
+							fileName: _jsxFileName,
+							lineNumber: 151,
+							columnNumber: 13
+						}, this)]
+					}, void 0, true, {
+						fileName: _jsxFileName,
+						lineNumber: 149,
+						columnNumber: 11
+					}, this),
+					/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("section", {
+						id: "s9",
+						className: "space-y-2 pt-2",
+						children: [
+							/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("h2", {
+								className: "text-2xl font-display font-bold text-foreground",
+								children: "9. Multiplayer rooms & Reconnection"
+							}, void 0, false, {
+								fileName: _jsxFileName,
+								lineNumber: 157,
+								columnNumber: 13
+							}, this),
+							/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("p", {
+								className: "text-sm",
+								children: "9.1 Game rooms enforce strict server-side timers and confidential word isolation. A player who disconnects has a grace period to reconnect before their seat is forfeited."
+							}, void 0, false, {
+								fileName: _jsxFileName,
+								lineNumber: 158,
+								columnNumber: 13
+							}, this),
+							/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("p", {
+								className: "text-sm",
+								children: "9.2 A single user cannot join the same room twice simultaneously from multiple tabs or duplicate connections."
+							}, void 0, false, {
+								fileName: _jsxFileName,
+								lineNumber: 161,
+								columnNumber: 13
+							}, this)
+						]
+					}, void 0, true, {
+						fileName: _jsxFileName,
+						lineNumber: 156,
+						columnNumber: 11
+					}, this),
+					/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("section", {
+						id: "s10",
+						className: "space-y-2 pt-2",
+						children: [/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("h2", {
+							className: "text-2xl font-display font-bold text-foreground",
+							children: "10. Acceptable use (Rule 3(1)(b) IT Rules, 2021)"
+						}, void 0, false, {
+							fileName: _jsxFileName,
+							lineNumber: 167,
+							columnNumber: 13
+						}, this), /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("p", {
+							className: "text-sm",
+							children: "Users shall not upload, display, transmit, or share any information that is defamatory, obscene, invasive of another's privacy, harmful to minors, infringes intellectual property, contains software viruses, impersonates another person, or threatens the sovereignty, integrity, or public order of India."
+						}, void 0, false, {
+							fileName: _jsxFileName,
+							lineNumber: 168,
+							columnNumber: 13
+						}, this)]
+					}, void 0, true, {
+						fileName: _jsxFileName,
+						lineNumber: 166,
+						columnNumber: 11
+					}, this),
+					/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("section", {
+						id: "s11",
+						className: "space-y-2 pt-2",
+						children: [/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("h2", {
+							className: "text-2xl font-display font-bold text-foreground",
+							children: "11. Fair play & Anti-cheat"
+						}, void 0, false, {
+							fileName: _jsxFileName,
+							lineNumber: 174,
+							columnNumber: 13
+						}, this), /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("p", {
+							className: "text-sm",
+							children: "Cheating, automated scripts, packet injection, deliberate match collusion, or stream sniping violates fair play. Accounts violating these rules will be removed from rankings."
+						}, void 0, false, {
+							fileName: _jsxFileName,
+							lineNumber: 175,
+							columnNumber: 13
+						}, this)]
+					}, void 0, true, {
+						fileName: _jsxFileName,
+						lineNumber: 173,
+						columnNumber: 11
+					}, this),
+					/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("section", {
+						id: "s21",
+						className: "space-y-2 pt-2",
+						children: [/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("h2", {
+							className: "text-2xl font-display font-bold text-foreground",
+							children: "21. Privacy & DPDP Act, 2023"
+						}, void 0, false, {
+							fileName: _jsxFileName,
+							lineNumber: 182,
+							columnNumber: 13
+						}, this), /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("p", {
+							className: "text-sm",
+							children: [
+								"Our data processing practices, consent mechanisms, and user rights under the Digital Personal Data Protection Act, 2023 are detailed in our ",
+								/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(Link, {
+									to: "/privacy",
+									className: "text-primary underline font-bold",
+									children: "Privacy Policy"
+								}, void 0, false, {
+									fileName: _jsxFileName,
+									lineNumber: 184,
+									columnNumber: 155
+								}, this),
+								"."
+							]
+						}, void 0, true, {
+							fileName: _jsxFileName,
+							lineNumber: 183,
+							columnNumber: 13
+						}, this)]
+					}, void 0, true, {
+						fileName: _jsxFileName,
+						lineNumber: 181,
+						columnNumber: 11
+					}, this),
+					/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("section", {
+						id: "s23",
+						className: "space-y-2 pt-2",
+						children: [/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("h2", {
+							className: "text-2xl font-display font-bold text-foreground",
+							children: "23. General & Sound Credits"
+						}, void 0, false, {
+							fileName: _jsxFileName,
+							lineNumber: 189,
+							columnNumber: 13
+						}, this), /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("p", {
+							className: "text-sm",
+							children: "Sound effects and lo-fi melodies are synthesized client-side via Web Audio API or licensed under Creative Commons CC0 / CC BY."
+						}, void 0, false, {
+							fileName: _jsxFileName,
+							lineNumber: 190,
+							columnNumber: 13
+						}, this)]
+					}, void 0, true, {
+						fileName: _jsxFileName,
+						lineNumber: 188,
+						columnNumber: 11
+					}, this),
+					/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("section", {
+						id: "s24",
+						className: "space-y-2 pt-2 border-t border-foreground/20 pt-4",
+						children: [
+							/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("h2", {
+								className: "text-2xl font-display font-bold text-foreground",
+								children: "24. Contact and Grievances"
+							}, void 0, false, {
+								fileName: _jsxFileName,
+								lineNumber: 196,
+								columnNumber: 13
+							}, this),
+							/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("p", {
+								className: "text-sm",
+								children: "For legal questions, dispute resolution, or grievances under the IT Rules 2021 and DPDP Act 2023, you may contact our Grievance Officer:"
+							}, void 0, false, {
+								fileName: _jsxFileName,
+								lineNumber: 197,
+								columnNumber: 13
+							}, this),
+							/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", {
+								className: "sketch bg-white/80 p-4 text-xs sm:text-sm space-y-1",
+								children: [
+									/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", {
+										className: "font-bold",
+										children: "Grievance Officer — Imposter World"
+									}, void 0, false, {
+										fileName: _jsxFileName,
+										lineNumber: 201,
+										columnNumber: 15
+									}, this),
+									/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", { children: ["Email: ", /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("a", {
+										href: "mailto:hello@imposterworld.xyz",
+										className: "text-primary underline",
+										children: "hello@imposterworld.xyz"
+									}, void 0, false, {
+										fileName: _jsxFileName,
+										lineNumber: 202,
+										columnNumber: 27
+									}, this)] }, void 0, true, {
+										fileName: _jsxFileName,
+										lineNumber: 202,
+										columnNumber: 15
+									}, this),
+									/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", { children: "Response timeline: Acknowledgment within 24 hours, resolution within 15 days." }, void 0, false, {
+										fileName: _jsxFileName,
+										lineNumber: 203,
+										columnNumber: 15
+									}, this)
+								]
+							}, void 0, true, {
+								fileName: _jsxFileName,
+								lineNumber: 200,
+								columnNumber: 13
+							}, this)
+						]
+					}, void 0, true, {
+						fileName: _jsxFileName,
+						lineNumber: 195,
+						columnNumber: 11
+					}, this),
+					/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("footer", {
+						className: "border-t-2 border-foreground/20 pt-6 flex flex-wrap gap-3 text-xs sm:text-sm font-bold text-primary",
+						children: [
+							/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(Link, {
+								to: "/",
+								className: "hover:underline",
+								children: "Play Imposter World"
+							}, void 0, false, {
+								fileName: _jsxFileName,
+								lineNumber: 209,
+								columnNumber: 13
+							}, this),
+							/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("span", { children: "•" }, void 0, false, {
+								fileName: _jsxFileName,
+								lineNumber: 210,
+								columnNumber: 13
+							}, this),
+							/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(Link, {
+								to: "/how-to-play",
+								className: "hover:underline",
+								children: "How To Play"
+							}, void 0, false, {
+								fileName: _jsxFileName,
+								lineNumber: 211,
+								columnNumber: 13
+							}, this),
+							/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("span", { children: "•" }, void 0, false, {
+								fileName: _jsxFileName,
+								lineNumber: 212,
+								columnNumber: 13
+							}, this),
+							/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(Link, {
+								to: "/notice-board",
+								className: "hover:underline",
+								children: "Notice Board"
+							}, void 0, false, {
+								fileName: _jsxFileName,
+								lineNumber: 213,
+								columnNumber: 13
+							}, this),
+							/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("span", { children: "•" }, void 0, false, {
+								fileName: _jsxFileName,
+								lineNumber: 214,
+								columnNumber: 13
+							}, this),
+							/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(Link, {
+								to: "/privacy",
+								className: "hover:underline",
+								children: "Privacy Policy"
+							}, void 0, false, {
+								fileName: _jsxFileName,
+								lineNumber: 215,
+								columnNumber: 13
+							}, this),
+							/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("span", { children: "•" }, void 0, false, {
+								fileName: _jsxFileName,
+								lineNumber: 216,
+								columnNumber: 13
+							}, this),
+							/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(Link, {
+								to: "/support",
+								className: "hover:underline",
+								children: "Support the Dev"
+							}, void 0, false, {
+								fileName: _jsxFileName,
+								lineNumber: 217,
+								columnNumber: 13
+							}, this),
+							/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("span", { children: "•" }, void 0, false, {
+								fileName: _jsxFileName,
+								lineNumber: 218,
+								columnNumber: 13
+							}, this),
+							/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(Link, {
+								to: "/delete-account",
+								className: "hover:underline",
+								children: "Delete Account"
+							}, void 0, false, {
+								fileName: _jsxFileName,
+								lineNumber: 219,
+								columnNumber: 13
+							}, this)
+						]
+					}, void 0, true, {
+						fileName: _jsxFileName,
+						lineNumber: 208,
+						columnNumber: 11
+					}, this)
+				]
+			}, void 0, true, {
+				fileName: _jsxFileName,
+				lineNumber: 16,
+				columnNumber: 9
+			}, this)]
+		}, void 0, true, {
+			fileName: _jsxFileName,
+			lineNumber: 5,
+			columnNumber: 7
+		}, this)
+	}, void 0, false, {
+		fileName: _jsxFileName,
+		lineNumber: 4,
+		columnNumber: 10
+	}, this);
+}
+//#endregion
+export { TermsPage as component };

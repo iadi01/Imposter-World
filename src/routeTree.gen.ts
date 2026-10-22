@@ -12,7 +12,12 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as DeleteAccountRouteImport } from './routes/delete-account'
+import { Route as FaqRouteImport } from './routes/faq'
 import { Route as HowToPlayRouteImport } from './routes/how-to-play'
+import { Route as ImposterGameOnlineRouteImport } from './routes/imposter-game-online'
+import { Route as ImposterGameQuestionsRouteImport } from './routes/imposter-game-questions'
+import { Route as ImposterGameWithFriendsRouteImport } from './routes/imposter-game-with-friends'
+import { Route as ImposterWordListRouteImport } from './routes/imposter-word-list'
 import { Route as NoticeBoardRouteImport } from './routes/notice-board'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as SupportRouteImport } from './routes/support'
@@ -34,9 +39,34 @@ const DeleteAccountRoute = DeleteAccountRouteImport.update({
   path: '/delete-account',
   getParentRoute: () => rootRouteImport,
 } as any)
+const FaqRoute = FaqRouteImport.update({
+  id: '/faq',
+  path: '/faq',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const HowToPlayRoute = HowToPlayRouteImport.update({
   id: '/how-to-play',
   path: '/how-to-play',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ImposterGameOnlineRoute = ImposterGameOnlineRouteImport.update({
+  id: '/imposter-game-online',
+  path: '/imposter-game-online',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ImposterGameQuestionsRoute = ImposterGameQuestionsRouteImport.update({
+  id: '/imposter-game-questions',
+  path: '/imposter-game-questions',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ImposterGameWithFriendsRoute = ImposterGameWithFriendsRouteImport.update({
+  id: '/imposter-game-with-friends',
+  path: '/imposter-game-with-friends',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ImposterWordListRoute = ImposterWordListRouteImport.update({
+  id: '/imposter-word-list',
+  path: '/imposter-word-list',
   getParentRoute: () => rootRouteImport,
 } as any)
 const NoticeBoardRoute = NoticeBoardRouteImport.update({
@@ -69,7 +99,12 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
   '/delete-account': typeof DeleteAccountRoute
+  '/faq': typeof FaqRoute
   '/how-to-play': typeof HowToPlayRoute
+  '/imposter-game-online': typeof ImposterGameOnlineRoute
+  '/imposter-game-questions': typeof ImposterGameQuestionsRoute
+  '/imposter-game-with-friends': typeof ImposterGameWithFriendsRoute
+  '/imposter-word-list': typeof ImposterWordListRoute
   '/notice-board': typeof NoticeBoardRoute
   '/privacy': typeof PrivacyRoute
   '/support': typeof SupportRoute
@@ -80,7 +115,12 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
   '/delete-account': typeof DeleteAccountRoute
+  '/faq': typeof FaqRoute
   '/how-to-play': typeof HowToPlayRoute
+  '/imposter-game-online': typeof ImposterGameOnlineRoute
+  '/imposter-game-questions': typeof ImposterGameQuestionsRoute
+  '/imposter-game-with-friends': typeof ImposterGameWithFriendsRoute
+  '/imposter-word-list': typeof ImposterWordListRoute
   '/notice-board': typeof NoticeBoardRoute
   '/privacy': typeof PrivacyRoute
   '/support': typeof SupportRoute
@@ -92,7 +132,12 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
   '/delete-account': typeof DeleteAccountRoute
+  '/faq': typeof FaqRoute
   '/how-to-play': typeof HowToPlayRoute
+  '/imposter-game-online': typeof ImposterGameOnlineRoute
+  '/imposter-game-questions': typeof ImposterGameQuestionsRoute
+  '/imposter-game-with-friends': typeof ImposterGameWithFriendsRoute
+  '/imposter-word-list': typeof ImposterWordListRoute
   '/notice-board': typeof NoticeBoardRoute
   '/privacy': typeof PrivacyRoute
   '/support': typeof SupportRoute
@@ -105,7 +150,12 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/delete-account'
+    | '/faq'
     | '/how-to-play'
+    | '/imposter-game-online'
+    | '/imposter-game-questions'
+    | '/imposter-game-with-friends'
+    | '/imposter-word-list'
     | '/notice-board'
     | '/privacy'
     | '/support'
@@ -116,7 +166,12 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/delete-account'
+    | '/faq'
     | '/how-to-play'
+    | '/imposter-game-online'
+    | '/imposter-game-questions'
+    | '/imposter-game-with-friends'
+    | '/imposter-word-list'
     | '/notice-board'
     | '/privacy'
     | '/support'
@@ -127,7 +182,12 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/delete-account'
+    | '/faq'
     | '/how-to-play'
+    | '/imposter-game-online'
+    | '/imposter-game-questions'
+    | '/imposter-game-with-friends'
+    | '/imposter-word-list'
     | '/notice-board'
     | '/privacy'
     | '/support'
@@ -139,7 +199,12 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRoute: typeof AdminRoute
   DeleteAccountRoute: typeof DeleteAccountRoute
+  FaqRoute: typeof FaqRoute
   HowToPlayRoute: typeof HowToPlayRoute
+  ImposterGameOnlineRoute: typeof ImposterGameOnlineRoute
+  ImposterGameQuestionsRoute: typeof ImposterGameQuestionsRoute
+  ImposterGameWithFriendsRoute: typeof ImposterGameWithFriendsRoute
+  ImposterWordListRoute: typeof ImposterWordListRoute
   NoticeBoardRoute: typeof NoticeBoardRoute
   PrivacyRoute: typeof PrivacyRoute
   SupportRoute: typeof SupportRoute
@@ -170,11 +235,46 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DeleteAccountRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/faq': {
+      id: '/faq'
+      path: '/faq'
+      fullPath: '/faq'
+      preLoaderRoute: typeof FaqRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/how-to-play': {
       id: '/how-to-play'
       path: '/how-to-play'
       fullPath: '/how-to-play'
       preLoaderRoute: typeof HowToPlayRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/imposter-game-online': {
+      id: '/imposter-game-online'
+      path: '/imposter-game-online'
+      fullPath: '/imposter-game-online'
+      preLoaderRoute: typeof ImposterGameOnlineRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/imposter-game-questions': {
+      id: '/imposter-game-questions'
+      path: '/imposter-game-questions'
+      fullPath: '/imposter-game-questions'
+      preLoaderRoute: typeof ImposterGameQuestionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/imposter-game-with-friends': {
+      id: '/imposter-game-with-friends'
+      path: '/imposter-game-with-friends'
+      fullPath: '/imposter-game-with-friends'
+      preLoaderRoute: typeof ImposterGameWithFriendsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/imposter-word-list': {
+      id: '/imposter-word-list'
+      path: '/imposter-word-list'
+      fullPath: '/imposter-word-list'
+      preLoaderRoute: typeof ImposterWordListRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/notice-board': {
@@ -219,7 +319,12 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRoute,
   DeleteAccountRoute: DeleteAccountRoute,
+  FaqRoute: FaqRoute,
   HowToPlayRoute: HowToPlayRoute,
+  ImposterGameOnlineRoute: ImposterGameOnlineRoute,
+  ImposterGameQuestionsRoute: ImposterGameQuestionsRoute,
+  ImposterGameWithFriendsRoute: ImposterGameWithFriendsRoute,
+  ImposterWordListRoute: ImposterWordListRoute,
   NoticeBoardRoute: NoticeBoardRoute,
   PrivacyRoute: PrivacyRoute,
   SupportRoute: SupportRoute,

@@ -74,16 +74,29 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Imposter World" },
-      { name: "description", content: "Find the imposter — a notebook-style party word game." },
+      { title: "Imposter World | Play the Imposter Game Online Free" },
+      {
+        name: "description",
+        content:
+          "Play Imposter World, a free online multiplayer imposter word game with friends. Discover secret words, give drawing and voice clues, deduce the bluffer, and catch the imposter without downloading an app.",
+      },
+      { name: "keywords", content: "imposter game, imposter game online, play imposter online, imposter game with friends, imposter word game, free imposter game" },
+      { property: "og:site_name", content: "Imposter World" },
       { property: "og:type", content: "website" },
+      { property: "og:title", content: "Imposter World — Play Multiplayer Imposter Game Online" },
+      { property: "og:description", content: "Join friends, give clever clues, interrogate bluffers, and catch the classroom imposter online for free." },
+      { property: "og:image", content: "https://imposterworld.xyz/classroom-bg.jpg" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "Imposter World — Online Imposter Party Game" },
+      { name: "twitter:description", content: "Play the nostalgic classroom notebook multiplayer imposter game with friends." },
+      { name: "twitter:image", content: "https://imposterworld.xyz/classroom-bg.jpg" },
     ],
     links: [
       {
         rel: "stylesheet",
         href: appCss,
       },
+      { rel: "canonical", href: "https://imposterworld.xyz/" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
@@ -91,6 +104,41 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         href: "https://fonts.googleapis.com/css2?family=Caveat+Brush&family=Kalam:wght@400;700&display=swap",
       },
       { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
+      { rel: "apple-touch-icon", href: "/detective.png" },
+    ],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@type": "WebSite",
+              "@id": "https://imposterworld.xyz/#website",
+              "url": "https://imposterworld.xyz/",
+              "name": "Imposter World",
+              "description": "Free Online Multiplayer Imposter Word Game with Friends",
+              "inLanguage": "en-US",
+            },
+            {
+              "@type": "VideoGame",
+              "@id": "https://imposterworld.xyz/#game",
+              "name": "Imposter World",
+              "url": "https://imposterworld.xyz/",
+              "description":
+                "Multiplayer classroom notebook party game where players receive secret words, give subtle clues, and deduce who the imposter is.",
+              "genre": ["Party Game", "Word Game", "Social Deduction", "Multiplayer"],
+              "gamePlatform": ["Web Browser", "Mobile Browser"],
+              "numberOfPlayers": {
+                "@type": "QuantitativeValue",
+                "minValue": 3,
+                "maxValue": 14,
+              },
+              "image": "https://imposterworld.xyz/detective.png",
+            },
+          ],
+        }),
+      },
     ],
   }),
   shellComponent: RootShell,

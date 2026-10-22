@@ -1,0 +1,21 @@
+{
+  "name": "Imposter World — Online Multiplayer Game",
+  "short_name": "Imposter World",
+  "description": "Play the nostalgic classroom notebook imposter word game online with friends.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#1c1b18",
+  "theme_color": "#e63946",
+  "icons": [
+    {
+      "src": "/favicon.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/detective.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

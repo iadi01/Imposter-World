@@ -1,0 +1,18 @@
+{
+  "buildCommand": "npm run build",
+  "outputDirectory": ".output/public",
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "https://imposter-world.onrender.com/api/:path*"
+    },
+    {
+      "source": "/health",
+      "destination": "https://imposter-world.onrender.com/health"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}
