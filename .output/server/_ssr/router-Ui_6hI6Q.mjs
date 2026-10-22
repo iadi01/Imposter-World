@@ -2,7 +2,7 @@ import { t as QueryClientProvider } from "../_libs/react+tanstack__react-query.m
 import { S as useRouter, _ as lazyRouteComponent, b as Link, f as Scripts, g as Outlet, h as createRouter, p as HeadContent, v as createFileRoute, y as createRootRouteWithContext } from "../_libs/@tanstack/react-router+[...].mjs";
 import { t as require_jsx_dev_runtime } from "../_libs/react.mjs";
 import { t as QueryClient } from "../_libs/tanstack__query-core.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/router-Ctsy3-xr.js
+//#region node_modules/.nitro/vite/services/ssr/assets/router-Ui_6hI6Q.js
 var import_jsx_dev_runtime = require_jsx_dev_runtime();
 var styles_default = "/assets/styles-jIyh6IGM.css";
 var _jsxFileName = "/Users/aadi/Downloads/f8225c15-5378-482e-bfe4-be001f84d384/src/routes/__root.tsx";
@@ -293,7 +293,7 @@ function RootComponent() {
 		columnNumber: 5
 	}, this);
 }
-var $$splitComponentImporter$13 = () => import("./routes-DjGDj1L_.mjs");
+var $$splitComponentImporter$13 = () => import("./routes-CHyJbM_o.mjs");
 var Route$13 = createFileRoute("/")({
 	head: () => ({ meta: [{ title: "Imposter World — Real-Time Multiplayer Party Game" }, {
 		name: "description",
@@ -301,7 +301,7 @@ var Route$13 = createFileRoute("/")({
 	}] }),
 	component: lazyRouteComponent($$splitComponentImporter$13, "component")
 });
-var $$splitComponentImporter$12 = () => import("./admin-Sys5rbIw.mjs");
+var $$splitComponentImporter$12 = () => import("./admin-Cp5xmH9d.mjs");
 var Route$12 = createFileRoute("/admin")({
 	head: () => ({ meta: [{ title: "Page Not Found — Imposter World" }, {
 		name: "robots",
@@ -544,11 +544,11 @@ var Route$5 = createFileRoute("/imposter-word-list")({
 	}),
 	component: lazyRouteComponent($$splitComponentImporter$5, "component")
 });
-var $$splitComponentImporter$4 = () => import("./notice-board-oM1yE6Ck.mjs");
+var $$splitComponentImporter$4 = () => import("./notice-board-6XZeQfzx.mjs");
 var Route$4 = createFileRoute("/notice-board")({ component: lazyRouteComponent($$splitComponentImporter$4, "component") });
 var $$splitComponentImporter$3 = () => import("./privacy-De9A_CLl.mjs");
 var Route$3 = createFileRoute("/privacy")({ component: lazyRouteComponent($$splitComponentImporter$3, "component") });
-var $$splitComponentImporter$2 = () => import("./support-Cq_0cR4T.mjs");
+var $$splitComponentImporter$2 = () => import("./support-CF6xcI_6.mjs");
 var Route$2 = createFileRoute("/support")({
 	head: () => ({ meta: [
 		{ title: "Support the Developer — Imposter World ☕" },
@@ -577,7 +577,7 @@ var Route$2 = createFileRoute("/support")({
 });
 var $$splitComponentImporter$1 = () => import("./terms-DGJXOJy4.mjs");
 var Route$1 = createFileRoute("/terms")({ component: lazyRouteComponent($$splitComponentImporter$1, "component") });
-var $$splitComponentImporter = () => import("./api.auth.google.callback-Bj-1OysD.mjs");
+var $$splitComponentImporter = () => import("./api.auth.google.callback-4QVqZRFV.mjs");
 var Route = createFileRoute("/api/auth/google/callback")({ component: lazyRouteComponent($$splitComponentImporter, "component") });
 var rootRouteChildren = {
 	IndexRoute: Route$13.update({

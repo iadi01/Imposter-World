@@ -1,11 +1,14 @@
 import { io, Socket } from "socket.io-client";
 
 const SOCKET_URL =
-  typeof window !== "undefined"
-    ? window.location.port === "8080"
-      ? "http://localhost:4001"
-      : window.location.origin
-    : "http://localhost:4001";
+  (import.meta.env.VITE_SOCKET_URL as string | undefined) ||
+  (typeof window !== "undefined"
+    ? window.location.origin.includes("vercel.app")
+      ? "https://imposter-world.onrender.com"
+      : window.location.port === "8080"
+        ? "http://localhost:4001"
+        : window.location.origin
+    : "http://localhost:4001");
 
 let socket: Socket | null = null;
 

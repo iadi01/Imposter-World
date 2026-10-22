@@ -1,4 +1,4 @@
-//#region node_modules/.nitro/vite/services/ssr/assets/_tanstack-start-manifest_v-DwFy4ZHW.js
+//#region node_modules/.nitro/vite/services/ssr/assets/_tanstack-start-manifest_v-BDyeh1L7.js
 var tsrStartManifest = () => ({ routes: {
 	__root__: {
 		filePath: "/Users/aadi/Downloads/f8225c15-5378-482e-bfe4-be001f84d384/src/routes/__root.tsx",
@@ -18,20 +18,20 @@ var tsrStartManifest = () => ({ routes: {
 			"/terms",
 			"/api/auth/google/callback"
 		],
-		preloads: ["/assets/index-Ch3TTzI_.js", "/assets/jsx-dev-runtime-DbLlTiMW.js"],
+		preloads: ["/assets/index-ehvoJyJf.js", "/assets/jsx-dev-runtime-DbLlTiMW.js"],
 		scripts: [{ attrs: {
 			type: "module",
 			async: !0,
-			src: "/assets/index-Ch3TTzI_.js"
+			src: "/assets/index-ehvoJyJf.js"
 		} }]
 	},
 	"/": {
 		filePath: "/Users/aadi/Downloads/f8225c15-5378-482e-bfe4-be001f84d384/src/routes/index.tsx",
 		children: void 0,
 		preloads: [
-			"/assets/routes-DFJgv_-C.js",
-			"/assets/x-5qqOOq0G.js",
-			"/assets/api-NuPcq6NV.js",
+			"/assets/routes-CmnMwecb.js",
+			"/assets/x-FFdReLff.js",
+			"/assets/api-BVeTUwDV.js",
 			"/assets/arrow-left-ChUIYleA.js",
 			"/assets/loader-circle-lh_pxZk3.js",
 			"/assets/trash-2-DLmbRi9M.js",
@@ -46,9 +46,9 @@ var tsrStartManifest = () => ({ routes: {
 		filePath: "/Users/aadi/Downloads/f8225c15-5378-482e-bfe4-be001f84d384/src/routes/admin.tsx",
 		children: void 0,
 		preloads: [
-			"/assets/admin-Cc6yqjRa.js",
-			"/assets/x-5qqOOq0G.js",
-			"/assets/api-NuPcq6NV.js",
+			"/assets/admin-KmxNufcP.js",
+			"/assets/x-FFdReLff.js",
+			"/assets/api-BVeTUwDV.js",
 			"/assets/arrow-left-ChUIYleA.js",
 			"/assets/circle-check-B1n4i50z.js",
 			"/assets/trash-2-DLmbRi9M.js",
@@ -59,13 +59,13 @@ var tsrStartManifest = () => ({ routes: {
 	"/delete-account": {
 		filePath: "/Users/aadi/Downloads/f8225c15-5378-482e-bfe4-be001f84d384/src/routes/delete-account.tsx",
 		children: void 0,
-		preloads: ["/assets/delete-account-Bn0L6myd.js", "/assets/arrow-left-ChUIYleA.js"]
+		preloads: ["/assets/delete-account-B46AOYIV.js", "/assets/arrow-left-ChUIYleA.js"]
 	},
 	"/faq": {
 		filePath: "/Users/aadi/Downloads/f8225c15-5378-482e-bfe4-be001f84d384/src/routes/faq.tsx",
 		children: void 0,
 		preloads: [
-			"/assets/faq-PBkyRNRt.js",
+			"/assets/faq-DnON4hLy.js",
 			"/assets/arrow-left-ChUIYleA.js",
 			"/assets/play-5yw8wkQ0.js"
 		]
@@ -73,13 +73,13 @@ var tsrStartManifest = () => ({ routes: {
 	"/how-to-play": {
 		filePath: "/Users/aadi/Downloads/f8225c15-5378-482e-bfe4-be001f84d384/src/routes/how-to-play.tsx",
 		children: void 0,
-		preloads: ["/assets/how-to-play-BE17UyBC.js", "/assets/arrow-left-ChUIYleA.js"]
+		preloads: ["/assets/how-to-play-SBdkoQYf.js", "/assets/arrow-left-ChUIYleA.js"]
 	},
 	"/imposter-game-online": {
 		filePath: "/Users/aadi/Downloads/f8225c15-5378-482e-bfe4-be001f84d384/src/routes/imposter-game-online.tsx",
 		children: void 0,
 		preloads: [
-			"/assets/imposter-game-online-CbPI9mEk.js",
+			"/assets/imposter-game-online-5yVmBEgm.js",
 			"/assets/arrow-left-ChUIYleA.js",
 			"/assets/circle-check-B1n4i50z.js",
 			"/assets/globe-C5QVNHdE.js",
@@ -92,7 +92,7 @@ var tsrStartManifest = () => ({ routes: {
 		filePath: "/Users/aadi/Downloads/f8225c15-5378-482e-bfe4-be001f84d384/src/routes/imposter-game-questions.tsx",
 		children: void 0,
 		preloads: [
-			"/assets/imposter-game-questions-1MsJvO5H.js",
+			"/assets/imposter-game-questions-Rbigaosi.js",
 			"/assets/arrow-left-ChUIYleA.js",
 			"/assets/play-5yw8wkQ0.js"
 		]
@@ -101,7 +101,7 @@ var tsrStartManifest = () => ({ routes: {
 		filePath: "/Users/aadi/Downloads/f8225c15-5378-482e-bfe4-be001f84d384/src/routes/imposter-game-with-friends.tsx",
 		children: void 0,
 		preloads: [
-			"/assets/imposter-game-with-friends-C-FoUSGw.js",
+			"/assets/imposter-game-with-friends-DdzHXEEM.js",
 			"/assets/arrow-left-ChUIYleA.js",
 			"/assets/users-6LeHmIcc.js"
 		]
@@ -110,7 +110,7 @@ var tsrStartManifest = () => ({ routes: {
 		filePath: "/Users/aadi/Downloads/f8225c15-5378-482e-bfe4-be001f84d384/src/routes/imposter-word-list.tsx",
 		children: void 0,
 		preloads: [
-			"/assets/imposter-word-list-B0Gn8Pit.js",
+			"/assets/imposter-word-list-DlGB3cJe.js",
 			"/assets/arrow-left-ChUIYleA.js",
 			"/assets/play-5yw8wkQ0.js"
 		]
@@ -119,8 +119,8 @@ var tsrStartManifest = () => ({ routes: {
 		filePath: "/Users/aadi/Downloads/f8225c15-5378-482e-bfe4-be001f84d384/src/routes/notice-board.tsx",
 		children: void 0,
 		preloads: [
-			"/assets/notice-board-BzR02Opq.js",
-			"/assets/api-NuPcq6NV.js",
+			"/assets/notice-board-C9PvFrs3.js",
+			"/assets/api-BVeTUwDV.js",
 			"/assets/arrow-left-ChUIYleA.js",
 			"/assets/trophy-Bkjg7_bf.js",
 			"/assets/shield-C4Ij8hRi.js"
@@ -129,15 +129,15 @@ var tsrStartManifest = () => ({ routes: {
 	"/privacy": {
 		filePath: "/Users/aadi/Downloads/f8225c15-5378-482e-bfe4-be001f84d384/src/routes/privacy.tsx",
 		children: void 0,
-		preloads: ["/assets/privacy-CbEBat2R.js", "/assets/arrow-left-ChUIYleA.js"]
+		preloads: ["/assets/privacy-VVhN1qSB.js", "/assets/arrow-left-ChUIYleA.js"]
 	},
 	"/support": {
 		filePath: "/Users/aadi/Downloads/f8225c15-5378-482e-bfe4-be001f84d384/src/routes/support.tsx",
 		children: void 0,
 		preloads: [
-			"/assets/support-BrLtVyeO.js",
-			"/assets/x-5qqOOq0G.js",
-			"/assets/api-NuPcq6NV.js",
+			"/assets/support-C1yRJm5L.js",
+			"/assets/x-FFdReLff.js",
+			"/assets/api-BVeTUwDV.js",
 			"/assets/arrow-left-ChUIYleA.js",
 			"/assets/circle-check-B1n4i50z.js",
 			"/assets/copy-BY2rP_QU.js",
@@ -147,14 +147,14 @@ var tsrStartManifest = () => ({ routes: {
 	"/terms": {
 		filePath: "/Users/aadi/Downloads/f8225c15-5378-482e-bfe4-be001f84d384/src/routes/terms.tsx",
 		children: void 0,
-		preloads: ["/assets/terms-BFQSgYCg.js", "/assets/arrow-left-ChUIYleA.js"]
+		preloads: ["/assets/terms-Bsdxvcll.js", "/assets/arrow-left-ChUIYleA.js"]
 	},
 	"/api/auth/google/callback": {
 		filePath: "/Users/aadi/Downloads/f8225c15-5378-482e-bfe4-be001f84d384/src/routes/api.auth.google.callback.tsx",
 		children: void 0,
 		preloads: [
-			"/assets/api.auth.google.callback-Bb-ZVBJ4.js",
-			"/assets/api-NuPcq6NV.js",
+			"/assets/api.auth.google.callback-htwGnEQT.js",
+			"/assets/api-BVeTUwDV.js",
 			"/assets/arrow-left-ChUIYleA.js",
 			"/assets/loader-circle-lh_pxZk3.js"
 		]

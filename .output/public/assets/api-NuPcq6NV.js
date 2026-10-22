@@ -1,1 +1,0 @@
-var e=typeof window<`u`&&window.location.port===`8080`?`http://localhost:4001`:``;export{e as t};

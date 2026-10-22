@@ -1,12 +1,12 @@
 import { o as __toESM } from "../_runtime.mjs";
-import { t as API_BASE } from "./api-CvQPumbW.mjs";
+import { t as API_BASE } from "./api-6A2QlK4P.mjs";
 import { r as require_react } from "../_libs/react+tanstack__react-query.mjs";
 import { b as Link } from "../_libs/@tanstack/react-router+[...].mjs";
 import { t as require_jsx_dev_runtime } from "../_libs/react.mjs";
 import { t as toast } from "../_libs/sonner.mjs";
 import { $ as Building2, A as Music, B as Flag, C as Plus, D as Pause, F as LoaderCircle, G as Copy, H as EyeOff, K as Compass, L as Heart, M as MapPin, N as LogOut, O as Paintbrush, P as Lock, Q as Check, R as Globe, T as Pin, V as Eye, W as Eraser, X as CircleAlert, _ as Send, a as UserCheck, b as RefreshCw, d as Square, h as Settings, i as Users, j as Mic, k as PaintBucket, l as Trash2, n as VolumeX, nt as ArrowLeft, o as Undo2, q as Clock, r as Volume2, s as Trophy, t as X, tt as AtSign, v as Search, w as Play, y as RotateCcw, z as Flame } from "../_libs/lucide-react.mjs";
 import { t as lookup } from "../_libs/socket.io-client+[...].mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/routes-DjGDj1L_.js
+//#region node_modules/.nitro/vite/services/ssr/assets/routes-CHyJbM_o.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_dev_runtime = require_jsx_dev_runtime();
 var _jsxFileName$8 = "/Users/aadi/Downloads/f8225c15-5378-482e-bfe4-be001f84d384/src/components/DrawPad.tsx";
@@ -5806,7 +5806,7 @@ function VoiceCluePlayer({ audioUrl, transcript }) {
 		columnNumber: 5
 	}, this);
 }
-var SOCKET_URL = typeof window !== "undefined" ? window.location.port === "8080" ? "http://localhost:4001" : window.location.origin : "http://localhost:4001";
+var SOCKET_URL = "http://localhost:4001";
 var socket = null;
 function getSocket() {
 	if (!socket) {
@@ -9151,14 +9151,14 @@ function Index() {
 				user,
 				onClose: () => setShowAccount(false),
 				onLogout: () => {
-					fetch(`${API_BASE}/api/auth/logout`, { method: "POST" }).then(() => {
+					fetch(`http://localhost:4001/api/auth/logout`, { method: "POST" }).then(() => {
 						setUser(null);
 						setShowAccount(false);
 					});
 				},
 				onGoogleLogin: handleGoogleLogin,
 				onUpdateProfile: (profileData) => {
-					if (user) fetch(`${API_BASE}/api/user/update`, {
+					if (user) fetch(`http://localhost:4001/api/user/update`, {
 						method: "POST",
 						headers: { "Content-Type": "application/json" },
 						body: JSON.stringify({

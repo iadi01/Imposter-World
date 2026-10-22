@@ -365,6 +365,7 @@ export function isAllowedOrigin(urlStr?: string | null, hostHeader?: string | nu
     }
 
     if (hostname.endsWith(".onrender.com")) return true;
+    if (hostname.endsWith(".vercel.app")) return true;
     if (hostname === "imposterworld.xyz" || hostname.endsWith(".imposterworld.xyz")) return true;
 
     if (process.env.APP_URL && (origin === process.env.APP_URL || hostname === new URL(process.env.APP_URL).hostname)) return true;
