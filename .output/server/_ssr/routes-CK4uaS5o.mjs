@@ -5,7 +5,7 @@ import { b as Link } from "../_libs/@tanstack/react-router+[...].mjs";
 import { t as toast } from "../_libs/sonner.mjs";
 import { $ as Building2, A as Music, B as Flag, C as Plus, D as Pause, F as LoaderCircle, G as Copy, H as EyeOff, K as Compass, L as Heart, M as MapPin, N as LogOut, O as Paintbrush, P as Lock, Q as Check, R as Globe, T as Pin, V as Eye, W as Eraser, X as CircleAlert, _ as Send, a as UserCheck, b as RefreshCw, d as Square, h as Settings, i as Users, j as Mic, k as PaintBucket, l as Trash2, n as VolumeX, nt as ArrowLeft, o as Undo2, q as Clock, r as Volume2, s as Trophy, t as X, tt as AtSign, v as Search, w as Play, y as RotateCcw, z as Flame } from "../_libs/lucide-react.mjs";
 import { t as lookup } from "../_libs/socket.io-client+[...].mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/routes-XvJPKsqV.js
+//#region node_modules/.nitro/vite/services/ssr/assets/routes-CK4uaS5o.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 function hexToRgba(hex) {
@@ -3867,7 +3867,7 @@ var getSocketUrl = () => {
 			if (window.location.hostname.includes("vercel.app")) return "https://imposter-world.onrender.com";
 			return window.location.origin;
 		}
-		if (window.location.port === "8080") return "http://localhost:4001";
+		if (window.location.port === "8080" || window.location.port === "4002") return "http://localhost:4001";
 		return window.location.origin;
 	}
 	return "http://localhost:4001";
@@ -3879,9 +3879,9 @@ function getSocket() {
 		socket = lookup(socketUrl, {
 			autoConnect: true,
 			reconnection: true,
-			reconnectionAttempts: 10,
+			reconnectionAttempts: 20,
 			reconnectionDelay: 1e3,
-			transports: ["websocket", "polling"],
+			transports: ["polling", "websocket"],
 			withCredentials: true
 		});
 		socket.on("connect", () => {
@@ -3889,6 +3889,9 @@ function getSocket() {
 		});
 		socket.on("disconnect", (reason) => {
 			console.warn("[Socket Client] Disconnected:", reason);
+		});
+		socket.on("connect_error", (err) => {
+			console.error("[Socket Client] Connection error:", err.message);
 		});
 	}
 	return socket;
@@ -4189,25 +4192,21 @@ function Index() {
 			displayName: "Detective",
 			avatarUrl: ""
 		};
-		const doCreate = () => {
-			socket.emit("room:create", {
-				user: {
-					id: creatorUser.id,
-					displayName: creatorUser.displayName,
-					avatarUrl: creatorUser.avatarUrl
-				},
-				settings: customSettings
-			}, (res) => {
-				if (res && res.success && res.roomCode) {
-					if (res.roomState) setRoomState(res.roomState);
-					const url = new URL(window.location.href);
-					url.searchParams.set("room", res.roomCode);
-					window.history.replaceState({}, "", `${url.pathname}?${url.searchParams.toString()}`);
-				} else if (res && !res.success) alert(res.error || "Failed to create room");
-			});
-		};
-		if (socket.connected) doCreate();
-		else socket.once("connect", doCreate);
+		socket.emit("room:create", {
+			user: {
+				id: creatorUser.id,
+				displayName: creatorUser.displayName,
+				avatarUrl: creatorUser.avatarUrl
+			},
+			settings: customSettings
+		}, (res) => {
+			if (res && res.success && res.roomCode) {
+				if (res.roomState) setRoomState(res.roomState);
+				const url = new URL(window.location.href);
+				url.searchParams.set("room", res.roomCode);
+				window.history.replaceState({}, "", `${url.pathname}?${url.searchParams.toString()}`);
+			} else if (res && !res.success) alert(res.error || "Failed to create room");
+		});
 	};
 	const handleJoinRoom = (code) => {
 		if (!code || !code.trim()) return;
@@ -4221,28 +4220,24 @@ function Index() {
 			displayName: "Detective",
 			avatarUrl: ""
 		};
-		const doJoin = () => {
-			socket.emit("room:join", {
-				roomCode: cleanCode,
-				user: {
-					id: joinUser.id,
-					displayName: joinUser.displayName,
-					avatarUrl: joinUser.avatarUrl
-				}
-			}, (res) => {
-				if (res && res.success && res.roomCode) {
-					if (res.roomState) setRoomState(res.roomState);
-					const url = new URL(window.location.href);
-					url.searchParams.set("room", res.roomCode);
-					window.history.replaceState({}, "", `${url.pathname}?${url.searchParams.toString()}`);
-				} else if (res && !res.success) {
-					toast.error(res.error || "Failed to join room");
-					pendingInviteCode.current = null;
-				}
-			});
-		};
-		if (socket.connected) doJoin();
-		else socket.once("connect", doJoin);
+		socket.emit("room:join", {
+			roomCode: cleanCode,
+			user: {
+				id: joinUser.id,
+				displayName: joinUser.displayName,
+				avatarUrl: joinUser.avatarUrl
+			}
+		}, (res) => {
+			if (res && res.success && res.roomCode) {
+				if (res.roomState) setRoomState(res.roomState);
+				const url = new URL(window.location.href);
+				url.searchParams.set("room", res.roomCode);
+				window.history.replaceState({}, "", `${url.pathname}?${url.searchParams.toString()}`);
+			} else if (res && !res.success) {
+				toast.error(res.error || "Failed to join room");
+				pendingInviteCode.current = null;
+			}
+		});
 	};
 	const handleInstantMatch = () => {
 		sound.playPop();
@@ -4253,22 +4248,18 @@ function Index() {
 			displayName: "Detective",
 			avatarUrl: ""
 		};
-		const doInstant = () => {
-			socket.emit("room:instant-match", { user: {
-				id: matchUser.id,
-				displayName: matchUser.displayName,
-				avatarUrl: matchUser.avatarUrl
-			} }, (res) => {
-				if (res && res.success && res.roomCode) {
-					if (res.roomState) setRoomState(res.roomState);
-					const url = new URL(window.location.href);
-					url.searchParams.set("room", res.roomCode);
-					window.history.replaceState({}, "", `${url.pathname}?${url.searchParams.toString()}`);
-				} else if (res && !res.success) alert(res.error || "Instant match failed");
-			});
-		};
-		if (socket.connected) doInstant();
-		else socket.once("connect", doInstant);
+		socket.emit("room:instant-match", { user: {
+			id: matchUser.id,
+			displayName: matchUser.displayName,
+			avatarUrl: matchUser.avatarUrl
+		} }, (res) => {
+			if (res && res.success && res.roomCode) {
+				if (res.roomState) setRoomState(res.roomState);
+				const url = new URL(window.location.href);
+				url.searchParams.set("room", res.roomCode);
+				window.history.replaceState({}, "", `${url.pathname}?${url.searchParams.toString()}`);
+			} else if (res && !res.success) alert(res.error || "Instant match failed");
+		});
 	};
 	const handleStartGame = () => {
 		sound.playDing();

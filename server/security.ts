@@ -325,10 +325,10 @@ export function securityHeaders(_req: Request, res: Response, next: NextFunction
   // Restrict unused browser device APIs
   res.setHeader("Permissions-Policy", "camera=(), microphone=*, geolocation=()");
 
-  // Strict Content-Security-Policy (with Cloudflare Turnstile & Analytics support)
+  // Strict Content-Security-Policy (with Cloudflare Turnstile & Analytics & WebSocket support)
   res.setHeader(
     "Content-Security-Policy",
-    "default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https://fonts.googleapis.com https://fonts.gstatic.com https://challenges.cloudflare.com https://static.cloudflareinsights.com http://localhost:* ws://localhost:* http://127.0.0.1:* ws://127.0.0.1:* https://lh3.googleusercontent.com https://accounts.google.com; frame-src 'self' https://challenges.cloudflare.com; frame-ancestors 'self';"
+    "default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https://fonts.googleapis.com https://fonts.gstatic.com https://challenges.cloudflare.com https://static.cloudflareinsights.com http://localhost:* ws://localhost:* http://127.0.0.1:* ws://127.0.0.1:* https://lh3.googleusercontent.com https://accounts.google.com; connect-src 'self' wss: ws: https: http:; frame-src 'self' https://challenges.cloudflare.com; frame-ancestors 'self';"
   );
 
   next();
@@ -378,6 +378,11 @@ export function isAllowedOrigin(urlStr?: string | null, hostHeader?: string | nu
 }
 
 export function verifyOrigin(req: Request, res: Response, next: NextFunction): any {
+  // Never block WebSocket or Socket.IO polling requests
+  if (req.path && (req.path.startsWith("/socket.io") || req.path.startsWith("/health"))) {
+    return next();
+  }
+
   // Only enforce origin check on state-changing methods
   if (["POST", "PUT", "DELETE", "PATCH"].includes(req.method)) {
     const origin = req.headers.origin;

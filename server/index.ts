@@ -85,7 +85,7 @@ if (fs.existsSync(ssrIndexPath)) {
     const { middleware } = await import(ssrIndexPath);
     if (middleware) {
       app.use(async (req, res, next) => {
-        if (req.path.startsWith("/api") || req.path === "/health") {
+        if (req.path.startsWith("/api") || req.path === "/health" || req.path.startsWith("/socket.io")) {
           return next();
         }
         try {
@@ -119,8 +119,12 @@ setupSocketServer(httpServer);
 
 async function startServer() {
   try {
-    await connectDB();
-    await seedWordPairsIfEmpty();
+    try {
+      await connectDB();
+      await seedWordPairsIfEmpty();
+    } catch (dbErr: any) {
+      console.warn("[Database] MongoDB connection deferred (running with in-memory fallback):", dbErr.message);
+    }
 
     httpServer.listen(PORT, () => {
       console.log(`=================================================`);

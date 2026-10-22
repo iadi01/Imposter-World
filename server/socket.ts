@@ -15,7 +15,10 @@ export function getSocketIO(): Server | null {
 export function setupSocketServer(httpServer: HttpServer) {
   const io = new Server(httpServer, {
     cors: {
-      origin: "*",
+      origin: (origin, callback) => {
+        // Dynamic origin reflection allows credentials: true in all browsers
+        callback(null, origin || true);
+      },
       methods: ["GET", "POST"],
       credentials: true,
     },

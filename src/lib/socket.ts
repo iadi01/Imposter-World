@@ -9,8 +9,8 @@ const getSocketUrl = (): string => {
       }
       return window.location.origin;
     }
-    // Local dev: port 8080 connects to backend port 4001
-    if (window.location.port === "8080") {
+    // Local dev: port 8080 or 4002 connects to backend port 4001
+    if (window.location.port === "8080" || window.location.port === "4002") {
       return "http://localhost:4001";
     }
     return window.location.origin;
@@ -26,9 +26,9 @@ export function getSocket(): Socket {
     socket = io(socketUrl, {
       autoConnect: true,
       reconnection: true,
-      reconnectionAttempts: 10,
+      reconnectionAttempts: 20,
       reconnectionDelay: 1000,
-      transports: ["websocket", "polling"],
+      transports: ["polling", "websocket"],
       withCredentials: true,
     });
 
@@ -38,6 +38,10 @@ export function getSocket(): Socket {
 
     socket.on("disconnect", (reason) => {
       console.warn("[Socket Client] Disconnected:", reason);
+    });
+
+    socket.on("connect_error", (err) => {
+      console.error("[Socket Client] Connection error:", err.message);
     });
   }
   return socket;
