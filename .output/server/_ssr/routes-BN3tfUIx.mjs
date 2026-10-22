@@ -5,7 +5,7 @@ import { b as Link } from "../_libs/@tanstack/react-router+[...].mjs";
 import { t as toast } from "../_libs/sonner.mjs";
 import { $ as Building2, A as Music, B as Flag, C as Plus, D as Pause, F as LoaderCircle, G as Copy, H as EyeOff, K as Compass, L as Heart, M as MapPin, N as LogOut, O as Paintbrush, P as Lock, Q as Check, R as Globe, T as Pin, V as Eye, W as Eraser, X as CircleAlert, _ as Send, a as UserCheck, b as RefreshCw, d as Square, h as Settings, i as Users, j as Mic, k as PaintBucket, l as Trash2, n as VolumeX, nt as ArrowLeft, o as Undo2, q as Clock, r as Volume2, s as Trophy, t as X, tt as AtSign, v as Search, w as Play, y as RotateCcw, z as Flame } from "../_libs/lucide-react.mjs";
 import { t as lookup } from "../_libs/socket.io-client+[...].mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/routes-CD6nrc1Y.js
+//#region node_modules/.nitro/vite/services/ssr/assets/routes-BN3tfUIx.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 function hexToRgba(hex) {
@@ -3971,6 +3971,8 @@ function Index() {
 	}, []);
 	const socketRef = (0, import_react.useRef)(getSocket());
 	const autoJoinAttempted = (0, import_react.useRef)(false);
+	const pendingInviteCode = (0, import_react.useRef)(typeof window !== "undefined" ? new URLSearchParams(window.location.search).get("room")?.trim().toUpperCase() || null : null);
+	const [lobbyTimeLeft, setLobbyTimeLeft] = (0, import_react.useState)(null);
 	(0, import_react.useEffect)(() => {
 		if (typeof window === "undefined") return;
 		const url = new URL(window.location.href);
@@ -3979,12 +3981,21 @@ function Index() {
 				url.searchParams.set("room", roomState.roomCode);
 				window.history.replaceState({}, "", `${url.pathname}?${url.searchParams.toString()}`);
 			}
-		} else if (url.searchParams.has("room")) {
-			url.searchParams.delete("room");
-			const remaining = url.searchParams.toString();
-			window.history.replaceState({}, "", remaining ? `${url.pathname}?${remaining}` : url.pathname);
 		}
 	}, [roomState?.roomCode]);
+	(0, import_react.useEffect)(() => {
+		if (!roomState || roomState.phase !== "lobby" || !roomState.lobbyDeadline) {
+			setLobbyTimeLeft(null);
+			return;
+		}
+		const updateTimer = () => {
+			const diff = Math.max(0, Math.ceil((roomState.lobbyDeadline - Date.now()) / 1e3));
+			setLobbyTimeLeft(diff);
+		};
+		updateTimer();
+		const interval = setInterval(updateTimer, 1e3);
+		return () => clearInterval(interval);
+	}, [roomState?.lobbyDeadline, roomState?.phase]);
 	(0, import_react.useEffect)(() => {
 		if (typeof window !== "undefined") {
 			const searchParams = new URLSearchParams(window.location.search);
@@ -4030,16 +4041,22 @@ function Index() {
 		fetchPublicRooms();
 	}, []);
 	(0, import_react.useEffect)(() => {
-		if (typeof window === "undefined" || !user || autoJoinAttempted.current) return;
-		const inviteCode = new URLSearchParams(window.location.search).get("room");
-		if (inviteCode && inviteCode.trim()) {
-			const cleanCode = inviteCode.trim().toUpperCase();
-			setRoomCodeInput(cleanCode);
-			if (roomState && roomState.roomCode === cleanCode) return;
-			autoJoinAttempted.current = true;
-			setTimeout(() => {
-				handleJoinRoom(cleanCode);
-			}, 350);
+		if (typeof window === "undefined" || !user || !pendingInviteCode.current || autoJoinAttempted.current) return;
+		const cleanCode = pendingInviteCode.current;
+		setRoomCodeInput(cleanCode);
+		if (roomState && roomState.roomCode === cleanCode) return;
+		autoJoinAttempted.current = true;
+		toast.info(`Connecting to Classroom Room #${cleanCode}...`);
+		const doJoin = () => {
+			handleJoinRoom(cleanCode);
+		};
+		const socket = socketRef.current;
+		if (socket && socket.connected) doJoin();
+		else if (socket) {
+			socket.once("connect", () => {
+				doJoin();
+			});
+			setTimeout(doJoin, 350);
 		}
 	}, [user]);
 	const fetchPublicRooms = () => {
@@ -4079,8 +4096,18 @@ function Index() {
 			toast(`📢 ${data.from || "Principal Office"}: ${data.message}`, { duration: 8e3 });
 		});
 		socket.on("room:disbanded", (data) => {
-			toast.error(data.reason || "This room was closed by the administrator.");
+			toast.error(data.reason || "This room was closed.");
 			setRoomState(null);
+			pendingInviteCode.current = null;
+			if (typeof window !== "undefined") {
+				const url = new URL(window.location.href);
+				if (url.searchParams.has("room")) {
+					url.searchParams.delete("room");
+					const remaining = url.searchParams.toString();
+					window.history.replaceState({}, "", remaining ? `${url.pathname}?${remaining}` : url.pathname);
+				}
+			}
+			sound.playError();
 		});
 		return () => {
 			socket.off("room:state");
@@ -4161,26 +4188,32 @@ function Index() {
 		});
 	};
 	const handleJoinRoom = (code) => {
-		if (!user || !code.trim()) return;
+		if (!code || !code.trim()) return;
 		const cleanCode = code.trim().toUpperCase();
-		if (roomState && roomState.roomCode === cleanCode) {
-			alert("You are already playing in this room! No need to join again.");
-			return;
-		}
+		if (roomState && roomState.roomCode === cleanCode) return;
 		sound.playPop();
-		socketRef.current.emit("room:join", {
+		const socket = socketRef.current;
+		const joinUser = user || {
+			id: socket.id || "guest",
+			displayName: "Detective",
+			avatarUrl: ""
+		};
+		socket.emit("room:join", {
 			roomCode: cleanCode,
 			user: {
-				id: user.id,
-				displayName: user.displayName,
-				avatarUrl: user.avatarUrl
+				id: joinUser.id,
+				displayName: joinUser.displayName,
+				avatarUrl: joinUser.avatarUrl
 			}
 		}, (res) => {
 			if (res.success && res.roomCode) {
 				const url = new URL(window.location.href);
 				url.searchParams.set("room", res.roomCode);
 				window.history.replaceState({}, "", `${url.pathname}?${url.searchParams.toString()}`);
-			} else if (!res.success) alert(res.error || "Failed to join room");
+			} else if (!res.success) {
+				toast.error(res.error || "Failed to join room");
+				pendingInviteCode.current = null;
+			}
 		});
 	};
 	const handleInstantMatch = () => {
@@ -4264,6 +4297,7 @@ function Index() {
 		socketRef.current.emit("room:leave");
 		setRoomState(null);
 		setSecretInfo(null);
+		pendingInviteCode.current = null;
 		if (typeof window !== "undefined") {
 			const url = new URL(window.location.href);
 			url.searchParams.delete("room");
@@ -5278,14 +5312,27 @@ function Index() {
 					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 						className: "flex flex-wrap items-center justify-between gap-4 border-b-2 border-foreground/30 pb-4",
 						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-							className: "flex items-center gap-2",
-							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-								className: `text-xs font-bold px-2 py-0.5 rounded uppercase font-hand ${roomState.settings.isPublic ? "bg-accent/20 text-accent border border-accent/30" : "bg-primary/20 text-primary border border-primary/30"}`,
-								children: roomState.settings.isPublic ? "🟢 Public Room" : "🔒 Private Room"
-							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-								className: "text-sm font-bold text-accent font-hand uppercase",
-								children: "Classroom Lobby"
-							})]
+							className: "flex flex-wrap items-center gap-2",
+							children: [
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: `text-xs font-bold px-2 py-0.5 rounded uppercase font-hand ${roomState.settings.isPublic ? "bg-accent/20 text-accent border border-accent/30" : "bg-primary/20 text-primary border border-primary/30"}`,
+									children: roomState.settings.isPublic ? "🟢 Public Room" : "🔒 Private Room"
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: "text-sm font-bold text-accent font-hand uppercase",
+									children: "Classroom Lobby"
+								}),
+								lobbyTimeLeft !== null && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+									className: "flex items-center gap-1 text-xs font-bold px-2.5 py-0.5 rounded uppercase font-hand bg-amber-100 text-amber-900 border border-amber-400/60 shadow-xs",
+									children: [
+										/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Clock, { className: "h-3.5 w-3.5 animate-pulse text-amber-700" }),
+										"Auto-closes in ",
+										Math.floor(lobbyTimeLeft / 60),
+										":",
+										(lobbyTimeLeft % 60).toString().padStart(2, "0")
+									]
+								})
+							]
 						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h2", {
 							className: "text-4xl md:text-5xl font-display text-foreground",
 							children: ["Room #", roomState.roomCode]

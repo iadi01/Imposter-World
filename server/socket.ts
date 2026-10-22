@@ -50,6 +50,7 @@ export function setupSocketServer(httpServer: HttpServer) {
   }
 
   const roomManager = RoomManager.getInstance();
+  roomManager.setIO(io);
 
   io.on("connection", (socket: Socket) => {
     let currentRoomCode: string | null = null;

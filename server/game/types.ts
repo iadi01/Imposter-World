@@ -70,6 +70,8 @@ export interface PublicRoomState {
   activePlayerSocketId: string | null;
   activePlayerName: string | null;
   phaseDeadline: number | null; // epoch ms
+  lobbyDeadline?: number | null; // epoch ms when lobby auto-closes after 240s
+  createdAt?: number;
   hints: HintItem[];
   chatMessages: ChatMessage[];
   answerSubmissionCount: number;

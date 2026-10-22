@@ -28,6 +28,11 @@ export class Room {
   public lastResult: PublicRoomState["lastResult"];
   public skipDiscussionVotes: Set<string> = new Set();
 
+  // 240-second inactivity timer for lobby (room auto-closes if match not started)
+  public createdAt: number = Date.now();
+  public lobbyDeadline: number;
+  public lobbyExpiryTimer: NodeJS.Timeout | null = null;
+
   // Protected private state — never sent to public clients!
   public privateData: PrivateRoundData = {
     commonWord: "",
@@ -53,6 +58,8 @@ export class Room {
       ...settings,
     };
     this.players.set(host.socketId, host);
+    this.createdAt = Date.now();
+    this.lobbyDeadline = this.createdAt + 240 * 1000;
   }
 
   public getPlayerList(): Player[] {
@@ -88,6 +95,8 @@ export class Room {
       activePlayerSocketId: activePlayer ? activePlayer.socketId : null,
       activePlayerName: activePlayer ? activePlayer.displayName : null,
       phaseDeadline: this.phaseDeadline,
+      lobbyDeadline: this.phase === "lobby" ? this.lobbyDeadline : null,
+      createdAt: this.createdAt,
       hints: this.hints,
       chatMessages: this.chatMessages,
       answerSubmissionCount: Object.keys(this.privateData.answers).length,
@@ -103,6 +112,13 @@ export class Room {
     if (this.timer) {
       clearTimeout(this.timer);
       this.timer = null;
+    }
+  }
+
+  public clearLobbyTimer() {
+    if (this.lobbyExpiryTimer) {
+      clearTimeout(this.lobbyExpiryTimer);
+      this.lobbyExpiryTimer = null;
     }
   }
 
@@ -224,6 +240,7 @@ export class Room {
     if (this.players.size < 3) {
       throw new Error("At least 3 players are required to start.");
     }
+    this.clearLobbyTimer();
     this.currentRound = 1;
     this.getPlayerList().forEach((p) => (p.score = 0));
     await this.startRound(io);
@@ -659,6 +676,7 @@ function generateCryptographicCode(length = 6): string {
 
 export class RoomManager {
   private static instance: RoomManager;
+  private io: Server | null = null;
   private rooms: Map<string, Room> = new Map();
   private historicalCodes: Set<string> = new Set(); // Prevents collisions with previous rooms
 
@@ -669,6 +687,10 @@ export class RoomManager {
       RoomManager.instance = new RoomManager();
     }
     return RoomManager.instance;
+  }
+
+  public setIO(io: Server) {
+    this.io = io;
   }
 
   public createRoom(host: Player, settings?: Partial<RoomSettings>): Room {
@@ -691,7 +713,22 @@ export class RoomManager {
 
     const room = new Room(code, host, settings);
     this.rooms.set(code, room);
-    console.log(`[RoomManager] Secure Collision-Proof Room created: #${code} by ${host.displayName}`);
+
+    // Auto-close room after 240 seconds (4 minutes) if game has not started
+    room.lobbyExpiryTimer = setTimeout(() => {
+      if (room.phase === "lobby") {
+        console.log(`[RoomManager] Room #${room.code} auto-closed after 240s inactivity in lobby.`);
+        if (this.io) {
+          this.io.to(room.code).emit("room:disbanded", {
+            reason: "Room was automatically closed because the game did not start within 240 seconds.",
+          });
+          this.io.emit("rooms:public-updated", this.getPublicRooms());
+        }
+        this.removeRoom(room.code);
+      }
+    }, 240 * 1000);
+
+    console.log(`[RoomManager] Secure Collision-Proof Room created: #${code} by ${host.displayName} (240s lobby timer active)`);
     return room;
   }
 
@@ -703,6 +740,7 @@ export class RoomManager {
     const room = this.rooms.get(code);
     if (room) {
       room.clearTimer();
+      room.clearLobbyTimer();
       this.rooms.delete(code);
       console.log(`[RoomManager] Room destroyed: #${code}`);
     }

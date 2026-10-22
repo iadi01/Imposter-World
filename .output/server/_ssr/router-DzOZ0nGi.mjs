@@ -1,9 +1,9 @@
 import { n as require_jsx_runtime, t as QueryClientProvider } from "../_libs/react+tanstack__react-query.mjs";
 import { S as useRouter, _ as lazyRouteComponent, b as Link, f as Scripts, g as Outlet, h as createRouter, p as HeadContent, v as createFileRoute, y as createRootRouteWithContext } from "../_libs/@tanstack/react-router+[...].mjs";
 import { t as QueryClient } from "../_libs/tanstack__query-core.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/router-Ca0RCeMP.js
+//#region node_modules/.nitro/vite/services/ssr/assets/router-DzOZ0nGi.js
 var import_jsx_runtime = require_jsx_runtime();
-var styles_default = "/assets/styles-jIyh6IGM.css";
+var styles_default = "/assets/styles-RJ__PhC5.css";
 function NotFoundComponent() {
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 		className: "flex min-h-screen items-center justify-center bg-background px-4",
@@ -207,7 +207,7 @@ function RootComponent() {
 		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Outlet, {})
 	});
 }
-var $$splitComponentImporter$13 = () => import("./routes-CD6nrc1Y.mjs");
+var $$splitComponentImporter$13 = () => import("./routes-BN3tfUIx.mjs");
 var Route$13 = createFileRoute("/")({
 	head: () => ({ meta: [{ title: "Imposter World — Real-Time Multiplayer Party Game" }, {
 		name: "description",

@@ -171,9 +171,15 @@ function Index() {
     };
   }, []);
 
-  // Socket Reference
+  // Socket Reference & Auto-join Invite Tracker
   const socketRef = useRef(getSocket());
   const autoJoinAttempted = useRef(false);
+  const pendingInviteCode = useRef<string | null>(
+    typeof window !== "undefined"
+      ? new URLSearchParams(window.location.search).get("room")?.trim().toUpperCase() || null
+      : null
+  );
+  const [lobbyTimeLeft, setLobbyTimeLeft] = useState<number | null>(null);
 
   // Synchronize browser URL query param (?room=CODE) with active roomState
   useEffect(() => {
@@ -184,14 +190,23 @@ function Index() {
         url.searchParams.set("room", roomState.roomCode);
         window.history.replaceState({}, "", `${url.pathname}?${url.searchParams.toString()}`);
       }
-    } else {
-      if (url.searchParams.has("room")) {
-        url.searchParams.delete("room");
-        const remaining = url.searchParams.toString();
-        window.history.replaceState({}, "", remaining ? `${url.pathname}?${remaining}` : url.pathname);
-      }
     }
   }, [roomState?.roomCode]);
+
+  // Track 240s Room Lobby Countdown
+  useEffect(() => {
+    if (!roomState || roomState.phase !== "lobby" || !roomState.lobbyDeadline) {
+      setLobbyTimeLeft(null);
+      return;
+    }
+    const updateTimer = () => {
+      const diff = Math.max(0, Math.ceil((roomState.lobbyDeadline - Date.now()) / 1000));
+      setLobbyTimeLeft(diff);
+    };
+    updateTimer();
+    const interval = setInterval(updateTimer, 1000);
+    return () => clearInterval(interval);
+  }, [roomState?.lobbyDeadline, roomState?.phase]);
 
   // 1. Initial User fetch & authentic session
   useEffect(() => {
@@ -266,19 +281,29 @@ function Index() {
 
   // Auto-detect invite link (?room=CODE) and join room directly
   useEffect(() => {
-    if (typeof window === "undefined" || !user || autoJoinAttempted.current) return;
-    const params = new URLSearchParams(window.location.search);
-    const inviteCode = params.get("room");
-    if (inviteCode && inviteCode.trim()) {
-      const cleanCode = inviteCode.trim().toUpperCase();
-      setRoomCodeInput(cleanCode);
-      if (roomState && roomState.roomCode === cleanCode) {
-        return; // Already actively in this room
-      }
-      autoJoinAttempted.current = true;
-      setTimeout(() => {
-        handleJoinRoom(cleanCode);
-      }, 350);
+    if (typeof window === "undefined" || !user || !pendingInviteCode.current || autoJoinAttempted.current) return;
+    const cleanCode = pendingInviteCode.current;
+    setRoomCodeInput(cleanCode);
+
+    if (roomState && roomState.roomCode === cleanCode) {
+      return; // Already actively in this room
+    }
+
+    autoJoinAttempted.current = true;
+    toast.info(`Connecting to Classroom Room #${cleanCode}...`);
+
+    const doJoin = () => {
+      handleJoinRoom(cleanCode);
+    };
+
+    const socket = socketRef.current;
+    if (socket && socket.connected) {
+      doJoin();
+    } else if (socket) {
+      socket.once("connect", () => {
+        doJoin();
+      });
+      setTimeout(doJoin, 350);
     }
   }, [user]);
 
@@ -335,8 +360,18 @@ function Index() {
     });
 
     socket.on("room:disbanded", (data: { reason?: string }) => {
-      toast.error(data.reason || "This room was closed by the administrator.");
+      toast.error(data.reason || "This room was closed.");
       setRoomState(null);
+      pendingInviteCode.current = null;
+      if (typeof window !== "undefined") {
+        const url = new URL(window.location.href);
+        if (url.searchParams.has("room")) {
+          url.searchParams.delete("room");
+          const remaining = url.searchParams.toString();
+          window.history.replaceState({}, "", remaining ? `${url.pathname}?${remaining}` : url.pathname);
+        }
+      }
+      sound.playError();
     });
 
     return () => {
@@ -443,19 +478,19 @@ function Index() {
   };
 
   const handleJoinRoom = (code: string) => {
-    if (!user || !code.trim()) return;
+    if (!code || !code.trim()) return;
     const cleanCode = code.trim().toUpperCase();
     if (roomState && roomState.roomCode === cleanCode) {
-      alert("You are already playing in this room! No need to join again.");
       return;
     }
     sound.playPop();
     const socket = socketRef.current;
+    const joinUser = user || { id: socket.id || "guest", displayName: "Detective", avatarUrl: "" };
     socket.emit(
       "room:join",
       {
         roomCode: cleanCode,
-        user: { id: user.id, displayName: user.displayName, avatarUrl: user.avatarUrl },
+        user: { id: joinUser.id, displayName: joinUser.displayName, avatarUrl: joinUser.avatarUrl },
       },
       (res: any) => {
         if (res.success && res.roomCode) {
@@ -463,7 +498,8 @@ function Index() {
           url.searchParams.set("room", res.roomCode);
           window.history.replaceState({}, "", `${url.pathname}?${url.searchParams.toString()}`);
         } else if (!res.success) {
-          alert(res.error || "Failed to join room");
+          toast.error(res.error || "Failed to join room");
+          pendingInviteCode.current = null;
         }
       }
     );
@@ -579,6 +615,7 @@ function Index() {
     socketRef.current.emit("room:leave");
     setRoomState(null);
     setSecretInfo(null);
+    pendingInviteCode.current = null;
     if (typeof window !== "undefined") {
       const url = new URL(window.location.href);
       url.searchParams.delete("room");
@@ -1455,7 +1492,7 @@ function Index() {
           {/* Room Header Info */}
           <div className="flex flex-wrap items-center justify-between gap-4 border-b-2 border-foreground/30 pb-4">
             <div>
-              <div className="flex items-center gap-2">
+              <div className="flex flex-wrap items-center gap-2">
                 <span
                   className={`text-xs font-bold px-2 py-0.5 rounded uppercase font-hand ${
                     roomState.settings.isPublic
@@ -1466,6 +1503,12 @@ function Index() {
                   {roomState.settings.isPublic ? "🟢 Public Room" : "🔒 Private Room"}
                 </span>
                 <span className="text-sm font-bold text-accent font-hand uppercase">Classroom Lobby</span>
+                {lobbyTimeLeft !== null && (
+                  <span className="flex items-center gap-1 text-xs font-bold px-2.5 py-0.5 rounded uppercase font-hand bg-amber-100 text-amber-900 border border-amber-400/60 shadow-xs">
+                    <Clock className="h-3.5 w-3.5 animate-pulse text-amber-700" />
+                    Auto-closes in {Math.floor(lobbyTimeLeft / 60)}:{(lobbyTimeLeft % 60).toString().padStart(2, "0")}
+                  </span>
+                )}
               </div>
               <h2 className="text-4xl md:text-5xl font-display text-foreground">
                 Room #{roomState.roomCode}
