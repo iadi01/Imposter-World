@@ -72,13 +72,11 @@ app.get("/health", (_req, res) => {
 
 // 8. Serve Client Static Assets (from .output/public)
 const publicDir = path.resolve(process.cwd(), ".output/public");
-const indexFile = path.resolve(publicDir, "index.html");
-
 if (fs.existsSync(publicDir)) {
-  app.use(express.static(publicDir, { maxAge: "1d" }));
+  app.use(express.static(publicDir, { maxAge: "1d", index: false }));
 }
 
-// 9. TanStack Start SSR Handler with Bulletproof Static Fallback
+// 9. TanStack Start SSR Handler (Nitro Middleware)
 const ssrIndexPath = path.resolve(process.cwd(), ".output/server/index.mjs");
 if (fs.existsSync(ssrIndexPath)) {
   try {
@@ -88,29 +86,13 @@ if (fs.existsSync(ssrIndexPath)) {
         if (req.path.startsWith("/api") || req.path === "/health") {
           return next();
         }
-        middleware(req, res, (err) => {
-          if (err && fs.existsSync(indexFile)) {
-            return res.sendFile(indexFile);
-          }
-          next(err);
-        });
+        middleware(req, res, next);
       });
     }
   } catch (err) {
     console.error("[SSR Setup Error] Failed to load Nitro middleware:", err);
   }
 }
-
-// 10. SPA Fallback for all other HTML navigations
-app.get("*", (req, res, next) => {
-  if (req.path.startsWith("/api") || req.path === "/health") {
-    return next();
-  }
-  if (fs.existsSync(indexFile)) {
-    return res.sendFile(indexFile);
-  }
-  next();
-});
 
 // 10. Global Safe Error Handler (Never leak stack traces or system internals)
 app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
