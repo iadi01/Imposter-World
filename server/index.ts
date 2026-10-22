@@ -58,9 +58,16 @@ app.use("/api/auth", authRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api", apiRoutes);
 
-// Health probe (minimal output)
+// Health probe (detailed diagnostics)
 app.get("/health", (_req, res) => {
-  res.json({ status: "healthy" });
+  const ssrPath = path.resolve(process.cwd(), ".output/server/index.mjs");
+  const publicPath = path.resolve(process.cwd(), ".output/public");
+  res.json({
+    status: "healthy",
+    hasSsr: fs.existsSync(ssrPath),
+    hasPublic: fs.existsSync(publicPath),
+    version: "1.0.1",
+  });
 });
 
 // 8. Serve Client Static Assets (from .output/public)
