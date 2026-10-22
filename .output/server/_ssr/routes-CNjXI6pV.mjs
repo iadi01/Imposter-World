@@ -5,7 +5,7 @@ import { b as Link } from "../_libs/@tanstack/react-router+[...].mjs";
 import { t as toast } from "../_libs/sonner.mjs";
 import { $ as Building2, A as Music, B as Flag, C as Plus, D as Pause, F as LoaderCircle, G as Copy, H as EyeOff, K as Compass, L as Heart, M as MapPin, N as LogOut, O as Paintbrush, P as Lock, Q as Check, R as Globe, T as Pin, V as Eye, W as Eraser, X as CircleAlert, _ as Send, a as UserCheck, b as RefreshCw, d as Square, h as Settings, i as Users, j as Mic, k as PaintBucket, l as Trash2, n as VolumeX, nt as ArrowLeft, o as Undo2, q as Clock, r as Volume2, s as Trophy, t as X, tt as AtSign, v as Search, w as Play, y as RotateCcw, z as Flame } from "../_libs/lucide-react.mjs";
 import { t as lookup } from "../_libs/socket.io-client+[...].mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/routes-DGhBvz94.js
+//#region node_modules/.nitro/vite/services/ssr/assets/routes-CNjXI6pV.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 function hexToRgba(hex) {
@@ -4055,11 +4055,12 @@ function Index() {
 		fetchPublicRooms();
 	}, []);
 	(0, import_react.useEffect)(() => {
-		if (typeof window === "undefined" || !pendingInviteCode.current || autoJoinAttempted.current) return;
-		const cleanCode = pendingInviteCode.current;
-		setRoomCodeInput(cleanCode);
+		if (typeof window === "undefined" || autoJoinAttempted.current) return;
+		const cleanCode = new URLSearchParams(window.location.search).get("room")?.trim().toUpperCase();
+		if (!cleanCode) return;
 		if (roomState && roomState.roomCode === cleanCode) return;
 		autoJoinAttempted.current = true;
+		setRoomCodeInput(cleanCode);
 		toast.info(`Connecting to Classroom Room #${cleanCode}...`);
 		const doJoin = () => {
 			handleJoinRoom(cleanCode);

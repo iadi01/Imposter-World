@@ -281,15 +281,17 @@ function Index() {
 
   // Auto-detect invite link (?room=CODE) and join room directly
   useEffect(() => {
-    if (typeof window === "undefined" || !pendingInviteCode.current || autoJoinAttempted.current) return;
-    const cleanCode = pendingInviteCode.current;
-    setRoomCodeInput(cleanCode);
+    if (typeof window === "undefined" || autoJoinAttempted.current) return;
+    const searchParams = new URLSearchParams(window.location.search);
+    const cleanCode = searchParams.get("room")?.trim().toUpperCase();
+    if (!cleanCode) return;
 
     if (roomState && roomState.roomCode === cleanCode) {
       return; // Already actively in this room
     }
 
     autoJoinAttempted.current = true;
+    setRoomCodeInput(cleanCode);
     toast.info(`Connecting to Classroom Room #${cleanCode}...`);
 
     const doJoin = () => {
