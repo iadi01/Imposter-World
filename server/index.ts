@@ -71,22 +71,27 @@ app.get("/health", (_req, res) => {
 });
 
 // 8. Serve Client Static Assets (from .output/public)
-const publicDir = path.resolve(process.cwd(), ".output/public");
+const projectRoot = path.resolve(import.meta.dirname, "..");
+const publicDir = path.resolve(projectRoot, ".output/public");
 if (fs.existsSync(publicDir)) {
   app.use(express.static(publicDir, { maxAge: "1d", index: false }));
 }
 
 // 9. TanStack Start SSR Handler (Nitro Middleware)
-const ssrIndexPath = path.resolve(process.cwd(), ".output/server/index.mjs");
+const ssrIndexPath = path.resolve(projectRoot, ".output/server/index.mjs");
 if (fs.existsSync(ssrIndexPath)) {
   try {
     const { middleware } = await import(ssrIndexPath);
     if (middleware) {
-      app.use((req, res, next) => {
+      app.use(async (req, res, next) => {
         if (req.path.startsWith("/api") || req.path === "/health") {
           return next();
         }
-        middleware(req, res, next);
+        try {
+          await middleware(req, res);
+        } catch (err) {
+          next(err);
+        }
       });
     }
   } catch (err) {
