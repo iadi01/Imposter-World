@@ -1,11 +1,11 @@
 import { o as __toESM } from "../_runtime.mjs";
-import { t as API_BASE } from "./api-6A2QlK4P.mjs";
+import { t as API_BASE } from "./api-OZfBBcXI.mjs";
 import { n as require_jsx_runtime, r as require_react } from "../_libs/react+tanstack__react-query.mjs";
 import { b as Link } from "../_libs/@tanstack/react-router+[...].mjs";
 import { t as toast } from "../_libs/sonner.mjs";
 import { $ as Building2, A as Music, B as Flag, C as Plus, D as Pause, F as LoaderCircle, G as Copy, H as EyeOff, K as Compass, L as Heart, M as MapPin, N as LogOut, O as Paintbrush, P as Lock, Q as Check, R as Globe, T as Pin, V as Eye, W as Eraser, X as CircleAlert, _ as Send, a as UserCheck, b as RefreshCw, d as Square, h as Settings, i as Users, j as Mic, k as PaintBucket, l as Trash2, n as VolumeX, nt as ArrowLeft, o as Undo2, q as Clock, r as Volume2, s as Trophy, t as X, tt as AtSign, v as Search, w as Play, y as RotateCcw, z as Flame } from "../_libs/lucide-react.mjs";
 import { t as lookup } from "../_libs/socket.io-client+[...].mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/routes-CrsyKeAq.js
+//#region node_modules/.nitro/vite/services/ssr/assets/routes-5BuEEn1O.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 function hexToRgba(hex) {
@@ -3861,11 +3861,22 @@ function VoiceCluePlayer({ audioUrl, transcript }) {
 		})]
 	});
 }
-var SOCKET_URL = "http://localhost:4001";
+var getSocketUrl = () => {
+	if (typeof window !== "undefined") {
+		if (window.location.hostname !== "localhost" && window.location.hostname !== "127.0.0.1") {
+			if (window.location.hostname.includes("vercel.app")) return "https://imposter-world.onrender.com";
+			return window.location.origin;
+		}
+		if (window.location.port === "8080") return "http://localhost:4001";
+		return window.location.origin;
+	}
+	return "http://localhost:4001";
+};
 var socket = null;
 function getSocket() {
 	if (!socket) {
-		socket = lookup(SOCKET_URL, {
+		const socketUrl = getSocketUrl();
+		socket = lookup(socketUrl, {
 			autoConnect: true,
 			reconnection: true,
 			reconnectionAttempts: 10,
@@ -5889,14 +5900,14 @@ function Index() {
 				user,
 				onClose: () => setShowAccount(false),
 				onLogout: () => {
-					fetch(`http://localhost:4001/api/auth/logout`, { method: "POST" }).then(() => {
+					fetch(`${API_BASE}/api/auth/logout`, { method: "POST" }).then(() => {
 						setUser(null);
 						setShowAccount(false);
 					});
 				},
 				onGoogleLogin: handleGoogleLogin,
 				onUpdateProfile: (profileData) => {
-					if (user) fetch(`http://localhost:4001/api/user/update`, {
+					if (user) fetch(`${API_BASE}/api/user/update`, {
 						method: "POST",
 						headers: { "Content-Type": "application/json" },
 						body: JSON.stringify({

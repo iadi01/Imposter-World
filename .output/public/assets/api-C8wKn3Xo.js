@@ -1,0 +1,1 @@
+var e=typeof window<`u`?window.location.hostname!==`localhost`&&window.location.hostname!==`127.0.0.1`?window.location.hostname.includes(`vercel.app`)?`https://imposter-world.onrender.com`:``:window.location.port===`8080`?`http://localhost:4001`:``:``;export{e as t};
