@@ -68,7 +68,7 @@ export function RoomSettingsModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-2 sm:p-4 backdrop-blur-xs">
-      <div className="notebook relative w-full max-w-lg max-h-[92vh] overflow-y-auto rounded-sm bg-card p-4 sm:p-6 md:p-8 space-y-4 sm:space-y-6 shadow-2xl">
+      <div className="notebook relative w-full max-w-lg max-h-[92vh] overflow-y-auto overflow-x-hidden rounded-sm bg-card p-4 sm:p-6 md:p-8 space-y-4 sm:space-y-6 shadow-2xl">
         {/* Tape decoration */}
         <div className="tape absolute -top-3 left-1/2 h-6 w-32 -translate-x-1/2 rotate-[-2deg]" />
 

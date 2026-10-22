@@ -456,25 +456,41 @@ function Index() {
   };
 
   const handleCreateRoom = (customSettings?: Partial<GameSettingsData>) => {
-    if (!user) return;
     sound.playPop();
     const socket = socketRef.current;
-    socket.emit(
-      "room:create",
-      {
-        user: { id: user.id, displayName: user.displayName, avatarUrl: user.avatarUrl },
-        settings: customSettings,
-      },
-      (res: any) => {
-        if (res.success && res.roomCode) {
-          const url = new URL(window.location.href);
-          url.searchParams.set("room", res.roomCode);
-          window.history.replaceState({}, "", `${url.pathname}?${url.searchParams.toString()}`);
-        } else if (!res.success) {
-          alert(res.error || "Failed to create room");
+    if (!socket.connected) {
+      socket.connect();
+    }
+    const creatorUser = user || {
+      id: socket.id || `guest-${Math.random().toString(36).substring(2, 9)}`,
+      displayName: "Detective",
+      avatarUrl: "",
+    };
+
+    const doCreate = () => {
+      socket.emit(
+        "room:create",
+        {
+          user: { id: creatorUser.id, displayName: creatorUser.displayName, avatarUrl: creatorUser.avatarUrl },
+          settings: customSettings,
+        },
+        (res: any) => {
+          if (res && res.success && res.roomCode) {
+            const url = new URL(window.location.href);
+            url.searchParams.set("room", res.roomCode);
+            window.history.replaceState({}, "", `${url.pathname}?${url.searchParams.toString()}`);
+          } else if (res && !res.success) {
+            alert(res.error || "Failed to create room");
+          }
         }
-      }
-    );
+      );
+    };
+
+    if (socket.connected) {
+      doCreate();
+    } else {
+      socket.once("connect", doCreate);
+    }
   };
 
   const handleJoinRoom = (code: string) => {
@@ -485,43 +501,75 @@ function Index() {
     }
     sound.playPop();
     const socket = socketRef.current;
-    const joinUser = user || { id: socket.id || "guest", displayName: "Detective", avatarUrl: "" };
-    socket.emit(
-      "room:join",
-      {
-        roomCode: cleanCode,
-        user: { id: joinUser.id, displayName: joinUser.displayName, avatarUrl: joinUser.avatarUrl },
-      },
-      (res: any) => {
-        if (res.success && res.roomCode) {
-          const url = new URL(window.location.href);
-          url.searchParams.set("room", res.roomCode);
-          window.history.replaceState({}, "", `${url.pathname}?${url.searchParams.toString()}`);
-        } else if (!res.success) {
-          toast.error(res.error || "Failed to join room");
-          pendingInviteCode.current = null;
+    if (!socket.connected) {
+      socket.connect();
+    }
+    const joinUser = user || {
+      id: socket.id || `guest-${Math.random().toString(36).substring(2, 9)}`,
+      displayName: "Detective",
+      avatarUrl: "",
+    };
+
+    const doJoin = () => {
+      socket.emit(
+        "room:join",
+        {
+          roomCode: cleanCode,
+          user: { id: joinUser.id, displayName: joinUser.displayName, avatarUrl: joinUser.avatarUrl },
+        },
+        (res: any) => {
+          if (res && res.success && res.roomCode) {
+            const url = new URL(window.location.href);
+            url.searchParams.set("room", res.roomCode);
+            window.history.replaceState({}, "", `${url.pathname}?${url.searchParams.toString()}`);
+          } else if (res && !res.success) {
+            toast.error(res.error || "Failed to join room");
+            pendingInviteCode.current = null;
+          }
         }
-      }
-    );
+      );
+    };
+
+    if (socket.connected) {
+      doJoin();
+    } else {
+      socket.once("connect", doJoin);
+    }
   };
 
   const handleInstantMatch = () => {
-    if (!user) return;
     sound.playPop();
     const socket = socketRef.current;
-    socket.emit(
-      "room:instant-match",
-      { user: { id: user.id, displayName: user.displayName, avatarUrl: user.avatarUrl } },
-      (res: any) => {
-        if (res.success && res.roomCode) {
-          const url = new URL(window.location.href);
-          url.searchParams.set("room", res.roomCode);
-          window.history.replaceState({}, "", `${url.pathname}?${url.searchParams.toString()}`);
-        } else if (!res.success) {
-          alert(res.error || "Instant match failed");
+    if (!socket.connected) {
+      socket.connect();
+    }
+    const matchUser = user || {
+      id: socket.id || `guest-${Math.random().toString(36).substring(2, 9)}`,
+      displayName: "Detective",
+      avatarUrl: "",
+    };
+
+    const doInstant = () => {
+      socket.emit(
+        "room:instant-match",
+        { user: { id: matchUser.id, displayName: matchUser.displayName, avatarUrl: matchUser.avatarUrl } },
+        (res: any) => {
+          if (res && res.success && res.roomCode) {
+            const url = new URL(window.location.href);
+            url.searchParams.set("room", res.roomCode);
+            window.history.replaceState({}, "", `${url.pathname}?${url.searchParams.toString()}`);
+          } else if (res && !res.success) {
+            alert(res.error || "Instant match failed");
+          }
         }
-      }
-    );
+      );
+    };
+
+    if (socket.connected) {
+      doInstant();
+    } else {
+      socket.once("connect", doInstant);
+    }
   };
 
   const handleStartGame = () => {
@@ -804,17 +852,17 @@ function Index() {
 
       {/* VIEW 1: HOME / LANDING PAGE */}
       {!roomState && !isLocalMode && (
-        <section className="notebook relative mx-auto max-w-4xl rounded-sm py-5 sm:py-10 pl-4 sm:pl-12 md:pl-20 pr-3 sm:pr-8 md:pr-12 shadow-2xl">
+        <section className="notebook relative mx-auto max-w-4xl rounded-sm py-5 sm:py-10 pl-3.5 sm:pl-12 md:pl-20 pr-3 sm:pr-8 md:pr-12 shadow-2xl">
           <div className="tape absolute -top-4 left-1/2 h-7 w-36 -translate-x-1/2 rotate-[-2deg]" />
 
           <div className="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-8 items-center">
             {/* Left Hero Details */}
-            <div className="md:col-span-8 space-y-4 sm:space-y-6">
+            <div className="md:col-span-8 space-y-4 sm:space-y-6 min-w-0">
               <div className="inline-flex items-center gap-2 rounded-full bg-accent/15 px-3 py-1 text-accent font-bold text-xs sm:text-sm border border-accent/30">
                 <span>🕵️ Real-Time Multiplayer Party Game</span>
               </div>
 
-              <h1 className="text-3xl sm:text-5xl md:text-6xl font-display leading-[0.95] text-foreground">
+              <h1 className="text-3xl sm:text-5xl md:text-6xl font-display leading-[0.95] text-foreground break-words">
                 One Word. Different Secrets. <br />
                 <span className="marker text-accent">Who's the Imposter?</span>
               </h1>
@@ -852,26 +900,26 @@ function Index() {
               </div>
 
               {/* CTA Action Buttons */}
-              <div className="flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-2.5 sm:gap-4 pt-1">
+              <div className="flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-2.5 sm:gap-4 pt-1 max-w-full">
                 <Btn
                   onClick={() => handleCreateRoom({ isPublic: true })}
-                  className="w-full sm:w-auto text-center"
+                  className="w-full sm:w-auto text-center justify-center"
                 >
                   Create Room (3-14 Players)
                 </Btn>
-                <div className="flex items-center gap-2 w-full sm:w-auto">
+                <div className="flex items-center gap-2 w-full sm:w-auto max-w-full">
                   <input
                     type="text"
                     value={roomCodeInput}
                     onChange={(e) => setRoomCodeInput(e.target.value.toUpperCase())}
                     placeholder="ENTER CODE"
                     maxLength={6}
-                    className="sketch flex-1 sm:w-36 bg-white px-3 py-2 text-center text-base sm:text-lg font-bold uppercase tracking-wider focus:outline-none"
+                    className="sketch flex-1 min-w-0 sm:w-36 bg-white px-2.5 sm:px-3 py-2 text-center text-base sm:text-lg font-bold uppercase tracking-wider focus:outline-none"
                   />
                   <Btn
                     variant="secondary"
                     onClick={() => handleJoinRoom(roomCodeInput)}
-                    className="px-5 py-2.5 shrink-0"
+                    className="px-4 sm:px-5 py-2.5 shrink-0 justify-center"
                   >
                     Join
                   </Btn>
@@ -1018,19 +1066,19 @@ function Index() {
 
       {/* VIEW: LOCAL PASS-AND-PLAY ON 1 DEVICE */}
       {isLocalMode && (
-        <section className="notebook relative mx-auto max-w-2xl rounded-sm py-6 sm:py-8 pl-5 sm:pl-12 md:pl-20 pr-4 sm:pr-8 md:pr-10 shadow-2xl space-y-4 sm:space-y-6">
+        <section className="notebook relative mx-auto max-w-2xl rounded-sm py-6 sm:py-8 pl-3.5 sm:pl-12 md:pl-20 pr-3 sm:pr-8 md:pr-10 shadow-2xl space-y-4 sm:space-y-6">
           <div className="tape absolute -top-4 left-1/2 h-7 w-36 -translate-x-1/2 rotate-[-1deg]" />
 
-          <div className="flex items-center justify-between border-b-2 border-foreground/30 pb-3">
-            <div className="flex items-center gap-2.5">
+          <div className="flex items-center justify-between gap-2 border-b-2 border-foreground/30 pb-3">
+            <div className="flex items-center gap-2 sm:gap-2.5 min-w-0">
               <img
                 src="/secret-folder.svg"
                 alt="Secret Folder"
-                className="h-10 w-10 sm:h-12 sm:w-12 object-contain drop-shadow-xs"
+                className="h-8 w-8 sm:h-12 sm:w-12 object-contain shrink-0 drop-shadow-xs"
               />
-              <div>
-                <span className="text-xs font-bold text-accent font-hand uppercase">Single Device Mode</span>
-                <h2 className="text-2xl sm:text-3xl font-display text-foreground">Local Pass & Play 📱</h2>
+              <div className="min-w-0">
+                <span className="text-[10px] sm:text-xs font-bold text-accent font-hand uppercase block truncate">Single Device Mode</span>
+                <h2 className="text-xl sm:text-3xl font-display text-foreground truncate">Local Pass & Play 📱</h2>
               </div>
             </div>
             <button
@@ -1038,7 +1086,7 @@ function Index() {
                 sound.playPop();
                 setIsLocalMode(false);
               }}
-              className="sketch bg-secondary px-3.5 sm:px-4 py-1.5 text-xs sm:text-sm font-bold text-foreground"
+              className="sketch bg-secondary px-2.5 sm:px-4 py-1 sm:py-1.5 text-xs sm:text-sm font-bold text-foreground shrink-0"
             >
               Exit Local
             </button>
@@ -1055,13 +1103,13 @@ function Index() {
                 {localPlayers.map((name, i) => (
                   <span
                     key={`${name}-${i}`}
-                    className="sketch bg-white px-3 py-1 font-bold text-base flex items-center gap-2 shadow-2xs"
+                    className="sketch bg-white px-2.5 sm:px-3 py-1 font-bold text-sm sm:text-base flex items-center gap-1.5 sm:gap-2 shadow-2xs"
                   >
-                    <span>{name}</span>
+                    <span className="truncate max-w-[120px]">{name}</span>
                     <button
                       type="button"
                       onClick={() => setLocalPlayers(localPlayers.filter((_, idx) => idx !== i))}
-                      className="text-xs text-destructive hover:bg-destructive/15 rounded-full h-5 w-5 inline-flex items-center justify-center font-bold transition-colors cursor-pointer"
+                      className="text-xs text-destructive hover:bg-destructive/15 rounded-full h-5 w-5 inline-flex items-center justify-center font-bold transition-colors cursor-pointer shrink-0"
                       title={`Remove ${name}`}
                     >
                       ×
@@ -1072,7 +1120,7 @@ function Index() {
 
               {/* Add player input */}
               {localPlayers.length < 12 && (
-                <div className="flex gap-2">
+                <div className="flex flex-col sm:flex-row gap-2 w-full max-w-full">
                   <input
                     type="text"
                     value={localNewPlayerName}
@@ -1083,12 +1131,13 @@ function Index() {
                         setLocalNewPlayerName("");
                       }
                     }}
-                    placeholder="New player name (e.g. Priya, Kabir)..."
-                    className="sketch flex-1 bg-white px-3 py-1.5 text-base"
+                    placeholder="New player name..."
+                    className="sketch flex-1 min-w-0 w-full bg-white px-3 py-2 text-base focus:outline-none"
                     maxLength={15}
                   />
                   <Btn
                     variant="secondary"
+                    className="w-full sm:w-auto shrink-0 justify-center"
                     onClick={() => {
                       if (localNewPlayerName.trim()) {
                         setLocalPlayers([...localPlayers, localNewPlayerName.trim()]);
@@ -1107,7 +1156,7 @@ function Index() {
                     ⚠️ Add at least 3 players to start (currently {localPlayers.length}/3)
                   </div>
                 )}
-                <Btn onClick={startLocalGame} disabled={localPlayers.length < 3}>
+                <Btn className="w-full sm:w-auto justify-center" onClick={startLocalGame} disabled={localPlayers.length < 3}>
                   Start Pass & Play Round 🚀
                 </Btn>
               </div>

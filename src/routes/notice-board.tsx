@@ -37,7 +37,7 @@ function NoticeBoardPage() {
         </nav>
 
         {/* Notebook Paper Sheet */}
-        <article className="notebook relative p-6 sm:p-10 shadow-lg space-y-6 font-hand text-foreground leading-relaxed">
+        <article className="notebook relative p-4 sm:p-8 md:p-10 shadow-lg space-y-6 font-hand text-foreground leading-relaxed">
           <div className="tape absolute -top-3 left-1/2 h-6 w-36 -translate-x-1/2 rotate-[-1deg]" />
 
           <header className="border-b-2 border-foreground/20 pb-4 space-y-2">

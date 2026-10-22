@@ -63,6 +63,12 @@
 
 @layer base {
   * { border-color: var(--color-border); }
+  html {
+    overflow-x: hidden;
+    max-width: 100%;
+    width: 100%;
+    -webkit-text-size-adjust: 100%;
+  }
   body {
     background-color: var(--color-background);
     background-image:
@@ -74,6 +80,10 @@
     color: var(--color-foreground);
     font-family: var(--font-hand);
     min-height: 100vh;
+    overflow-x: hidden;
+    max-width: 100%;
+    width: 100%;
+    touch-action: pan-y;
   }
   h1, h2, h3 { font-family: var(--font-display); }
 }
@@ -104,7 +114,7 @@
 @media (max-width: 640px) {
   .notebook {
     background-image:
-      linear-gradient(90deg, transparent 1.15rem, var(--margin) 1.15rem, var(--margin) 1.25rem, transparent 1.25rem),
+      linear-gradient(90deg, transparent 0.75rem, var(--margin) 0.75rem, var(--margin) 0.85rem, transparent 0.85rem),
       repeating-linear-gradient(transparent 0 1.95rem, var(--line) 1.95rem 2rem);
     box-shadow: 3px 4px 0 var(--foreground);
   }

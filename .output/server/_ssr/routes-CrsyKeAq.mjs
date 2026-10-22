@@ -5,7 +5,7 @@ import { b as Link } from "../_libs/@tanstack/react-router+[...].mjs";
 import { t as toast } from "../_libs/sonner.mjs";
 import { $ as Building2, A as Music, B as Flag, C as Plus, D as Pause, F as LoaderCircle, G as Copy, H as EyeOff, K as Compass, L as Heart, M as MapPin, N as LogOut, O as Paintbrush, P as Lock, Q as Check, R as Globe, T as Pin, V as Eye, W as Eraser, X as CircleAlert, _ as Send, a as UserCheck, b as RefreshCw, d as Square, h as Settings, i as Users, j as Mic, k as PaintBucket, l as Trash2, n as VolumeX, nt as ArrowLeft, o as Undo2, q as Clock, r as Volume2, s as Trophy, t as X, tt as AtSign, v as Search, w as Play, y as RotateCcw, z as Flame } from "../_libs/lucide-react.mjs";
 import { t as lookup } from "../_libs/socket.io-client+[...].mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/routes-BN3tfUIx.js
+//#region node_modules/.nitro/vite/services/ssr/assets/routes-CrsyKeAq.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 function hexToRgba(hex) {
@@ -513,7 +513,7 @@ function RoomSettingsModal({ initialSettings, isHost, onSave, onClose, isMuted, 
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 		className: "fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-2 sm:p-4 backdrop-blur-xs",
 		children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-			className: "notebook relative w-full max-w-lg max-h-[92vh] overflow-y-auto rounded-sm bg-card p-4 sm:p-6 md:p-8 space-y-4 sm:space-y-6 shadow-2xl",
+			className: "notebook relative w-full max-w-lg max-h-[92vh] overflow-y-auto overflow-x-hidden rounded-sm bg-card p-4 sm:p-6 md:p-8 space-y-4 sm:space-y-6 shadow-2xl",
 			children: [
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "tape absolute -top-3 left-1/2 h-6 w-32 -translate-x-1/2 rotate-[-2deg]" }),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
@@ -2586,7 +2586,7 @@ function AccountModal({ user, onClose, onLogout, onGoogleLogin, onUpdateProfile 
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 		className: "fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-3 sm:p-4 backdrop-blur-xs",
 		children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-			className: "notebook relative w-full max-w-md max-h-[92vh] overflow-y-auto rounded-sm bg-card p-4 sm:p-6 md:p-8 space-y-4 sm:space-y-6 shadow-2xl",
+			className: "notebook relative w-full max-w-md max-h-[92vh] overflow-y-auto overflow-x-hidden rounded-sm bg-card p-4 sm:p-6 md:p-8 space-y-4 sm:space-y-6 shadow-2xl",
 			children: [
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "tape absolute -top-3 left-1/2 h-6 w-32 -translate-x-1/2 rotate-[-1deg]" }),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
@@ -3037,7 +3037,7 @@ function LeaderboardModal({ onClose }) {
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 		className: "fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-2 sm:p-4 backdrop-blur-xs",
 		children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-			className: "notebook relative w-full max-w-xl max-h-[92vh] flex flex-col rounded-sm bg-card p-4 sm:p-6 md:p-8 space-y-3.5 shadow-2xl",
+			className: "notebook relative w-full max-w-xl max-h-[92vh] flex flex-col overflow-x-hidden rounded-sm bg-card p-4 sm:p-6 md:p-8 space-y-3.5 shadow-2xl",
 			children: [
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "tape absolute -top-3 left-1/2 h-6 w-32 -translate-x-1/2 rotate-[1deg]" }),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
@@ -3286,7 +3286,7 @@ function PublicRoomsModal({ rooms, onJoinRoom, onCreateRoom, onRefresh, onClose 
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 		className: "fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-2 sm:p-4 backdrop-blur-xs",
 		children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-			className: "notebook relative w-full max-w-2xl max-h-[92vh] overflow-y-auto rounded-sm bg-card p-4 sm:p-6 md:p-8 space-y-4 sm:space-y-5 shadow-2xl",
+			className: "notebook relative w-full max-w-2xl max-h-[92vh] overflow-y-auto overflow-x-hidden rounded-sm bg-card p-4 sm:p-6 md:p-8 space-y-4 sm:space-y-5 shadow-2xl",
 			children: [
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "tape absolute -top-3 left-1/2 h-6 w-36 -translate-x-1/2 rotate-[-1deg]" }),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
@@ -3309,7 +3309,7 @@ function PublicRoomsModal({ rooms, onJoinRoom, onCreateRoom, onRefresh, onClose 
 				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 					className: "flex flex-wrap items-center justify-between gap-3 font-hand text-sm",
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						className: "flex items-center gap-1.5",
+						className: "flex flex-wrap items-center gap-1.5",
 						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 							className: "font-bold text-muted-foreground mr-1",
 							children: "MODE:"
@@ -3463,7 +3463,7 @@ function NoticeBoardModal({ onClose, championName }) {
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 		className: "fixed inset-0 z-50 flex items-center justify-center bg-black/55 p-3 sm:p-4 backdrop-blur-xs",
 		children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-			className: "notebook relative w-full max-w-2xl max-h-[92vh] overflow-y-auto rounded-sm bg-[#FAF4E4] p-4 sm:p-6 md:p-8 space-y-4 sm:space-y-6 shadow-2xl border-4 border-[#172C53]",
+			className: "notebook relative w-full max-w-2xl max-h-[92vh] overflow-y-auto overflow-x-hidden rounded-sm bg-[#FAF4E4] p-4 sm:p-6 md:p-8 space-y-4 sm:space-y-6 shadow-2xl border-4 border-[#172C53]",
 			children: [
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "tape absolute -top-4 left-1/2 h-7 w-40 -translate-x-1/2 rotate-[-2deg]" }),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
@@ -4170,22 +4170,32 @@ function Index() {
 		}
 	};
 	const handleCreateRoom = (customSettings) => {
-		if (!user) return;
 		sound.playPop();
-		socketRef.current.emit("room:create", {
-			user: {
-				id: user.id,
-				displayName: user.displayName,
-				avatarUrl: user.avatarUrl
-			},
-			settings: customSettings
-		}, (res) => {
-			if (res.success && res.roomCode) {
-				const url = new URL(window.location.href);
-				url.searchParams.set("room", res.roomCode);
-				window.history.replaceState({}, "", `${url.pathname}?${url.searchParams.toString()}`);
-			} else if (!res.success) alert(res.error || "Failed to create room");
-		});
+		const socket = socketRef.current;
+		if (!socket.connected) socket.connect();
+		const creatorUser = user || {
+			id: socket.id || `guest-${Math.random().toString(36).substring(2, 9)}`,
+			displayName: "Detective",
+			avatarUrl: ""
+		};
+		const doCreate = () => {
+			socket.emit("room:create", {
+				user: {
+					id: creatorUser.id,
+					displayName: creatorUser.displayName,
+					avatarUrl: creatorUser.avatarUrl
+				},
+				settings: customSettings
+			}, (res) => {
+				if (res && res.success && res.roomCode) {
+					const url = new URL(window.location.href);
+					url.searchParams.set("room", res.roomCode);
+					window.history.replaceState({}, "", `${url.pathname}?${url.searchParams.toString()}`);
+				} else if (res && !res.success) alert(res.error || "Failed to create room");
+			});
+		};
+		if (socket.connected) doCreate();
+		else socket.once("connect", doCreate);
 	};
 	const handleJoinRoom = (code) => {
 		if (!code || !code.trim()) return;
@@ -4193,43 +4203,58 @@ function Index() {
 		if (roomState && roomState.roomCode === cleanCode) return;
 		sound.playPop();
 		const socket = socketRef.current;
+		if (!socket.connected) socket.connect();
 		const joinUser = user || {
-			id: socket.id || "guest",
+			id: socket.id || `guest-${Math.random().toString(36).substring(2, 9)}`,
 			displayName: "Detective",
 			avatarUrl: ""
 		};
-		socket.emit("room:join", {
-			roomCode: cleanCode,
-			user: {
-				id: joinUser.id,
-				displayName: joinUser.displayName,
-				avatarUrl: joinUser.avatarUrl
-			}
-		}, (res) => {
-			if (res.success && res.roomCode) {
-				const url = new URL(window.location.href);
-				url.searchParams.set("room", res.roomCode);
-				window.history.replaceState({}, "", `${url.pathname}?${url.searchParams.toString()}`);
-			} else if (!res.success) {
-				toast.error(res.error || "Failed to join room");
-				pendingInviteCode.current = null;
-			}
-		});
+		const doJoin = () => {
+			socket.emit("room:join", {
+				roomCode: cleanCode,
+				user: {
+					id: joinUser.id,
+					displayName: joinUser.displayName,
+					avatarUrl: joinUser.avatarUrl
+				}
+			}, (res) => {
+				if (res && res.success && res.roomCode) {
+					const url = new URL(window.location.href);
+					url.searchParams.set("room", res.roomCode);
+					window.history.replaceState({}, "", `${url.pathname}?${url.searchParams.toString()}`);
+				} else if (res && !res.success) {
+					toast.error(res.error || "Failed to join room");
+					pendingInviteCode.current = null;
+				}
+			});
+		};
+		if (socket.connected) doJoin();
+		else socket.once("connect", doJoin);
 	};
 	const handleInstantMatch = () => {
-		if (!user) return;
 		sound.playPop();
-		socketRef.current.emit("room:instant-match", { user: {
-			id: user.id,
-			displayName: user.displayName,
-			avatarUrl: user.avatarUrl
-		} }, (res) => {
-			if (res.success && res.roomCode) {
-				const url = new URL(window.location.href);
-				url.searchParams.set("room", res.roomCode);
-				window.history.replaceState({}, "", `${url.pathname}?${url.searchParams.toString()}`);
-			} else if (!res.success) alert(res.error || "Instant match failed");
-		});
+		const socket = socketRef.current;
+		if (!socket.connected) socket.connect();
+		const matchUser = user || {
+			id: socket.id || `guest-${Math.random().toString(36).substring(2, 9)}`,
+			displayName: "Detective",
+			avatarUrl: ""
+		};
+		const doInstant = () => {
+			socket.emit("room:instant-match", { user: {
+				id: matchUser.id,
+				displayName: matchUser.displayName,
+				avatarUrl: matchUser.avatarUrl
+			} }, (res) => {
+				if (res && res.success && res.roomCode) {
+					const url = new URL(window.location.href);
+					url.searchParams.set("room", res.roomCode);
+					window.history.replaceState({}, "", `${url.pathname}?${url.searchParams.toString()}`);
+				} else if (res && !res.success) alert(res.error || "Instant match failed");
+			});
+		};
+		if (socket.connected) doInstant();
+		else socket.once("connect", doInstant);
 	};
 	const handleStartGame = () => {
 		sound.playDing();
@@ -4500,20 +4525,20 @@ function Index() {
 				})]
 			}),
 			!roomState && !isLocalMode && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
-				className: "notebook relative mx-auto max-w-4xl rounded-sm py-5 sm:py-10 pl-4 sm:pl-12 md:pl-20 pr-3 sm:pr-8 md:pr-12 shadow-2xl",
+				className: "notebook relative mx-auto max-w-4xl rounded-sm py-5 sm:py-10 pl-3.5 sm:pl-12 md:pl-20 pr-3 sm:pr-8 md:pr-12 shadow-2xl",
 				children: [
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "tape absolute -top-4 left-1/2 h-7 w-36 -translate-x-1/2 rotate-[-2deg]" }),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 						className: "grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-8 items-center",
 						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-							className: "md:col-span-8 space-y-4 sm:space-y-6",
+							className: "md:col-span-8 space-y-4 sm:space-y-6 min-w-0",
 							children: [
 								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 									className: "inline-flex items-center gap-2 rounded-full bg-accent/15 px-3 py-1 text-accent font-bold text-xs sm:text-sm border border-accent/30",
 									children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "🕵️ Real-Time Multiplayer Party Game" })
 								}),
 								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h1", {
-									className: "text-3xl sm:text-5xl md:text-6xl font-display leading-[0.95] text-foreground",
+									className: "text-3xl sm:text-5xl md:text-6xl font-display leading-[0.95] text-foreground break-words",
 									children: [
 										"One Word. Different Secrets. ",
 										/* @__PURE__ */ (0, import_jsx_runtime.jsx)("br", {}),
@@ -4561,24 +4586,24 @@ function Index() {
 									]
 								}),
 								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-									className: "flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-2.5 sm:gap-4 pt-1",
+									className: "flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-2.5 sm:gap-4 pt-1 max-w-full",
 									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Btn, {
 										onClick: () => handleCreateRoom({ isPublic: true }),
-										className: "w-full sm:w-auto text-center",
+										className: "w-full sm:w-auto text-center justify-center",
 										children: "Create Room (3-14 Players)"
 									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-										className: "flex items-center gap-2 w-full sm:w-auto",
+										className: "flex items-center gap-2 w-full sm:w-auto max-w-full",
 										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
 											type: "text",
 											value: roomCodeInput,
 											onChange: (e) => setRoomCodeInput(e.target.value.toUpperCase()),
 											placeholder: "ENTER CODE",
 											maxLength: 6,
-											className: "sketch flex-1 sm:w-36 bg-white px-3 py-2 text-center text-base sm:text-lg font-bold uppercase tracking-wider focus:outline-none"
+											className: "sketch flex-1 min-w-0 sm:w-36 bg-white px-2.5 sm:px-3 py-2 text-center text-base sm:text-lg font-bold uppercase tracking-wider focus:outline-none"
 										}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Btn, {
 											variant: "secondary",
 											onClick: () => handleJoinRoom(roomCodeInput),
-											className: "px-5 py-2.5 shrink-0",
+											className: "px-4 sm:px-5 py-2.5 shrink-0 justify-center",
 											children: "Join"
 										})]
 									})]
@@ -4786,30 +4811,33 @@ function Index() {
 				]
 			}),
 			isLocalMode && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
-				className: "notebook relative mx-auto max-w-2xl rounded-sm py-6 sm:py-8 pl-5 sm:pl-12 md:pl-20 pr-4 sm:pr-8 md:pr-10 shadow-2xl space-y-4 sm:space-y-6",
+				className: "notebook relative mx-auto max-w-2xl rounded-sm py-6 sm:py-8 pl-3.5 sm:pl-12 md:pl-20 pr-3 sm:pr-8 md:pr-10 shadow-2xl space-y-4 sm:space-y-6",
 				children: [
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "tape absolute -top-4 left-1/2 h-7 w-36 -translate-x-1/2 rotate-[-1deg]" }),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-						className: "flex items-center justify-between border-b-2 border-foreground/30 pb-3",
+						className: "flex items-center justify-between gap-2 border-b-2 border-foreground/30 pb-3",
 						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-							className: "flex items-center gap-2.5",
+							className: "flex items-center gap-2 sm:gap-2.5 min-w-0",
 							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
 								src: "/secret-folder.svg",
 								alt: "Secret Folder",
-								className: "h-10 w-10 sm:h-12 sm:w-12 object-contain drop-shadow-xs"
-							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-								className: "text-xs font-bold text-accent font-hand uppercase",
-								children: "Single Device Mode"
-							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
-								className: "text-2xl sm:text-3xl font-display text-foreground",
-								children: "Local Pass & Play 📱"
-							})] })]
+								className: "h-8 w-8 sm:h-12 sm:w-12 object-contain shrink-0 drop-shadow-xs"
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+								className: "min-w-0",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: "text-[10px] sm:text-xs font-bold text-accent font-hand uppercase block truncate",
+									children: "Single Device Mode"
+								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
+									className: "text-xl sm:text-3xl font-display text-foreground truncate",
+									children: "Local Pass & Play 📱"
+								})]
+							})]
 						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 							onClick: () => {
 								sound.playPop();
 								setIsLocalMode(false);
 							},
-							className: "sketch bg-secondary px-3.5 sm:px-4 py-1.5 text-xs sm:text-sm font-bold text-foreground",
+							className: "sketch bg-secondary px-2.5 sm:px-4 py-1 sm:py-1.5 text-xs sm:text-sm font-bold text-foreground shrink-0",
 							children: "Exit Local"
 						})]
 					}),
@@ -4823,18 +4851,21 @@ function Index() {
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 								className: "flex flex-wrap gap-2",
 								children: localPlayers.map((name, i) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-									className: "sketch bg-white px-3 py-1 font-bold text-base flex items-center gap-2 shadow-2xs",
-									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: name }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+									className: "sketch bg-white px-2.5 sm:px-3 py-1 font-bold text-sm sm:text-base flex items-center gap-1.5 sm:gap-2 shadow-2xs",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+										className: "truncate max-w-[120px]",
+										children: name
+									}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 										type: "button",
 										onClick: () => setLocalPlayers(localPlayers.filter((_, idx) => idx !== i)),
-										className: "text-xs text-destructive hover:bg-destructive/15 rounded-full h-5 w-5 inline-flex items-center justify-center font-bold transition-colors cursor-pointer",
+										className: "text-xs text-destructive hover:bg-destructive/15 rounded-full h-5 w-5 inline-flex items-center justify-center font-bold transition-colors cursor-pointer shrink-0",
 										title: `Remove ${name}`,
 										children: "×"
 									})]
 								}, `${name}-${i}`))
 							}),
 							localPlayers.length < 12 && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-								className: "flex gap-2",
+								className: "flex flex-col sm:flex-row gap-2 w-full max-w-full",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
 									type: "text",
 									value: localNewPlayerName,
@@ -4845,11 +4876,12 @@ function Index() {
 											setLocalNewPlayerName("");
 										}
 									},
-									placeholder: "New player name (e.g. Priya, Kabir)...",
-									className: "sketch flex-1 bg-white px-3 py-1.5 text-base",
+									placeholder: "New player name...",
+									className: "sketch flex-1 min-w-0 w-full bg-white px-3 py-2 text-base focus:outline-none",
 									maxLength: 15
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Btn, {
 									variant: "secondary",
+									className: "w-full sm:w-auto shrink-0 justify-center",
 									onClick: () => {
 										if (localNewPlayerName.trim()) {
 											setLocalPlayers([...localPlayers, localNewPlayerName.trim()]);
@@ -4869,6 +4901,7 @@ function Index() {
 										"/3)"
 									]
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Btn, {
+									className: "w-full sm:w-auto justify-center",
 									onClick: startLocalGame,
 									disabled: localPlayers.length < 3,
 									children: "Start Pass & Play Round 🚀"

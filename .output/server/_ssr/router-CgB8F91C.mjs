@@ -1,9 +1,9 @@
 import { n as require_jsx_runtime, t as QueryClientProvider } from "../_libs/react+tanstack__react-query.mjs";
 import { S as useRouter, _ as lazyRouteComponent, b as Link, f as Scripts, g as Outlet, h as createRouter, p as HeadContent, v as createFileRoute, y as createRootRouteWithContext } from "../_libs/@tanstack/react-router+[...].mjs";
 import { t as QueryClient } from "../_libs/tanstack__query-core.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/router-DzOZ0nGi.js
+//#region node_modules/.nitro/vite/services/ssr/assets/router-CgB8F91C.js
 var import_jsx_runtime = require_jsx_runtime();
-var styles_default = "/assets/styles-RJ__PhC5.css";
+var styles_default = "/assets/styles-OR35Fqi9.css";
 function NotFoundComponent() {
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 		className: "flex min-h-screen items-center justify-center bg-background px-4",
@@ -75,7 +75,7 @@ var Route$14 = createRootRouteWithContext()({
 			{ charSet: "utf-8" },
 			{
 				name: "viewport",
-				content: "width=device-width, initial-scale=1"
+				content: "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
 			},
 			{ title: "Imposter World | Play the Imposter Game Online Free" },
 			{
@@ -207,7 +207,7 @@ function RootComponent() {
 		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Outlet, {})
 	});
 }
-var $$splitComponentImporter$13 = () => import("./routes-BN3tfUIx.mjs");
+var $$splitComponentImporter$13 = () => import("./routes-CrsyKeAq.mjs");
 var Route$13 = createFileRoute("/")({
 	head: () => ({ meta: [{ title: "Imposter World — Real-Time Multiplayer Party Game" }, {
 		name: "description",
@@ -225,7 +225,7 @@ var Route$12 = createFileRoute("/admin")({
 });
 var $$splitComponentImporter$11 = () => import("./delete-account-lsbCZbgI.mjs");
 var Route$11 = createFileRoute("/delete-account")({ component: lazyRouteComponent($$splitComponentImporter$11, "component") });
-var $$splitComponentImporter$10 = () => import("./faq-CwAQKlaK.mjs");
+var $$splitComponentImporter$10 = () => import("./faq-9trRYDbq.mjs");
 var Route$10 = createFileRoute("/faq")({
 	head: () => ({
 		meta: [
@@ -307,7 +307,7 @@ var Route$10 = createFileRoute("/faq")({
 	}),
 	component: lazyRouteComponent($$splitComponentImporter$10, "component")
 });
-var $$splitComponentImporter$9 = () => import("./how-to-play-CGTYqVww.mjs");
+var $$splitComponentImporter$9 = () => import("./how-to-play-kSHUO3xr.mjs");
 var Route$9 = createFileRoute("/how-to-play")({
 	head: () => ({ meta: [
 		{ title: "How To Play Imposter World — Complete Classroom Rules & Guide" },
@@ -458,11 +458,11 @@ var Route$5 = createFileRoute("/imposter-word-list")({
 	}),
 	component: lazyRouteComponent($$splitComponentImporter$5, "component")
 });
-var $$splitComponentImporter$4 = () => import("./notice-board-DLLaJfvq.mjs");
+var $$splitComponentImporter$4 = () => import("./notice-board-YTxrffzn.mjs");
 var Route$4 = createFileRoute("/notice-board")({ component: lazyRouteComponent($$splitComponentImporter$4, "component") });
-var $$splitComponentImporter$3 = () => import("./privacy-DMKSCFcy.mjs");
+var $$splitComponentImporter$3 = () => import("./privacy-qpHUcyLt.mjs");
 var Route$3 = createFileRoute("/privacy")({ component: lazyRouteComponent($$splitComponentImporter$3, "component") });
-var $$splitComponentImporter$2 = () => import("./support-CVavkUIz.mjs");
+var $$splitComponentImporter$2 = () => import("./support-CriIRQo_.mjs");
 var Route$2 = createFileRoute("/support")({
 	head: () => ({ meta: [
 		{ title: "Support the Developer — Imposter World ☕" },
@@ -489,7 +489,7 @@ var Route$2 = createFileRoute("/support")({
 	] }),
 	component: lazyRouteComponent($$splitComponentImporter$2, "component")
 });
-var $$splitComponentImporter$1 = () => import("./terms-Lw_BBD3c.mjs");
+var $$splitComponentImporter$1 = () => import("./terms-CT-bPoAi.mjs");
 var Route$1 = createFileRoute("/terms")({ component: lazyRouteComponent($$splitComponentImporter$1, "component") });
 var $$splitComponentImporter = () => import("./api.auth.google.callback-D0ayzpIM.mjs");
 var Route = createFileRoute("/api/auth/google/callback")({ component: lazyRouteComponent($$splitComponentImporter, "component") });

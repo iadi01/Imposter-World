@@ -53,8 +53,9 @@ app.use(sanitizeMongoInputs);
 
 app.use(cookieParser());
 
-// 7. API Routes
+// 7. API Routes & Auth Aliases (Both /api/auth and /auth supported)
 app.use("/api/auth", authRoutes);
+app.use("/auth", authRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api", apiRoutes);
 

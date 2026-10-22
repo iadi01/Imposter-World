@@ -5,7 +5,7 @@ import { b as Link } from "../_libs/@tanstack/react-router+[...].mjs";
 import { t as toast } from "../_libs/sonner.mjs";
 import { G as Copy, Q as Check, S as QrCode, U as ExternalLink, Y as CircleCheck, _ as Send, c as TriangleAlert, f as Smartphone, m as ShieldCheck, nt as ArrowLeft, t as X } from "../_libs/lucide-react.mjs";
 import { t as require_lib } from "../_libs/qrcode.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/support-CVavkUIz.js
+//#region node_modules/.nitro/vite/services/ssr/assets/support-CriIRQo_.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var import_lib = /* @__PURE__ */ __toESM(require_lib());
@@ -184,7 +184,7 @@ function SupportPage() {
 					})
 				]
 			}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("article", {
-				className: "notebook relative p-6 sm:p-10 shadow-lg space-y-10 font-hand text-foreground leading-relaxed",
+				className: "notebook relative p-4 sm:p-8 md:p-10 shadow-lg space-y-10 font-hand text-foreground leading-relaxed",
 				children: [
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "tape absolute -top-3 left-1/2 h-6 w-36 -translate-x-1/2 rotate-[-1deg]" }),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("header", {

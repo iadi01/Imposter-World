@@ -8,9 +8,19 @@ router.use(authLimiter);
 
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID || "";
 const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET || "";
-const GOOGLE_REDIRECT_URI =
-  process.env.GOOGLE_REDIRECT_URI || "http://localhost:8080/api/auth/google/callback";
 const JWT_SECRET = process.env.JWT_SECRET || "imposter-world-secret-jwt-key-2026";
+
+function resolveRedirectUri(req: Request, fallbackPath: string = "/auth/google/callback"): string {
+  if (process.env.GOOGLE_REDIRECT_URI) {
+    return process.env.GOOGLE_REDIRECT_URI;
+  }
+  const host = (req.headers["x-forwarded-host"] as string) || req.headers.host || "";
+  const proto = (req.headers["x-forwarded-proto"] as string) || (req.secure ? "https" : "https");
+  if (host && !host.includes("localhost")) {
+    return `${proto}://${host}${fallbackPath}`;
+  }
+  return `http://localhost:8080${fallbackPath}`;
+}
 
 export function generateToken(user: {
   _id: string;
@@ -35,8 +45,9 @@ export function generateToken(user: {
 // 1. Get Google OAuth URL
 router.get("/google/url", (req: Request, res: Response) => {
   const rootUrl = "https://accounts.google.com/o/oauth2/v2/auth";
+  const redirectUri = resolveRedirectUri(req, "/auth/google/callback");
   const options = {
-    redirect_uri: GOOGLE_REDIRECT_URI,
+    redirect_uri: redirectUri,
     client_id: GOOGLE_CLIENT_ID,
     access_type: "offline",
     response_type: "code",
@@ -51,29 +62,57 @@ router.get("/google/url", (req: Request, res: Response) => {
   res.json({ url: `${rootUrl}?${qs}` });
 });
 
-// Shared Google Auth Code Exchanger
+// Shared Google Auth Code Exchanger with automatic fallback for callback URIs
 async function exchangeGoogleAuthCode(code: string, redirectUriOverride?: string) {
   const tokenUrl = "https://oauth2.googleapis.com/token";
-  const redirectUri = redirectUriOverride || GOOGLE_REDIRECT_URI;
-  const values = {
-    code,
-    client_id: GOOGLE_CLIENT_ID,
-    client_secret: GOOGLE_CLIENT_SECRET,
-    redirect_uri: redirectUri,
-    grant_type: "authorization_code",
-  };
+  
+  const candidateUris = Array.from(
+    new Set(
+      [
+        redirectUriOverride,
+        process.env.GOOGLE_REDIRECT_URI,
+        "https://imposter-world.onrender.com/auth/google/callback",
+        "https://imposter-world.onrender.com/api/auth/google/callback",
+        "http://localhost:8080/api/auth/google/callback",
+        "http://localhost:8080/auth/google/callback",
+      ].filter((u): u is string => typeof u === "string" && u.length > 0)
+    )
+  );
 
-  const tokenRes = await fetch(tokenUrl, {
-    method: "POST",
-    headers: { "Content-Type": "application/x-www-form-urlencoded" },
-    body: new URLSearchParams(values).toString(),
-  });
+  let tokenData: any = null;
+  let lastError: any = null;
 
-  const tokenData = await tokenRes.json();
-  if (!tokenRes.ok || !tokenData.access_token) {
-    console.error("[Auth] Google token exchange failed:", tokenData);
+  for (const redirectUri of candidateUris) {
+    const values = {
+      code,
+      client_id: GOOGLE_CLIENT_ID,
+      client_secret: GOOGLE_CLIENT_SECRET,
+      redirect_uri: redirectUri,
+      grant_type: "authorization_code",
+    };
+
+    try {
+      const tokenRes = await fetch(tokenUrl, {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams(values).toString(),
+      });
+
+      tokenData = await tokenRes.json();
+      if (tokenRes.ok && tokenData.access_token) {
+        break;
+      } else {
+        lastError = tokenData;
+      }
+    } catch (e: any) {
+      lastError = e;
+    }
+  }
+
+  if (!tokenData || !tokenData.access_token) {
+    console.error("[Auth] Google token exchange failed on all candidate URIs:", lastError);
     throw new Error(
-      tokenData.error_description || tokenData.error || "Failed to exchange Google token"
+      lastError?.error_description || lastError?.error || "Failed to exchange Google token"
     );
   }
 
@@ -122,13 +161,14 @@ async function exchangeGoogleAuthCode(code: string, redirectUriOverride?: string
 
 // 2. Handle Google OAuth Callback (POST - from frontend proxy/client)
 router.post("/google/callback", async (req: Request, res: Response): Promise<any> => {
-  const { code } = req.body;
+  const { code, redirectUri } = req.body;
   if (!code) {
     return res.status(400).json({ error: "Authorization code missing" });
   }
 
   try {
-    const { user, token } = await exchangeGoogleAuthCode(code);
+    const preferredUri = redirectUri || resolveRedirectUri(req, "/auth/google/callback");
+    const { user, token } = await exchangeGoogleAuthCode(code, preferredUri);
 
     res.cookie("session_token", token, {
       httpOnly: true,
@@ -168,11 +208,15 @@ router.get("/google/callback", async (req: Request, res: Response): Promise<any>
   const error = typeof req.query.error === "string" ? req.query.error : "";
 
   if (error || !code) {
-    return res.redirect(`http://localhost:8080/?login=error&message=${encodeURIComponent(error || "Missing auth code")}`);
+    return res.redirect(`/?login=error&message=${encodeURIComponent(error || "Missing auth code")}`);
   }
 
   try {
-    const { token } = await exchangeGoogleAuthCode(code);
+    const host = (req.headers["x-forwarded-host"] as string) || req.headers.host || "";
+    const proto = (req.headers["x-forwarded-proto"] as string) || (req.secure ? "https" : "https");
+    const incomingUri = `${proto}://${host}${req.baseUrl}${req.path}`;
+
+    const { token } = await exchangeGoogleAuthCode(code, incomingUri);
 
     res.cookie("session_token", token, {
       httpOnly: true,
@@ -181,10 +225,10 @@ router.get("/google/callback", async (req: Request, res: Response): Promise<any>
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
-    return res.redirect("http://localhost:8080/?login=success");
+    return res.redirect("/?login=success");
   } catch (err: any) {
     console.error("[Auth] Direct Google GET Callback Error:", err);
-    return res.redirect(`http://localhost:8080/?login=error&message=${encodeURIComponent(err.message || "Auth failed")}`);
+    return res.redirect(`/?login=error&message=${encodeURIComponent(err.message || "Auth failed")}`);
   }
 });
 

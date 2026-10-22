@@ -3,7 +3,7 @@ import { t as API_BASE } from "./api-6A2QlK4P.mjs";
 import { n as require_jsx_runtime, r as require_react } from "../_libs/react+tanstack__react-query.mjs";
 import { b as Link } from "../_libs/@tanstack/react-router+[...].mjs";
 import { j as Mic, nt as ArrowLeft, p as Shield, s as Trophy } from "../_libs/lucide-react.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/notice-board-DLLaJfvq.js
+//#region node_modules/.nitro/vite/services/ssr/assets/notice-board-YTxrffzn.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 function NoticeBoardPage() {
@@ -35,7 +35,7 @@ function NoticeBoardPage() {
 					})
 				]
 			}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("article", {
-				className: "notebook relative p-6 sm:p-10 shadow-lg space-y-6 font-hand text-foreground leading-relaxed",
+				className: "notebook relative p-4 sm:p-8 md:p-10 shadow-lg space-y-6 font-hand text-foreground leading-relaxed",
 				children: [
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "tape absolute -top-3 left-1/2 h-6 w-36 -translate-x-1/2 rotate-[-1deg]" }),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("header", {

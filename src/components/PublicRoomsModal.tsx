@@ -48,7 +48,7 @@ export function PublicRoomsModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-2 sm:p-4 backdrop-blur-xs">
-      <div className="notebook relative w-full max-w-2xl max-h-[92vh] overflow-y-auto rounded-sm bg-card p-4 sm:p-6 md:p-8 space-y-4 sm:space-y-5 shadow-2xl">
+      <div className="notebook relative w-full max-w-2xl max-h-[92vh] overflow-y-auto overflow-x-hidden rounded-sm bg-card p-4 sm:p-6 md:p-8 space-y-4 sm:space-y-5 shadow-2xl">
         <div className="tape absolute -top-3 left-1/2 h-6 w-36 -translate-x-1/2 rotate-[-1deg]" />
 
         {/* Header */}
@@ -71,7 +71,7 @@ export function PublicRoomsModal({
         {/* Toolbar: Filters & Actions */}
         <div className="flex flex-wrap items-center justify-between gap-3 font-hand text-sm">
           {/* Mode Filters */}
-          <div className="flex items-center gap-1.5">
+          <div className="flex flex-wrap items-center gap-1.5">
             <span className="font-bold text-muted-foreground mr-1">MODE:</span>
             {["all", "normal", "double_imposter", "word_guess"].map((mode) => (
               <button
