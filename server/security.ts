@@ -357,6 +357,7 @@ export function isAllowedOrigin(urlStr?: string | null, hostHeader?: string | nu
     const hostname = parsed.hostname;
 
     if (ALLOWED_ORIGINS.has(origin)) return true;
+    if (hostname === "localhost" || hostname === "127.0.0.1" || hostname.startsWith("192.168.")) return true;
 
     if (hostHeader) {
       const cleanHost = hostHeader.split(":")[0];
