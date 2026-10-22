@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="100%" height="100%">
+  <!-- Lightbulb Idea Doodle -->
+  <defs>
+    <filter id="crayon-sketch" x="-10%" y="-10%" width="120%" height="120%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="3" result="noise" />
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="2" />
+    </filter>
+  </defs>
+
+  <g filter="url(#crayon-sketch)">
+    <!-- Spark / Glow Rays -->
+    <path d="M100 15 L100 35 M100 165 L100 185 M25 95 L45 95 M155 95 L175 95" stroke="#F59E0B" stroke-width="4.5" stroke-linecap="round" stroke-dasharray="2 4" />
+    <path d="M45 42 L60 56 M140 136 L155 150 M45 148 L60 134 M140 54 L155 40" stroke="#FBBF24" stroke-width="4" stroke-linecap="round" stroke-dasharray="1 3" />
+    <path d="M168 70 L185 64 M15 120 L32 114" stroke="#F59E0B" stroke-width="3.5" stroke-linecap="round" />
+
+    <!-- Bulb Glass Fill -->
+    <path d="M70 120 C50 100 50 65 72 45 C90 28 118 28 134 47 C152 68 150 100 130 120 C125 125 124 132 123 138 L77 138 C76 132 75 125 70 120 Z" fill="#FEF08A" fill-opacity="0.9" />
+
+    <!-- Bulb Glass Outline (Hand-drawn look) -->
+    <path d="M70 120 C50 100 50 65 72 45 C90 28 118 28 134 47 C152 68 150 100 130 120 C125 125 124 132 123 138 L77 138 C76 132 75 125 70 120 Z" fill="none" stroke="#234A91" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+
+    <!-- Glass Highlight Reflection -->
+    <path d="M68 55 C65 70 72 88 80 96" fill="none" stroke="#FFFFFF" stroke-width="5" stroke-linecap="round" />
+
+    <!-- Filament Doodle -->
+    <path d="M88 135 L88 95 C88 85 96 82 100 88 C104 82 112 85 112 95 L112 135" fill="none" stroke="#C64132" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+    <circle cx="95" cy="88" r="3" fill="#F59E0B" />
+    <circle cx="105" cy="88" r="3" fill="#F59E0B" />
+
+    <!-- Screw Base -->
+    <rect x="80" y="140" width="40" height="7" rx="3.5" fill="#CBD5E1" stroke="#234A91" stroke-width="3.5" />
+    <rect x="83" y="149" width="34" height="7" rx="3.5" fill="#94A3B8" stroke="#234A91" stroke-width="3.5" />
+    <rect x="86" y="158" width="28" height="6" rx="3" fill="#64748B" stroke="#234A91" stroke-width="3.5" />
+    <!-- Base tip -->
+    <path d="M92 166 C92 172 108 172 108 166 Z" fill="#334155" stroke="#234A91" stroke-width="3" />
+
+    <!-- Cute Notebook Paperclip -->
+    <path d="M142 105 L155 85 C160 76 174 85 168 94 L152 118 C144 130 124 116 132 104 L146 83 C151 75 162 82 158 88 L146 106" fill="none" stroke="#2563EB" stroke-width="3.5" stroke-linecap="round" />
+
+    <!-- Doodle Sparkle Stars -->
+    <path d="M42 30 L45 38 L53 41 L45 44 L42 52 L39 44 L31 41 L39 38 Z" fill="#F59E0B" />
+    <path d="M158 130 L160 135 L165 137 L160 139 L158 144 L156 139 L151 137 L156 135 Z" fill="#F59E0B" />
+  </g>
+</svg>
