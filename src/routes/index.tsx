@@ -281,7 +281,7 @@ function Index() {
 
   // Auto-detect invite link (?room=CODE) and join room directly
   useEffect(() => {
-    if (typeof window === "undefined" || !user || !pendingInviteCode.current || autoJoinAttempted.current) return;
+    if (typeof window === "undefined" || !pendingInviteCode.current || autoJoinAttempted.current) return;
     const cleanCode = pendingInviteCode.current;
     setRoomCodeInput(cleanCode);
 
@@ -300,10 +300,8 @@ function Index() {
     if (socket && socket.connected) {
       doJoin();
     } else if (socket) {
-      socket.once("connect", () => {
-        doJoin();
-      });
-      setTimeout(doJoin, 350);
+      socket.once("connect", doJoin);
+      setTimeout(doJoin, 400);
     }
   }, [user]);
 
