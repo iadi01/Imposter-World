@@ -1,5 +1,6 @@
 import { Trophy, X, Globe, MapPin, Flag, Building2, Search } from "lucide-react";
 import { useEffect, useState, useCallback, useDeferredValue } from "react";
+import { API_BASE } from "../lib/api";
 import { COUNTRIES, getStatesForCountry, getCitiesForState } from "../lib/locations";
 
 interface LeaderboardEntry {
@@ -46,7 +47,7 @@ export function LeaderboardModal({ onClose }: { onClose: () => void }) {
       params.set("search", deferredSearch.trim());
     }
 
-    fetch(`http://localhost:4001/api/leaderboard?${params.toString()}`)
+    fetch(`${API_BASE}/api/leaderboard?${params.toString()}`)
       .then((res) => res.json())
       .then((data) => {
         if (data.leaderboard) {

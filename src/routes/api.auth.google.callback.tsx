@@ -1,6 +1,7 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Loader2, AlertCircle, ArrowLeft } from "lucide-react";
+import { API_BASE } from "../lib/api";
 
 export const Route = createFileRoute("/api/auth/google/callback")({
   component: GoogleCallbackPage,
@@ -31,7 +32,7 @@ function GoogleCallbackPage() {
     }
 
     // Exchange code with backend
-    fetch("http://localhost:4001/api/auth/google/callback", {
+    fetch(`${API_BASE}/api/auth/google/callback`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       credentials: "include",

@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
+import { API_BASE } from "../lib/api";
 import {
   ArrowLeft,
   Lock,
@@ -40,8 +41,6 @@ export const Route = createFileRoute("/admin")({
   }),
   component: AdminPage,
 });
-
-const API_BASE = "http://localhost:4001";
 
 interface AdminStats {
   totalUsers: number;

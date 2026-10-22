@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 import QRCode from "qrcode";
+import { API_BASE } from "../lib/api";
 import {
   ArrowLeft,
   Copy,
@@ -108,10 +109,6 @@ function UpiQr({ amount }: { amount: number }) {
   );
 }
 
-const API_BASE =
-  typeof window !== "undefined" && window.location.hostname === "localhost"
-    ? "http://localhost:4001"
-    : "";
 
 function SupportPage() {
   const [selectedAmount, setSelectedAmount] = useState<number>(501);

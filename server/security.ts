@@ -341,30 +341,54 @@ export function securityHeaders(_req: Request, res: Response, next: NextFunction
 const ALLOWED_ORIGINS = new Set([
   "http://localhost:8080",
   "http://localhost:3000",
+  "http://localhost:4001",
   "http://127.0.0.1:8080",
+  "http://127.0.0.1:4001",
   "http://192.168.1.2:8080",
   "https://imposterworld.xyz",
   "https://www.imposterworld.xyz",
 ]);
+
+export function isAllowedOrigin(urlStr?: string | null, hostHeader?: string | null): boolean {
+  if (!urlStr) return true;
+  try {
+    const parsed = new URL(urlStr);
+    const origin = parsed.origin;
+    const hostname = parsed.hostname;
+
+    if (ALLOWED_ORIGINS.has(origin)) return true;
+
+    if (hostHeader) {
+      const cleanHost = hostHeader.split(":")[0];
+      if (hostname === cleanHost) return true;
+    }
+
+    if (hostname.endsWith(".onrender.com")) return true;
+    if (hostname === "imposterworld.xyz" || hostname.endsWith(".imposterworld.xyz")) return true;
+
+    if (process.env.APP_URL && (origin === process.env.APP_URL || hostname === new URL(process.env.APP_URL).hostname)) return true;
+    if (process.env.RENDER_EXTERNAL_URL && (origin === process.env.RENDER_EXTERNAL_URL || hostname === new URL(process.env.RENDER_EXTERNAL_URL).hostname)) return true;
+
+    return false;
+  } catch {
+    return false;
+  }
+}
 
 export function verifyOrigin(req: Request, res: Response, next: NextFunction): any {
   // Only enforce origin check on state-changing methods
   if (["POST", "PUT", "DELETE", "PATCH"].includes(req.method)) {
     const origin = req.headers.origin;
     const referer = req.headers.referer;
+    const host = req.headers.host;
 
     if (origin) {
-      if (!ALLOWED_ORIGINS.has(origin)) {
+      if (!isAllowedOrigin(origin, host)) {
         return res.status(403).json({ error: "Access Denied: Untrusted Origin" });
       }
     } else if (referer) {
-      try {
-        const parsed = new URL(referer);
-        if (!ALLOWED_ORIGINS.has(parsed.origin)) {
-          return res.status(403).json({ error: "Access Denied: Untrusted Referer" });
-        }
-      } catch {
-        return res.status(403).json({ error: "Access Denied: Invalid Referer" });
+      if (!isAllowedOrigin(referer, host)) {
+        return res.status(403).json({ error: "Access Denied: Untrusted Referer" });
       }
     }
   }

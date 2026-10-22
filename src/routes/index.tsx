@@ -11,6 +11,7 @@ import { NoticeBoardModal } from "@/components/NoticeBoardModal";
 import { VoiceClueRecorder, VoiceCluePlayer } from "@/components/VoiceClue";
 import { getSocket } from "@/lib/socket";
 import { sound } from "@/lib/sound";
+import { API_BASE } from "@/lib/api";
 import {
   Users,
   Copy,
@@ -138,7 +139,7 @@ function Index() {
 
   // Fetch real tournament belt champion from MongoDB
   useEffect(() => {
-    fetch("http://localhost:4001/api/leaderboard/champion")
+    fetch(`${API_BASE}/api/leaderboard/champion`)
       .then((r) => r.json())
       .then((d) => {
         if (d && d.success && d.champion) {
@@ -201,7 +202,7 @@ function Index() {
 
       if (googleCode) {
         // Direct OAuth code exchange if redirected to root
-        fetch("http://localhost:4001/api/auth/google/callback", {
+        fetch(`${API_BASE}/api/auth/google/callback`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           credentials: "include",
@@ -224,14 +225,14 @@ function Index() {
       }
     }
 
-    fetch("http://localhost:4001/api/auth/me", { credentials: "include" })
+    fetch(`${API_BASE}/api/auth/me`, { credentials: "include" })
       .then((res) => res.json())
       .then((data) => {
         if (data.user) {
           setUser(data.user);
         } else {
           // No active session: register a fresh authentic guest user
-          fetch("http://localhost:4001/api/auth/guest", {
+          fetch(`${API_BASE}/api/auth/guest`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             credentials: "include",
@@ -246,7 +247,7 @@ function Index() {
       })
       .catch(() => {
         // Fallback guest creation
-        fetch("http://localhost:4001/api/auth/guest", {
+        fetch(`${API_BASE}/api/auth/guest`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           credentials: "include",
@@ -282,7 +283,7 @@ function Index() {
   }, [user]);
 
   const fetchPublicRooms = () => {
-    fetch("http://localhost:4001/api/rooms/public")
+    fetch(`${API_BASE}/api/rooms/public`)
       .then((res) => res.json())
       .then((data) => {
         if (data.rooms) setPublicRooms(data.rooms);
@@ -598,7 +599,7 @@ function Index() {
   };
 
   const handleGoogleLogin = () => {
-    fetch("http://localhost:4001/api/auth/google/url")
+    fetch(`${API_BASE}/api/auth/google/url`)
       .then((res) => res.json())
       .then((data) => {
         if (data.url) window.location.href = data.url;
@@ -614,7 +615,7 @@ function Index() {
     let cat = "Food & Drinks";
 
     try {
-      const res = await fetch("http://localhost:4001/api/words/random");
+      const res = await fetch(`${API_BASE}/api/words/random`);
       if (res.ok) {
         const data = await res.json();
         if (data.common && data.imposter) {
@@ -2026,7 +2027,7 @@ function Index() {
           user={user}
           onClose={() => setShowAccount(false)}
           onLogout={() => {
-            fetch("http://localhost:4001/api/auth/logout", { method: "POST" }).then(() => {
+            fetch(`${API_BASE}/api/auth/logout`, { method: "POST" }).then(() => {
               setUser(null);
               setShowAccount(false);
             });
@@ -2034,7 +2035,7 @@ function Index() {
           onGoogleLogin={handleGoogleLogin}
           onUpdateProfile={(profileData) => {
             if (user) {
-              fetch("http://localhost:4001/api/user/update", {
+              fetch(`${API_BASE}/api/user/update`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({

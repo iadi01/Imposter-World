@@ -1,6 +1,7 @@
 import { X, Pin, Heart } from "lucide-react";
 import { sound } from "@/lib/sound";
 import { useEffect, useState } from "react";
+import { API_BASE } from "@/lib/api";
 
 export function NoticeBoardModal({
   onClose,
@@ -18,7 +19,7 @@ export function NoticeBoardModal({
       setCurrentBeltHolder(championName);
       return;
     }
-    fetch("http://localhost:4001/api/leaderboard/champion")
+    fetch(`${API_BASE}/api/leaderboard/champion`)
       .then((r) => r.json())
       .then((d) => {
         if (d && d.success && d.champion) {

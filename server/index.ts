@@ -3,13 +3,15 @@ import http from "http";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
+import path from "path";
+import fs from "fs";
 import { connectDB } from "./db";
 import { seedWordPairsIfEmpty } from "./game/words";
 import authRoutes from "./auth";
 import apiRoutes from "./routes";
 import adminRoutes from "./admin";
 import { setupSocketServer } from "./socket";
-import { securityHeaders, sanitizeMongoInputs, verifyOrigin } from "./security";
+import { securityHeaders, sanitizeMongoInputs, verifyOrigin, isAllowedOrigin } from "./security";
 
 dotenv.config();
 
@@ -25,21 +27,11 @@ app.disable("x-powered-by");
 // 2. HTTP Security Headers (Helmet style: CSP, nosniff, SAMEORIGIN, XSS protection)
 app.use(securityHeaders);
 
-// 3. Strict CORS Whitelisting
-const ALLOWED_ORIGINS = [
-  "http://localhost:8080",
-  "http://localhost:3000",
-  "http://127.0.0.1:8080",
-  "http://192.168.1.2:8080",
-  "https://imposterworld.xyz",
-  "https://www.imposterworld.xyz",
-];
-
+// 3. Dynamic & Flexible CORS Whitelisting
 app.use(
   cors({
     origin: (origin, callback) => {
-      // Allow requests with no origin (like mobile apps, curl, or server-to-server)
-      if (!origin || ALLOWED_ORIGINS.includes(origin)) {
+      if (!origin || isAllowedOrigin(origin)) {
         callback(null, true);
       } else {
         callback(new Error("CORS policy violation: Unauthorized origin"));
@@ -71,7 +63,26 @@ app.get("/health", (_req, res) => {
   res.json({ status: "healthy" });
 });
 
-// 8. Global Safe Error Handler (Never leak stack traces or system internals)
+// 8. Serve Client Static Assets (from .output/public)
+const publicDir = path.resolve(process.cwd(), ".output/public");
+if (fs.existsSync(publicDir)) {
+  app.use(express.static(publicDir, { maxAge: "1d", index: false }));
+}
+
+// 9. TanStack Start SSR Handler (Nitro Middleware)
+const ssrIndexPath = path.resolve(process.cwd(), ".output/server/index.mjs");
+if (fs.existsSync(ssrIndexPath)) {
+  try {
+    const { middleware } = await import(ssrIndexPath);
+    if (middleware) {
+      app.use(middleware);
+    }
+  } catch (err) {
+    console.error("[SSR Setup Error] Failed to load Nitro middleware:", err);
+  }
+}
+
+// 10. Global Safe Error Handler (Never leak stack traces or system internals)
 app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
   console.error("[Server Error]", err.message || err);
   if (err.message && err.message.includes("CORS")) {

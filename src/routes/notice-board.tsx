@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowLeft, Pin, Bell, Trophy, Mic, Shield } from "lucide-react";
 import { useEffect, useState } from "react";
+import { API_BASE } from "../lib/api";
 
 export const Route = createFileRoute("/notice-board")({
   component: NoticeBoardPage,
@@ -10,7 +11,7 @@ function NoticeBoardPage() {
   const [championName, setChampionName] = useState<string>("Loading...");
 
   useEffect(() => {
-    fetch("http://localhost:4001/api/leaderboard/champion")
+    fetch(`${API_BASE}/api/leaderboard/champion`)
       .then((r) => r.json())
       .then((d) => {
         if (d && d.success && d.champion) {

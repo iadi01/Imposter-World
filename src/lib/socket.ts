@@ -2,7 +2,9 @@ import { io, Socket } from "socket.io-client";
 
 const SOCKET_URL =
   typeof window !== "undefined"
-    ? `${window.location.protocol}//${window.location.hostname}:4001`
+    ? window.location.port === "8080"
+      ? "http://localhost:4001"
+      : window.location.origin
     : "http://localhost:4001";
 
 let socket: Socket | null = null;

@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from "react";
+import { API_BASE } from "../lib/api";
 
 export type UsernameStatus = "idle" | "invalid" | "checking" | "available" | "taken" | "error";
 
@@ -93,7 +94,7 @@ export function useUsernameCheck(initialUsername = "", currentUserId = "") {
             username: normalized,
             currentUserId: currentUserId || "",
           });
-          const res = await fetch(`http://localhost:4001/api/username/check?${params.toString()}`, {
+          const res = await fetch(`${API_BASE}/api/username/check?${params.toString()}`, {
             signal: controller.signal,
           });
 
