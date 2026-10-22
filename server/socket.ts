@@ -86,11 +86,13 @@ export function setupSocketServer(httpServer: HttpServer) {
           currentPlayer = hostPlayer;
 
           socket.join(room.code);
+          const publicState = room.getPublicState();
+          socket.emit("room:state", publicState);
           room.broadcastState(io);
           io.emit("rooms:public-updated", roomManager.getPublicRooms());
 
           if (callback) {
-            callback({ success: true, roomCode: room.code });
+            callback({ success: true, roomCode: room.code, roomState: publicState });
           }
         } catch (err: any) {
           if (callback) callback({ success: false, error: err.message });
@@ -161,9 +163,11 @@ export function setupSocketServer(httpServer: HttpServer) {
             currentPlayer = existingPlayer;
 
             socket.join(room.code);
+            const publicState = room.getPublicState();
+            socket.emit("room:state", publicState);
             room.broadcastState(io);
 
-            if (callback) callback({ success: true, roomCode: room.code });
+            if (callback) callback({ success: true, roomCode: room.code, roomState: publicState });
             return;
           }
 
@@ -192,6 +196,8 @@ export function setupSocketServer(httpServer: HttpServer) {
           currentPlayer = newPlayer;
 
           socket.join(room.code);
+          const publicState = room.getPublicState();
+          socket.emit("room:state", publicState);
           room.broadcastState(io);
           io.emit("rooms:public-updated", roomManager.getPublicRooms());
 
@@ -202,7 +208,7 @@ export function setupSocketServer(httpServer: HttpServer) {
             isSystem: true,
           });
 
-          if (callback) callback({ success: true, roomCode: room.code });
+          if (callback) callback({ success: true, roomCode: room.code, roomState: publicState });
         } catch (err: any) {
           if (callback) callback({ success: false, error: err.message });
         }
@@ -235,6 +241,8 @@ export function setupSocketServer(httpServer: HttpServer) {
               currentPlayer = newPlayer;
 
               socket.join(openRoom.code);
+              const publicState = openRoom.getPublicState();
+              socket.emit("room:state", publicState);
               openRoom.broadcastState(io);
               io.emit("rooms:public-updated", roomManager.getPublicRooms());
 
@@ -245,7 +253,7 @@ export function setupSocketServer(httpServer: HttpServer) {
                 isSystem: true,
               });
 
-              if (callback) callback({ success: true, roomCode: openRoom.code });
+              if (callback) callback({ success: true, roomCode: openRoom.code, roomState: publicState });
               return;
             }
           }
@@ -265,10 +273,12 @@ export function setupSocketServer(httpServer: HttpServer) {
             currentPlayer = hostPlayer;
 
             socket.join(room.code);
+            const publicState = room.getPublicState();
+            socket.emit("room:state", publicState);
             room.broadcastState(io);
             io.emit("rooms:public-updated", roomManager.getPublicRooms());
 
-            if (callback) callback({ success: true, roomCode: room.code });
+            if (callback) callback({ success: true, roomCode: room.code, roomState: publicState });
         } catch (err: any) {
           if (callback) callback({ success: false, error: err.message });
         }

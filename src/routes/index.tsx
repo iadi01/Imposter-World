@@ -476,6 +476,9 @@ function Index() {
         },
         (res: any) => {
           if (res && res.success && res.roomCode) {
+            if (res.roomState) {
+              setRoomState(res.roomState);
+            }
             const url = new URL(window.location.href);
             url.searchParams.set("room", res.roomCode);
             window.history.replaceState({}, "", `${url.pathname}?${url.searchParams.toString()}`);
@@ -519,6 +522,9 @@ function Index() {
         },
         (res: any) => {
           if (res && res.success && res.roomCode) {
+            if (res.roomState) {
+              setRoomState(res.roomState);
+            }
             const url = new URL(window.location.href);
             url.searchParams.set("room", res.roomCode);
             window.history.replaceState({}, "", `${url.pathname}?${url.searchParams.toString()}`);
@@ -555,6 +561,9 @@ function Index() {
         { user: { id: matchUser.id, displayName: matchUser.displayName, avatarUrl: matchUser.avatarUrl } },
         (res: any) => {
           if (res && res.success && res.roomCode) {
+            if (res.roomState) {
+              setRoomState(res.roomState);
+            }
             const url = new URL(window.location.href);
             url.searchParams.set("room", res.roomCode);
             window.history.replaceState({}, "", `${url.pathname}?${url.searchParams.toString()}`);
