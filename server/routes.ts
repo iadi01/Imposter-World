@@ -5,8 +5,8 @@ import { WordPair } from "./models/WordPair";
 import { Supporter } from "./models/Supporter";
 import { getRandomWordPair } from "./game/words";
 import { RoomManager } from "./game/roomManager";
-import { generalApiLimiter, isValidObjectId, sanitizeText } from "./security";
-import { generateToken, isUserAdmin } from "./auth";
+import { generalApiLimiter, isValidObjectId, sanitizeText, isUserAdmin } from "./security";
+import { generateToken } from "./auth";
 
 const router = Router();
 router.use(generalApiLimiter);
