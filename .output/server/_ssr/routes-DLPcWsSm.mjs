@@ -5,7 +5,7 @@ import { b as Link } from "../_libs/@tanstack/react-router+[...].mjs";
 import { t as toast } from "../_libs/sonner.mjs";
 import { $ as Building2, A as Music, B as Flag, C as Plus, D as Pause, F as LoaderCircle, G as Copy, H as EyeOff, K as Compass, L as Heart, M as MapPin, N as LogOut, O as Paintbrush, P as Lock, Q as Check, R as Globe, T as Pin, V as Eye, W as Eraser, X as CircleAlert, _ as Send, a as UserCheck, b as RefreshCw, d as Square, h as Settings, i as Users, j as Mic, k as PaintBucket, l as Trash2, n as VolumeX, nt as ArrowLeft, o as Undo2, q as Clock, r as Volume2, s as Trophy, t as X, tt as AtSign, v as Search, w as Play, y as RotateCcw, z as Flame } from "../_libs/lucide-react.mjs";
 import { t as lookup } from "../_libs/socket.io-client+[...].mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/routes-5gY9ray6.js
+//#region node_modules/.nitro/vite/services/ssr/assets/routes-DLPcWsSm.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 function hexToRgba(hex) {
@@ -4177,33 +4177,27 @@ function Index() {
 	const handleCreateRoom = (customSettings) => {
 		sound.playPop();
 		const socket = socketRef.current;
-		const emitCreate = () => {
-			const creatorUser = user || {
-				id: socket.id || `guest-${Math.random().toString(36).substring(2, 9)}`,
-				displayName: "Detective",
-				avatarUrl: ""
-			};
-			socket.emit("room:create", {
-				user: {
-					id: creatorUser.id,
-					displayName: creatorUser.displayName,
-					avatarUrl: creatorUser.avatarUrl
-				},
-				settings: customSettings
-			}, (res) => {
-				if (res && res.success && res.roomCode) {
-					if (res.roomState) setRoomState(res.roomState);
-					const url = new URL(window.location.href);
-					url.searchParams.set("room", res.roomCode);
-					window.history.replaceState({}, "", `${url.pathname}?${url.searchParams.toString()}`);
-				} else if (res && !res.success) alert(res.error || "Failed to create room");
-			});
+		if (!socket.connected) socket.connect();
+		const creatorUser = user || {
+			id: socket.id || `guest-${Math.random().toString(36).substring(2, 9)}`,
+			displayName: "Detective",
+			avatarUrl: ""
 		};
-		if (socket.connected) emitCreate();
-		else {
-			socket.connect();
-			socket.once("connect", emitCreate);
-		}
+		socket.emit("room:create", {
+			user: {
+				id: creatorUser.id,
+				displayName: creatorUser.displayName,
+				avatarUrl: creatorUser.avatarUrl
+			},
+			settings: customSettings
+		}, (res) => {
+			if (res && res.success && res.roomCode) {
+				if (res.roomState) setRoomState(res.roomState);
+				const url = new URL(window.location.href);
+				url.searchParams.set("room", res.roomCode);
+				window.history.replaceState({}, "", `${url.pathname}?${url.searchParams.toString()}`);
+			} else if (res && !res.success) alert(res.error || "Failed to create room");
+		});
 	};
 	const handleJoinRoom = (code) => {
 		if (!code || !code.trim()) return;
@@ -4211,64 +4205,52 @@ function Index() {
 		if (roomState && roomState.roomCode === cleanCode) return;
 		sound.playPop();
 		const socket = socketRef.current;
-		const emitJoin = () => {
-			const joinUser = user || {
-				id: socket.id || `guest-${Math.random().toString(36).substring(2, 9)}`,
-				displayName: "Detective",
-				avatarUrl: ""
-			};
-			socket.emit("room:join", {
-				roomCode: cleanCode,
-				user: {
-					id: joinUser.id,
-					displayName: joinUser.displayName,
-					avatarUrl: joinUser.avatarUrl
-				}
-			}, (res) => {
-				if (res && res.success && res.roomCode) {
-					if (res.roomState) setRoomState(res.roomState);
-					const url = new URL(window.location.href);
-					url.searchParams.set("room", res.roomCode);
-					window.history.replaceState({}, "", `${url.pathname}?${url.searchParams.toString()}`);
-				} else if (res && !res.success) {
-					toast.error(res.error || "Failed to join room");
-					pendingInviteCode.current = null;
-				}
-			});
+		if (!socket.connected) socket.connect();
+		const joinUser = user || {
+			id: socket.id || `guest-${Math.random().toString(36).substring(2, 9)}`,
+			displayName: "Detective",
+			avatarUrl: ""
 		};
-		if (socket.connected) emitJoin();
-		else {
-			socket.connect();
-			socket.once("connect", emitJoin);
-		}
+		socket.emit("room:join", {
+			roomCode: cleanCode,
+			user: {
+				id: joinUser.id,
+				displayName: joinUser.displayName,
+				avatarUrl: joinUser.avatarUrl
+			}
+		}, (res) => {
+			if (res && res.success && res.roomCode) {
+				if (res.roomState) setRoomState(res.roomState);
+				const url = new URL(window.location.href);
+				url.searchParams.set("room", res.roomCode);
+				window.history.replaceState({}, "", `${url.pathname}?${url.searchParams.toString()}`);
+			} else if (res && !res.success) {
+				toast.error(res.error || "Failed to join room");
+				pendingInviteCode.current = null;
+			}
+		});
 	};
 	const handleInstantMatch = () => {
 		sound.playPop();
 		const socket = socketRef.current;
-		const emitInstant = () => {
-			const matchUser = user || {
-				id: socket.id || `guest-${Math.random().toString(36).substring(2, 9)}`,
-				displayName: "Detective",
-				avatarUrl: ""
-			};
-			socket.emit("room:instant-match", { user: {
-				id: matchUser.id,
-				displayName: matchUser.displayName,
-				avatarUrl: matchUser.avatarUrl
-			} }, (res) => {
-				if (res && res.success && res.roomCode) {
-					if (res.roomState) setRoomState(res.roomState);
-					const url = new URL(window.location.href);
-					url.searchParams.set("room", res.roomCode);
-					window.history.replaceState({}, "", `${url.pathname}?${url.searchParams.toString()}`);
-				} else if (res && !res.success) alert(res.error || "Instant match failed");
-			});
+		if (!socket.connected) socket.connect();
+		const matchUser = user || {
+			id: socket.id || `guest-${Math.random().toString(36).substring(2, 9)}`,
+			displayName: "Detective",
+			avatarUrl: ""
 		};
-		if (socket.connected) emitInstant();
-		else {
-			socket.connect();
-			socket.once("connect", emitInstant);
-		}
+		socket.emit("room:instant-match", { user: {
+			id: matchUser.id,
+			displayName: matchUser.displayName,
+			avatarUrl: matchUser.avatarUrl
+		} }, (res) => {
+			if (res && res.success && res.roomCode) {
+				if (res.roomState) setRoomState(res.roomState);
+				const url = new URL(window.location.href);
+				url.searchParams.set("room", res.roomCode);
+				window.history.replaceState({}, "", `${url.pathname}?${url.searchParams.toString()}`);
+			} else if (res && !res.success) alert(res.error || "Instant match failed");
+		});
 	};
 	const handleStartGame = () => {
 		sound.playDing();

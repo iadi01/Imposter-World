@@ -447,41 +447,34 @@ function Index() {
   const handleCreateRoom = (customSettings?: Partial<GameSettingsData>) => {
     sound.playPop();
     const socket = socketRef.current;
-
-    const emitCreate = () => {
-      const creatorUser = user || {
-        id: socket.id || `guest-${Math.random().toString(36).substring(2, 9)}`,
-        displayName: "Detective",
-        avatarUrl: "",
-      };
-
-      socket.emit(
-        "room:create",
-        {
-          user: { id: creatorUser.id, displayName: creatorUser.displayName, avatarUrl: creatorUser.avatarUrl },
-          settings: customSettings,
-        },
-        (res: any) => {
-          if (res && res.success && res.roomCode) {
-            if (res.roomState) {
-              setRoomState(res.roomState);
-            }
-            const url = new URL(window.location.href);
-            url.searchParams.set("room", res.roomCode);
-            window.history.replaceState({}, "", `${url.pathname}?${url.searchParams.toString()}`);
-          } else if (res && !res.success) {
-            alert(res.error || "Failed to create room");
-          }
-        }
-      );
+    if (!socket.connected) {
+      socket.connect();
+    }
+    const creatorUser = user || {
+      id: socket.id || `guest-${Math.random().toString(36).substring(2, 9)}`,
+      displayName: "Detective",
+      avatarUrl: "",
     };
 
-    if (socket.connected) {
-      emitCreate();
-    } else {
-      socket.connect();
-      socket.once("connect", emitCreate);
-    }
+    socket.emit(
+      "room:create",
+      {
+        user: { id: creatorUser.id, displayName: creatorUser.displayName, avatarUrl: creatorUser.avatarUrl },
+        settings: customSettings,
+      },
+      (res: any) => {
+        if (res && res.success && res.roomCode) {
+          if (res.roomState) {
+            setRoomState(res.roomState);
+          }
+          const url = new URL(window.location.href);
+          url.searchParams.set("room", res.roomCode);
+          window.history.replaceState({}, "", `${url.pathname}?${url.searchParams.toString()}`);
+        } else if (res && !res.success) {
+          alert(res.error || "Failed to create room");
+        }
+      }
+    );
   };
 
   const handleJoinRoom = (code: string) => {
@@ -492,79 +485,65 @@ function Index() {
     }
     sound.playPop();
     const socket = socketRef.current;
-
-    const emitJoin = () => {
-      const joinUser = user || {
-        id: socket.id || `guest-${Math.random().toString(36).substring(2, 9)}`,
-        displayName: "Detective",
-        avatarUrl: "",
-      };
-
-      socket.emit(
-        "room:join",
-        {
-          roomCode: cleanCode,
-          user: { id: joinUser.id, displayName: joinUser.displayName, avatarUrl: joinUser.avatarUrl },
-        },
-        (res: any) => {
-          if (res && res.success && res.roomCode) {
-            if (res.roomState) {
-              setRoomState(res.roomState);
-            }
-            const url = new URL(window.location.href);
-            url.searchParams.set("room", res.roomCode);
-            window.history.replaceState({}, "", `${url.pathname}?${url.searchParams.toString()}`);
-          } else if (res && !res.success) {
-            toast.error(res.error || "Failed to join room");
-            pendingInviteCode.current = null;
-          }
-        }
-      );
+    if (!socket.connected) {
+      socket.connect();
+    }
+    const joinUser = user || {
+      id: socket.id || `guest-${Math.random().toString(36).substring(2, 9)}`,
+      displayName: "Detective",
+      avatarUrl: "",
     };
 
-    if (socket.connected) {
-      emitJoin();
-    } else {
-      socket.connect();
-      socket.once("connect", emitJoin);
-    }
+    socket.emit(
+      "room:join",
+      {
+        roomCode: cleanCode,
+        user: { id: joinUser.id, displayName: joinUser.displayName, avatarUrl: joinUser.avatarUrl },
+      },
+      (res: any) => {
+        if (res && res.success && res.roomCode) {
+          if (res.roomState) {
+            setRoomState(res.roomState);
+          }
+          const url = new URL(window.location.href);
+          url.searchParams.set("room", res.roomCode);
+          window.history.replaceState({}, "", `${url.pathname}?${url.searchParams.toString()}`);
+        } else if (res && !res.success) {
+          toast.error(res.error || "Failed to join room");
+          pendingInviteCode.current = null;
+        }
+      }
+    );
   };
 
   const handleInstantMatch = () => {
     sound.playPop();
     const socket = socketRef.current;
-
-    const emitInstant = () => {
-      const matchUser = user || {
-        id: socket.id || `guest-${Math.random().toString(36).substring(2, 9)}`,
-        displayName: "Detective",
-        avatarUrl: "",
-      };
-
-      socket.emit(
-        "room:instant-match",
-        { user: { id: matchUser.id, displayName: matchUser.displayName, avatarUrl: matchUser.avatarUrl } },
-        (res: any) => {
-          if (res && res.success && res.roomCode) {
-            if (res.roomState) {
-              setRoomState(res.roomState);
-            }
-            const url = new URL(window.location.href);
-            url.searchParams.set("room", res.roomCode);
-            window.history.replaceState({}, "", `${url.pathname}?${url.searchParams.toString()}`);
-          } else if (res && !res.success) {
-            alert(res.error || "Instant match failed");
-          }
-        }
-      );
+    if (!socket.connected) {
+      socket.connect();
+    }
+    const matchUser = user || {
+      id: socket.id || `guest-${Math.random().toString(36).substring(2, 9)}`,
+      displayName: "Detective",
+      avatarUrl: "",
     };
 
-    if (socket.connected) {
-      emitInstant();
-    } else {
-      socket.connect();
-      socket.once("connect", emitInstant);
-    }
+    socket.emit(
+      "room:instant-match",
+      { user: { id: matchUser.id, displayName: matchUser.displayName, avatarUrl: matchUser.avatarUrl } },
+      (res: any) => {
+        if (res && res.success && res.roomCode) {
+          if (res.roomState) {
+            setRoomState(res.roomState);
+          }
+          const url = new URL(window.location.href);
+          url.searchParams.set("room", res.roomCode);
+          window.history.replaceState({}, "", `${url.pathname}?${url.searchParams.toString()}`);
+        } else if (res && !res.success) {
+          alert(res.error || "Instant match failed");
+        }
+      }
+    );
   };
 
   const handleStartGame = () => {
