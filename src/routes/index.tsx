@@ -766,61 +766,71 @@ function Index() {
             </span>
           )}
 
-          {/* Public Rooms Modal Button */}
-          {!roomState && !isLocalMode && (
-            <button
-              onClick={() => {
-                sound.playPop();
-                fetchPublicRooms();
-                setShowPublicRooms(true);
-              }}
-              title="Public Classroom Rooms"
-              className="sketch flex items-center justify-center gap-1 bg-accent text-accent-foreground px-2 sm:px-3 py-1 text-xs sm:text-sm md:text-base font-bold hover:brightness-110 shrink-0"
-            >
-              <Globe className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
-              <span className="hidden sm:inline">Rooms</span>
-            </button>
+          {/* Local Mode Pill */}
+          {isLocalMode && (
+            <span className="sketch bg-secondary px-2 sm:px-3 py-1 text-xs sm:text-sm font-bold flex items-center gap-1 shrink-0">
+              📱 Pass & Play
+            </span>
           )}
 
-          {/* Notice Board Button */}
-          <button
-            onClick={() => {
-              sound.playPop();
-              setShowNoticeBoard(true);
-            }}
-            title="Classroom Notice Board"
-            className="sketch flex items-center justify-center gap-1 bg-secondary px-2 sm:px-3 py-1 text-xs sm:text-sm md:text-base font-bold hover:bg-secondary/80 shrink-0"
-          >
-            <Pin className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-accent" />
-            <span className="hidden sm:inline">Notice</span>
-          </button>
+          {/* Only show Rooms, Notice, Rankings, and Profile on Homepage (Hidden in multiplayer & local rooms) */}
+          {!roomState && !isLocalMode && (
+            <>
+              {/* Public Rooms Modal Button */}
+              <button
+                onClick={() => {
+                  sound.playPop();
+                  fetchPublicRooms();
+                  setShowPublicRooms(true);
+                }}
+                title="Public Classroom Rooms"
+                className="sketch flex items-center justify-center gap-1 bg-accent text-accent-foreground px-2 sm:px-3 py-1 text-xs sm:text-sm md:text-base font-bold hover:brightness-110 shrink-0"
+              >
+                <Globe className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                <span className="hidden sm:inline">Rooms</span>
+              </button>
 
-          {/* Leaderboard Button */}
-          <button
-            onClick={() => {
-              sound.playPop();
-              setShowLeaderboard(true);
-            }}
-            title="Classroom Rankings"
-            className="sketch flex items-center justify-center gap-1 bg-secondary px-2 sm:px-3 py-1 text-xs sm:text-sm md:text-base font-bold hover:bg-secondary/80 shrink-0"
-          >
-            <Trophy className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-accent" />
-            <span className="hidden sm:inline">Rankings</span>
-          </button>
+              {/* Notice Board Button */}
+              <button
+                onClick={() => {
+                  sound.playPop();
+                  setShowNoticeBoard(true);
+                }}
+                title="Classroom Notice Board"
+                className="sketch flex items-center justify-center gap-1 bg-secondary px-2 sm:px-3 py-1 text-xs sm:text-sm md:text-base font-bold hover:bg-secondary/80 shrink-0"
+              >
+                <Pin className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-accent" />
+                <span className="hidden sm:inline">Notice</span>
+              </button>
 
-          {/* Account Profile Button — Just Profile Emoji & Always Aligned in Top Row */}
-          <button
-            onClick={() => {
-              sound.playPop();
-              setShowAccount(true);
-            }}
-            title={user?.displayName ? `Account: ${user.displayName}` : "Account Profile"}
-            className="sketch flex items-center justify-center bg-card px-2 sm:px-2.5 py-1 text-sm sm:text-base font-bold hover:bg-secondary shrink-0"
-          >
-            <span className="text-sm sm:text-base leading-none select-none" role="img" aria-label="Profile">
-              👤
-            </span>
-          </button>
+              {/* Leaderboard Button */}
+              <button
+                onClick={() => {
+                  sound.playPop();
+                  setShowLeaderboard(true);
+                }}
+                title="Classroom Rankings"
+                className="sketch flex items-center justify-center gap-1 bg-secondary px-2 sm:px-3 py-1 text-xs sm:text-sm md:text-base font-bold hover:bg-secondary/80 shrink-0"
+              >
+                <Trophy className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-accent" />
+                <span className="hidden sm:inline">Rankings</span>
+              </button>
+
+              {/* Account Profile Button */}
+              <button
+                onClick={() => {
+                  sound.playPop();
+                  setShowAccount(true);
+                }}
+                title={user?.displayName ? `Account: ${user.displayName}` : "Account Profile"}
+                className="sketch flex items-center justify-center bg-card px-2 sm:px-2.5 py-1 text-sm sm:text-base font-bold hover:bg-secondary shrink-0"
+              >
+                <span className="text-sm sm:text-base leading-none select-none" role="img" aria-label="Profile">
+                  👤
+                </span>
+              </button>
+            </>
+          )}
         </div>
       </header>
 

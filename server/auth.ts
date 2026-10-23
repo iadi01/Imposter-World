@@ -11,14 +11,35 @@ const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET || "";
 const JWT_SECRET = process.env.JWT_SECRET || "imposter-world-secret-jwt-key-2026";
 
 function resolveRedirectUri(req: Request, fallbackPath: string = "/auth/google/callback"): string {
-  if (process.env.GOOGLE_REDIRECT_URI) {
-    return process.env.GOOGLE_REDIRECT_URI;
-  }
   const host = (req.headers["x-forwarded-host"] as string) || req.headers.host || "";
-  const proto = (req.headers["x-forwarded-proto"] as string) || (req.secure ? "https" : "https");
-  if (host && !host.includes("localhost")) {
+  const isProd =
+    process.env.NODE_ENV === "production" ||
+    (host && !host.includes("localhost") && !host.includes("127.0.0.1"));
+
+  // Check if GOOGLE_REDIRECT_URI is set
+  if (process.env.GOOGLE_REDIRECT_URI) {
+    const envUri = process.env.GOOGLE_REDIRECT_URI.trim();
+    // In production, ignore misconfigured localhost env URIs
+    if (isProd && (envUri.includes("localhost") || envUri.includes("127.0.0.1"))) {
+      console.warn(
+        `[Auth] Ignoring invalid localhost GOOGLE_REDIRECT_URI (${envUri}) on production request to host: ${host}`
+      );
+    } else {
+      return envUri;
+    }
+  }
+
+  // Derive from incoming request host (Render, custom domain, etc.)
+  if (host && !host.includes("localhost") && !host.includes("127.0.0.1")) {
+    const proto = (req.headers["x-forwarded-proto"] as string) || (req.secure ? "https" : "https");
     return `${proto}://${host}${fallbackPath}`;
   }
+
+  // Fallback to Render external URL if defined
+  if (process.env.RENDER_EXTERNAL_URL) {
+    return `${process.env.RENDER_EXTERNAL_URL.replace(/\/$/, "")}${fallbackPath}`;
+  }
+
   return `http://localhost:8080${fallbackPath}`;
 }
 

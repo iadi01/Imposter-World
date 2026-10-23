@@ -5,7 +5,7 @@ import { b as Link } from "../_libs/@tanstack/react-router+[...].mjs";
 import { t as toast } from "../_libs/sonner.mjs";
 import { $ as Building2, A as Music, B as Flag, C as Plus, D as Pause, F as LoaderCircle, G as Copy, H as EyeOff, K as Compass, L as Heart, M as MapPin, N as LogOut, O as Paintbrush, P as Lock, Q as Check, R as Globe, T as Pin, V as Eye, W as Eraser, X as CircleAlert, _ as Send, a as UserCheck, b as RefreshCw, d as Square, h as Settings, i as Users, j as Mic, k as PaintBucket, l as Trash2, n as VolumeX, nt as ArrowLeft, o as Undo2, q as Clock, r as Volume2, s as Trophy, t as X, tt as AtSign, v as Search, w as Play, y as RotateCcw, z as Flame } from "../_libs/lucide-react.mjs";
 import { t as lookup } from "../_libs/socket.io-client+[...].mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/routes-DLPcWsSm.js
+//#region node_modules/.nitro/vite/services/ssr/assets/routes-vaRMzM9b.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 function hexToRgba(hex) {
@@ -4466,57 +4466,63 @@ function Index() {
 								})
 							]
 						}),
-						!roomState && !isLocalMode && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
-							onClick: () => {
-								sound.playPop();
-								fetchPublicRooms();
-								setShowPublicRooms(true);
-							},
-							title: "Public Classroom Rooms",
-							className: "sketch flex items-center justify-center gap-1 bg-accent text-accent-foreground px-2 sm:px-3 py-1 text-xs sm:text-sm md:text-base font-bold hover:brightness-110 shrink-0",
-							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Globe, { className: "h-3.5 w-3.5 sm:h-4 sm:w-4" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-								className: "hidden sm:inline",
-								children: "Rooms"
-							})]
+						isLocalMode && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+							className: "sketch bg-secondary px-2 sm:px-3 py-1 text-xs sm:text-sm font-bold flex items-center gap-1 shrink-0",
+							children: "📱 Pass & Play"
 						}),
-						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
-							onClick: () => {
-								sound.playPop();
-								setShowNoticeBoard(true);
-							},
-							title: "Classroom Notice Board",
-							className: "sketch flex items-center justify-center gap-1 bg-secondary px-2 sm:px-3 py-1 text-xs sm:text-sm md:text-base font-bold hover:bg-secondary/80 shrink-0",
-							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Pin, { className: "h-3.5 w-3.5 sm:h-4 sm:w-4 text-accent" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-								className: "hidden sm:inline",
-								children: "Notice"
-							})]
-						}),
-						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
-							onClick: () => {
-								sound.playPop();
-								setShowLeaderboard(true);
-							},
-							title: "Classroom Rankings",
-							className: "sketch flex items-center justify-center gap-1 bg-secondary px-2 sm:px-3 py-1 text-xs sm:text-sm md:text-base font-bold hover:bg-secondary/80 shrink-0",
-							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Trophy, { className: "h-3.5 w-3.5 sm:h-4 sm:w-4 text-accent" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-								className: "hidden sm:inline",
-								children: "Rankings"
-							})]
-						}),
-						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-							onClick: () => {
-								sound.playPop();
-								setShowAccount(true);
-							},
-							title: user?.displayName ? `Account: ${user.displayName}` : "Account Profile",
-							className: "sketch flex items-center justify-center bg-card px-2 sm:px-2.5 py-1 text-sm sm:text-base font-bold hover:bg-secondary shrink-0",
-							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-								className: "text-sm sm:text-base leading-none select-none",
-								role: "img",
-								"aria-label": "Profile",
-								children: "👤"
+						!roomState && !isLocalMode && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+								onClick: () => {
+									sound.playPop();
+									fetchPublicRooms();
+									setShowPublicRooms(true);
+								},
+								title: "Public Classroom Rooms",
+								className: "sketch flex items-center justify-center gap-1 bg-accent text-accent-foreground px-2 sm:px-3 py-1 text-xs sm:text-sm md:text-base font-bold hover:brightness-110 shrink-0",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Globe, { className: "h-3.5 w-3.5 sm:h-4 sm:w-4" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: "hidden sm:inline",
+									children: "Rooms"
+								})]
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+								onClick: () => {
+									sound.playPop();
+									setShowNoticeBoard(true);
+								},
+								title: "Classroom Notice Board",
+								className: "sketch flex items-center justify-center gap-1 bg-secondary px-2 sm:px-3 py-1 text-xs sm:text-sm md:text-base font-bold hover:bg-secondary/80 shrink-0",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Pin, { className: "h-3.5 w-3.5 sm:h-4 sm:w-4 text-accent" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: "hidden sm:inline",
+									children: "Notice"
+								})]
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+								onClick: () => {
+									sound.playPop();
+									setShowLeaderboard(true);
+								},
+								title: "Classroom Rankings",
+								className: "sketch flex items-center justify-center gap-1 bg-secondary px-2 sm:px-3 py-1 text-xs sm:text-sm md:text-base font-bold hover:bg-secondary/80 shrink-0",
+								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Trophy, { className: "h-3.5 w-3.5 sm:h-4 sm:w-4 text-accent" }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: "hidden sm:inline",
+									children: "Rankings"
+								})]
+							}),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+								onClick: () => {
+									sound.playPop();
+									setShowAccount(true);
+								},
+								title: user?.displayName ? `Account: ${user.displayName}` : "Account Profile",
+								className: "sketch flex items-center justify-center bg-card px-2 sm:px-2.5 py-1 text-sm sm:text-base font-bold hover:bg-secondary shrink-0",
+								children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+									className: "text-sm sm:text-base leading-none select-none",
+									role: "img",
+									"aria-label": "Profile",
+									children: "👤"
+								})
 							})
-						})
+						] })
 					]
 				})]
 			}),
