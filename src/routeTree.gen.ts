@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminRouteImport } from './routes/admin'
+import { Route as ArticlesRouteImport } from './routes/articles'
 import { Route as DeleteAccountRouteImport } from './routes/delete-account'
 import { Route as FaqRouteImport } from './routes/faq'
 import { Route as HowToPlayRouteImport } from './routes/how-to-play'
@@ -32,6 +33,11 @@ const IndexRoute = IndexRouteImport.update({
 const AdminRoute = AdminRouteImport.update({
   id: '/admin',
   path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ArticlesRoute = ArticlesRouteImport.update({
+  id: '/articles',
+  path: '/articles',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DeleteAccountRoute = DeleteAccountRouteImport.update({
@@ -98,6 +104,7 @@ const ApiAuthGoogleCallbackRoute = ApiAuthGoogleCallbackRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
+  '/articles': typeof ArticlesRoute
   '/delete-account': typeof DeleteAccountRoute
   '/faq': typeof FaqRoute
   '/how-to-play': typeof HowToPlayRoute
@@ -114,6 +121,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
+  '/articles': typeof ArticlesRoute
   '/delete-account': typeof DeleteAccountRoute
   '/faq': typeof FaqRoute
   '/how-to-play': typeof HowToPlayRoute
@@ -131,6 +139,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
+  '/articles': typeof ArticlesRoute
   '/delete-account': typeof DeleteAccountRoute
   '/faq': typeof FaqRoute
   '/how-to-play': typeof HowToPlayRoute
@@ -149,6 +158,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/admin'
+    | '/articles'
     | '/delete-account'
     | '/faq'
     | '/how-to-play'
@@ -165,6 +175,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/admin'
+    | '/articles'
     | '/delete-account'
     | '/faq'
     | '/how-to-play'
@@ -181,6 +192,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/admin'
+    | '/articles'
     | '/delete-account'
     | '/faq'
     | '/how-to-play'
@@ -198,6 +210,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRoute: typeof AdminRoute
+  ArticlesRoute: typeof ArticlesRoute
   DeleteAccountRoute: typeof DeleteAccountRoute
   FaqRoute: typeof FaqRoute
   HowToPlayRoute: typeof HowToPlayRoute
@@ -226,6 +239,13 @@ declare module '@tanstack/react-router' {
       path: '/admin'
       fullPath: '/admin'
       preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/articles': {
+      id: '/articles'
+      path: '/articles'
+      fullPath: '/articles'
+      preLoaderRoute: typeof ArticlesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/delete-account': {
@@ -318,6 +338,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRoute,
+  ArticlesRoute: ArticlesRoute,
   DeleteAccountRoute: DeleteAccountRoute,
   FaqRoute: FaqRoute,
   HowToPlayRoute: HowToPlayRoute,

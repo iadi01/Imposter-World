@@ -3,9 +3,9 @@ import { t as API_BASE } from "./api-OZfBBcXI.mjs";
 import { n as require_jsx_runtime, r as require_react } from "../_libs/react+tanstack__react-query.mjs";
 import { b as Link } from "../_libs/@tanstack/react-router+[...].mjs";
 import { t as toast } from "../_libs/sonner.mjs";
-import { $ as Building2, A as Music, B as Flag, C as Plus, D as Pause, F as LoaderCircle, G as Copy, H as EyeOff, K as Compass, L as Heart, M as MapPin, N as LogOut, O as Paintbrush, P as Lock, Q as Check, R as Globe, T as Pin, V as Eye, W as Eraser, X as CircleAlert, _ as Send, a as UserCheck, b as RefreshCw, d as Square, h as Settings, i as Users, j as Mic, k as PaintBucket, l as Trash2, n as VolumeX, nt as ArrowLeft, o as Undo2, q as Clock, r as Volume2, s as Trophy, t as X, tt as AtSign, v as Search, w as Play, y as RotateCcw, z as Flame } from "../_libs/lucide-react.mjs";
+import { $ as Check, A as Music, B as Flag, C as Plus, D as Pause, F as LoaderCircle, H as EyeOff, J as Clock, K as Copy, L as Heart, M as MapPin, N as LogOut, O as Paintbrush, P as Lock, R as Globe, T as Pin, V as Eye, W as Eraser, Z as CircleAlert, _ as Send, a as UserCheck, b as RefreshCw, d as Square, et as Building2, h as Settings, i as Users, j as Mic, k as PaintBucket, l as Trash2, n as VolumeX, nt as AtSign, o as Undo2, q as Compass, r as Volume2, rt as ArrowLeft, s as Trophy, t as X, v as Search, w as Play, y as RotateCcw, z as Flame } from "../_libs/lucide-react.mjs";
 import { t as lookup } from "../_libs/socket.io-client+[...].mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/routes-DAX0RjF7.js
+//#region node_modules/.nitro/vite/services/ssr/assets/routes-C6xeE_y9.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 function hexToRgba(hex) {
@@ -4777,9 +4777,9 @@ function Index() {
 									children: "·"
 								}),
 								/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
-									to: "/how-to-play",
+									to: "/articles",
 									className: "underline hover:text-accent",
-									children: "What Is Imposter World?"
+									children: "Game Strategy Articles"
 								}),
 								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 									className: "text-muted-foreground/60",

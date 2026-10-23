@@ -39,6 +39,7 @@ export const Route = createFileRoute("/support")({
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
+    links: [{ rel: "canonical", href: "https://imposter-world.onrender.com/support" }],
   }),
   component: SupportPage,
 });
@@ -880,8 +881,8 @@ function SupportPage() {
               How To Play Imposter World
             </Link>
             <span className="text-muted-foreground/60">·</span>
-            <Link to="/how-to-play" className="hover:underline hover:text-accent">
-              What Is Imposter World?
+            <Link to="/articles" className="hover:underline hover:text-accent">
+              Game Strategy Articles
             </Link>
             <span className="text-muted-foreground/60">·</span>
             <Link to="/notice-board" className="hover:underline hover:text-accent">

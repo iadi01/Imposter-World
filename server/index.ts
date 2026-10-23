@@ -70,6 +70,29 @@ app.get(["/health", "/api/health"], (_req: Request, res: Response) => {
   });
 });
 
+// Dynamic Sitemap Generator (Always matches current requested host to eliminate Google Search Console errors)
+app.get("/sitemap.xml", (req: Request, res: Response) => {
+  const publicSitemap = path.resolve(publicDir, "sitemap.xml");
+  const fallbackSitemap = path.resolve(projectRoot, "public/sitemap.xml");
+  const sitemapPath = fs.existsSync(publicSitemap) ? publicSitemap : fallbackSitemap;
+
+  if (!fs.existsSync(sitemapPath)) {
+    return res.status(404).send("Sitemap not found");
+  }
+
+  const host = req.get("host") || "imposter-world.onrender.com";
+  const isLocal = host.startsWith("localhost") || host.startsWith("127.0.0.1");
+  const protocol = isLocal ? "http" : (req.get("x-forwarded-proto") === "http" ? "http" : "https");
+  const baseUrl = isLocal ? `${protocol}://${host}` : `https://${host}`;
+
+  let xml = fs.readFileSync(sitemapPath, "utf-8");
+  xml = xml.replace(/https?:\/\/(imposterworld\.xyz|imposter-world\.onrender\.com)/g, baseUrl);
+
+  res.setHeader("Content-Type", "application/xml; charset=utf-8");
+  res.setHeader("Cache-Control", "public, max-age=3600");
+  res.send(xml);
+});
+
 // 8. Serve Client Static Assets (from .output/public)
 const projectRoot = path.resolve(import.meta.dirname, "..");
 const publicDir = path.resolve(projectRoot, ".output/public");
@@ -84,7 +107,7 @@ if (fs.existsSync(ssrIndexPath)) {
     const { middleware } = await import(ssrIndexPath);
     if (middleware) {
       app.use(async (req, res, next) => {
-        if (req.path.startsWith("/api") || req.path.startsWith("/health") || req.path.startsWith("/socket.io")) {
+        if (req.path.startsWith("/api") || req.path.startsWith("/health") || req.path === "/sitemap.xml" || req.path.startsWith("/socket.io")) {
           return next();
         }
         try {

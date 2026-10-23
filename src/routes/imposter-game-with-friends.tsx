@@ -13,10 +13,10 @@ export const Route = createFileRoute("/imposter-game-with-friends")({
       { name: "keywords", content: "imposter game with friends, play imposter with friends, multiplayer imposter game, imposter game for parties, party word game online" },
       { property: "og:title", content: "Play Imposter Game With Friends Online — Imposter World" },
       { property: "og:description", content: "Create a private room in 5 seconds. Send the secret invite link to your friends and catch the imposter together!" },
-      { property: "og:image", content: "https://imposterworld.xyz/classroom-bg.jpg" },
+      { property: "og:image", content: "https://imposter-world.onrender.com/classroom-bg.jpg" },
     ],
     links: [
-      { rel: "canonical", href: "https://imposterworld.xyz/imposter-game-with-friends" },
+      { rel: "canonical", href: "https://imposter-world.onrender.com/imposter-game-with-friends" },
     ],
   }),
   component: ImposterGameWithFriendsPage,

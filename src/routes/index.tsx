@@ -45,6 +45,7 @@ export const Route = createFileRoute("/")({
           "A classroom notebook multiplayer party word game. Find the imposter before time runs out!",
       },
     ],
+    links: [{ rel: "canonical", href: "https://imposter-world.onrender.com/" }],
   }),
   component: Index,
 });
@@ -1032,8 +1033,8 @@ function Index() {
                 How To Play Imposter World
               </Link>
               <span className="text-muted-foreground/60">·</span>
-              <Link to="/how-to-play" className="underline hover:text-accent">
-                What Is Imposter World?
+              <Link to="/articles" className="underline hover:text-accent">
+                Game Strategy Articles
               </Link>
               <span className="text-muted-foreground/60">·</span>
               <Link to="/notice-board" className="underline hover:text-accent">

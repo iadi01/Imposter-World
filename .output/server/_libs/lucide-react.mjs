@@ -327,6 +327,26 @@ var Copy = createLucideIcon("copy", [["rect", {
 * This source code is licensed under the ISC license.
 * See the LICENSE file in the root directory of this source tree.
 */
+var Download = createLucideIcon("download", [
+	["path", {
+		d: "M12 15V3",
+		key: "m9g1x1"
+	}],
+	["path", {
+		d: "M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4",
+		key: "ih7n3h"
+	}],
+	["path", {
+		d: "m7 10 5 5 5-5",
+		key: "brsn70"
+	}]
+]);
+/**
+* @license lucide-react v0.575.0 - ISC
+*
+* This source code is licensed under the ISC license.
+* See the LICENSE file in the root directory of this source tree.
+*/
 var Eraser = createLucideIcon("eraser", [["path", {
 	d: "M21 21H8a2 2 0 0 1-1.42-.587l-3.994-3.999a2 2 0 0 1 0-2.828l10-10a2 2 0 0 1 2.829 0l5.999 6a2 2 0 0 1 0 2.828L12.834 21",
 	key: "g5wo59"
@@ -1177,4 +1197,4 @@ var X = createLucideIcon("x", [["path", {
 	key: "d8bk6v"
 }]]);
 //#endregion
-export { Building2 as $, Music as A, Flag as B, Plus as C, Pause as D, PenLine as E, LoaderCircle as F, Copy as G, EyeOff as H, Lightbulb as I, CircleQuestionMark as J, Compass as K, Heart as L, MapPin as M, LogOut as N, Paintbrush as O, Lock as P, Check as Q, Globe as R, QrCode as S, Pin as T, ExternalLink as U, Eye as V, Eraser as W, CircleAlert as X, CircleCheck as Y, ChevronDown as Z, Send as _, UserCheck as a, RefreshCw as b, TriangleAlert as c, Square as d, BookOpen as et, Smartphone as f, Server as g, Settings as h, Users as i, Mic as j, PaintBucket as k, Trash2 as l, ShieldCheck as m, VolumeX as n, ArrowLeft as nt, Undo2 as o, Shield as p, Clock as q, Volume2 as r, Activity as rt, Trophy as s, X as t, AtSign as tt, Terminal as u, Search as v, Play as w, Radio as x, RotateCcw as y, Flame as z };
+export { Check as $, Music as A, Flag as B, Plus as C, Pause as D, PenLine as E, LoaderCircle as F, Download as G, EyeOff as H, Lightbulb as I, Clock as J, Copy as K, Heart as L, MapPin as M, LogOut as N, Paintbrush as O, Lock as P, ChevronDown as Q, Globe as R, QrCode as S, Pin as T, ExternalLink as U, Eye as V, Eraser as W, CircleCheck as X, CircleQuestionMark as Y, CircleAlert as Z, Send as _, UserCheck as a, RefreshCw as b, TriangleAlert as c, Square as d, Building2 as et, Smartphone as f, Server as g, Settings as h, Users as i, Activity as it, Mic as j, PaintBucket as k, Trash2 as l, ShieldCheck as m, VolumeX as n, AtSign as nt, Undo2 as o, Shield as p, Compass as q, Volume2 as r, ArrowLeft as rt, Trophy as s, X as t, BookOpen as tt, Terminal as u, Search as v, Play as w, Radio as x, RotateCcw as y, Flame as z };

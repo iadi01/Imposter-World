@@ -13,10 +13,10 @@ export const Route = createFileRoute("/imposter-game-online")({
       { name: "keywords", content: "imposter game online, play imposter online, online imposter game, free imposter game no download, imposter browser game" },
       { property: "og:title", content: "Play Imposter Game Online Free — Imposter World" },
       { property: "og:description", content: "Jump into real-time classroom deduction word game with friends online. Free and works on phone and PC." },
-      { property: "og:image", content: "https://imposterworld.xyz/classroom-bg.jpg" },
+      { property: "og:image", content: "https://imposter-world.onrender.com/classroom-bg.jpg" },
     ],
     links: [
-      { rel: "canonical", href: "https://imposterworld.xyz/imposter-game-online" },
+      { rel: "canonical", href: "https://imposter-world.onrender.com/imposter-game-online" },
     ],
   }),
   component: ImposterGameOnlinePage,

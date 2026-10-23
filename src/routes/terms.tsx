@@ -2,6 +2,13 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowLeft, BookOpen, ShieldCheck, Mail } from "lucide-react";
 
 export const Route = createFileRoute("/terms")({
+  head: () => ({
+    meta: [
+      { title: "Terms of Use — Imposter World" },
+      { name: "description", content: "Terms of use and fair play guidelines for Imposter World multiplayer party game." },
+    ],
+    links: [{ rel: "canonical", href: "https://imposter-world.onrender.com/terms" }],
+  }),
   component: TermsPage,
 });
 

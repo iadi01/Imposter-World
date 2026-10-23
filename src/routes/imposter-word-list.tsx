@@ -14,10 +14,10 @@ export const Route = createFileRoute("/imposter-word-list")({
       { name: "keywords", content: "imposter word list, imposter words, imposter game word pairs, tricky imposter words, bollywood imposter words, cricket imposter words" },
       { property: "og:title", content: "Best Imposter Word List & Tricky Word Pairs — Imposter World" },
       { property: "og:description", content: "Discover 7,000+ verified lookalike word pairs that make bluffing fun and deceptive." },
-      { property: "og:image", content: "https://imposterworld.xyz/classroom-bg.jpg" },
+      { property: "og:image", content: "https://imposter-world.onrender.com/classroom-bg.jpg" },
     ],
     links: [
-      { rel: "canonical", href: "https://imposterworld.xyz/imposter-word-list" },
+      { rel: "canonical", href: "https://imposter-world.onrender.com/imposter-word-list" },
     ],
   }),
   component: ImposterWordListPage,

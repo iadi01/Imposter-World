@@ -1,9 +1,10 @@
 import { n as require_jsx_runtime, t as QueryClientProvider } from "../_libs/react+tanstack__react-query.mjs";
 import { S as useRouter, _ as lazyRouteComponent, b as Link, f as Scripts, g as Outlet, h as createRouter, p as HeadContent, v as createFileRoute, y as createRootRouteWithContext } from "../_libs/@tanstack/react-router+[...].mjs";
+import { t as ARTICLES } from "./articles-data-810nT1zP.mjs";
 import { t as QueryClient } from "../_libs/tanstack__query-core.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/router-C9nPiPm1.js
+//#region node_modules/.nitro/vite/services/ssr/assets/router-CyoHuGbm.js
 var import_jsx_runtime = require_jsx_runtime();
-var styles_default = "/assets/styles-OR35Fqi9.css";
+var styles_default = "/assets/styles-cXzavuhb.css";
 function NotFoundComponent() {
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 		className: "flex min-h-screen items-center justify-center bg-background px-4",
@@ -69,7 +70,7 @@ function ErrorComponent({ error, reset }) {
 		})
 	});
 }
-var Route$14 = createRootRouteWithContext()({
+var Route$15 = createRootRouteWithContext()({
 	head: () => ({
 		meta: [
 			{ charSet: "utf-8" },
@@ -104,7 +105,7 @@ var Route$14 = createRootRouteWithContext()({
 			},
 			{
 				property: "og:image",
-				content: "https://imposterworld.xyz/classroom-bg.jpg"
+				content: "https://imposter-world.onrender.com/classroom-bg.jpg"
 			},
 			{
 				name: "twitter:card",
@@ -120,7 +121,7 @@ var Route$14 = createRootRouteWithContext()({
 			},
 			{
 				name: "twitter:image",
-				content: "https://imposterworld.xyz/classroom-bg.jpg"
+				content: "https://imposter-world.onrender.com/classroom-bg.jpg"
 			},
 			{
 				name: "google-site-verification",
@@ -131,10 +132,6 @@ var Route$14 = createRootRouteWithContext()({
 			{
 				rel: "stylesheet",
 				href: styles_default
-			},
-			{
-				rel: "canonical",
-				href: "https://imposterworld.xyz/"
 			},
 			{
 				rel: "preconnect",
@@ -174,16 +171,16 @@ gtag('config', 'G-DPETXW891Q');` },
 					"@context": "https://schema.org",
 					"@graph": [{
 						"@type": "WebSite",
-						"@id": "https://imposterworld.xyz/#website",
-						"url": "https://imposterworld.xyz/",
+						"@id": "https://imposter-world.onrender.com/#website",
+						"url": "https://imposter-world.onrender.com/",
 						"name": "Imposter World",
 						"description": "Free Online Multiplayer Imposter Word Game with Friends",
 						"inLanguage": "en-US"
 					}, {
 						"@type": "VideoGame",
-						"@id": "https://imposterworld.xyz/#game",
+						"@id": "https://imposter-world.onrender.com/#game",
 						"name": "Imposter World",
-						"url": "https://imposterworld.xyz/",
+						"url": "https://imposter-world.onrender.com/",
 						"description": "Multiplayer classroom notebook party game where players receive secret words, give subtle clues, and deduce who the imposter is.",
 						"genre": [
 							"Party Game",
@@ -197,7 +194,7 @@ gtag('config', 'G-DPETXW891Q');` },
 							"minValue": 3,
 							"maxValue": 14
 						},
-						"image": "https://imposterworld.xyz/detective.png"
+						"image": "https://imposter-world.onrender.com/detective.png"
 					}]
 				})
 			}
@@ -229,26 +226,157 @@ gtag('config', 'G-DPETXW891Q');` } }),
 	});
 }
 function RootComponent() {
-	const { queryClient } = Route$14.useRouteContext();
+	const { queryClient } = Route$15.useRouteContext();
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(QueryClientProvider, {
 		client: queryClient,
 		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Outlet, {})
 	});
 }
-var $$splitComponentImporter$13 = () => import("./routes-DAX0RjF7.mjs");
-var Route$13 = createFileRoute("/")({
-	head: () => ({ meta: [{ title: "Imposter World — Real-Time Multiplayer Party Game" }, {
-		name: "description",
-		content: "A classroom notebook multiplayer party word game. Find the imposter before time runs out!"
-	}] }),
-	component: lazyRouteComponent($$splitComponentImporter$13, "component")
+var $$splitComponentImporter$14 = () => import("./routes-C6xeE_y9.mjs");
+var Route$14 = createFileRoute("/")({
+	head: () => ({
+		meta: [{ title: "Imposter World — Real-Time Multiplayer Party Game" }, {
+			name: "description",
+			content: "A classroom notebook multiplayer party word game. Find the imposter before time runs out!"
+		}],
+		links: [{
+			rel: "canonical",
+			href: "https://imposter-world.onrender.com/"
+		}]
+	}),
+	component: lazyRouteComponent($$splitComponentImporter$14, "component")
 });
-var $$splitComponentImporter$12 = () => import("./admin-DSIURltg.mjs");
-var Route$12 = createFileRoute("/admin")({
+var $$splitComponentImporter$13 = () => import("./admin-DSIURltg.mjs");
+var Route$13 = createFileRoute("/admin")({
 	head: () => ({ meta: [{ title: "Page Not Found — Imposter World" }, {
 		name: "robots",
 		content: "noindex, nofollow"
 	}] }),
+	component: lazyRouteComponent($$splitComponentImporter$13, "component")
+});
+var $$splitComponentImporter$12 = () => import("./articles-CrIzU7Dv.mjs");
+var SITE_URL = "https://imposter-world.onrender.com";
+var Route$12 = createFileRoute("/articles")({
+	head: () => ({
+		meta: [
+			{ title: "Game Articles & Strategy Guides — Imposter World" },
+			{
+				name: "description",
+				content: "Official Imposter World Strategy Observatory: Free guides, deduction masterclasses, imposter bluffing playbooks, word pair analyses, and party rules."
+			},
+			{
+				name: "keywords",
+				content: "imposter game strategy, how to play imposter game, imposter bluffing guide, detective deduction tips, imposter world articles, party word game strategies, pass and play rules"
+			},
+			{
+				property: "og:title",
+				content: "Game Articles & Strategy Guides — Imposter World"
+			},
+			{
+				property: "og:description",
+				content: "Master social deduction with free strategy guides, imposter bluffing tips, and detective rules."
+			},
+			{
+				property: "og:type",
+				content: "website"
+			},
+			{
+				property: "og:url",
+				content: `${SITE_URL}/articles`
+			},
+			{
+				property: "og:image",
+				content: `${SITE_URL}/classroom-bg.jpg`
+			},
+			{
+				name: "twitter:card",
+				content: "summary_large_image"
+			},
+			{
+				name: "twitter:title",
+				content: "Game Articles & Strategy Guides — Imposter World"
+			},
+			{
+				name: "twitter:description",
+				content: "Master social deduction with free strategy guides, imposter bluffing tips, and detective rules."
+			},
+			{
+				name: "twitter:image",
+				content: `${SITE_URL}/classroom-bg.jpg`
+			},
+			{
+				name: "robots",
+				content: "index, follow, max-image-preview:large, max-snippet:-1"
+			}
+		],
+		links: [{
+			rel: "canonical",
+			href: `${SITE_URL}/articles`
+		}],
+		scripts: [{
+			type: "application/ld+json",
+			children: JSON.stringify({
+				"@context": "https://schema.org",
+				"@graph": [
+					{
+						"@type": "CollectionPage",
+						"@id": `${SITE_URL}/articles#collection`,
+						name: "Imposter World Strategy Observatory & Game Articles",
+						url: `${SITE_URL}/articles`,
+						inLanguage: "en-US",
+						description: "Official strategy observatory for Imposter World. Guides on clue formulating, deception detection, bluffing tactics, and party game modes.",
+						publisher: {
+							"@type": "Organization",
+							name: "Imposter World",
+							url: SITE_URL,
+							logo: {
+								"@type": "ImageObject",
+								url: `${SITE_URL}/detective.png`
+							}
+						},
+						hasPart: ARTICLES.map((a) => ({
+							"@type": "Article",
+							headline: a.title,
+							author: {
+								"@type": "Person",
+								name: a.author
+							},
+							datePublished: a.date,
+							articleSection: a.category,
+							description: a.summary,
+							url: `${SITE_URL}/articles#${a.id}`
+						}))
+					},
+					{
+						"@type": "ItemList",
+						"@id": `${SITE_URL}/articles#list`,
+						name: "Imposter World Strategy Articles",
+						numberOfItems: ARTICLES.length,
+						itemListElement: ARTICLES.map((a, i) => ({
+							"@type": "ListItem",
+							position: i + 1,
+							url: `${SITE_URL}/articles#${a.id}`,
+							name: a.title
+						}))
+					},
+					{
+						"@type": "BreadcrumbList",
+						itemListElement: [{
+							"@type": "ListItem",
+							position: 1,
+							name: "Home",
+							item: `${SITE_URL}/`
+						}, {
+							"@type": "ListItem",
+							position: 2,
+							name: "Articles",
+							item: `${SITE_URL}/articles`
+						}]
+					}
+				]
+			})
+		}]
+	}),
 	component: lazyRouteComponent($$splitComponentImporter$12, "component")
 });
 var $$splitComponentImporter$11 = () => import("./delete-account-lsbCZbgI.mjs");
@@ -276,12 +404,12 @@ var Route$10 = createFileRoute("/faq")({
 			},
 			{
 				property: "og:image",
-				content: "https://imposterworld.xyz/classroom-bg.jpg"
+				content: "https://imposter-world.onrender.com/classroom-bg.jpg"
 			}
 		],
 		links: [{
 			rel: "canonical",
-			href: "https://imposterworld.xyz/faq"
+			href: "https://imposter-world.onrender.com/faq"
 		}],
 		scripts: [{
 			type: "application/ld+json",
@@ -337,21 +465,31 @@ var Route$10 = createFileRoute("/faq")({
 });
 var $$splitComponentImporter$9 = () => import("./how-to-play-kSHUO3xr.mjs");
 var Route$9 = createFileRoute("/how-to-play")({
-	head: () => ({ meta: [
-		{ title: "How To Play Imposter World — Complete Classroom Rules & Guide" },
-		{
-			name: "description",
-			content: "Learn how to play Imposter World step-by-step. Discover secret word reveal, drawing & text clue turns, debate interrogation, and voting rules with visual illustrations."
-		},
-		{
-			property: "og:title",
-			content: "How To Play Imposter World — Classroom Guide"
-		},
-		{
-			property: "og:description",
-			content: "Learn how to play Imposter World step-by-step with illustrated rules and strategies."
-		}
-	] }),
+	head: () => ({
+		meta: [
+			{ title: "How To Play Imposter World — Complete Classroom Rules & Guide" },
+			{
+				name: "description",
+				content: "Learn how to play Imposter World step-by-step. Discover secret word reveal, drawing & text clue turns, debate interrogation, and voting rules with visual illustrations."
+			},
+			{
+				property: "og:title",
+				content: "How To Play Imposter World — Classroom Guide"
+			},
+			{
+				property: "og:description",
+				content: "Learn how to play Imposter World step-by-step with illustrated rules and strategies."
+			},
+			{
+				property: "og:image",
+				content: "https://imposter-world.onrender.com/classroom-bg.jpg"
+			}
+		],
+		links: [{
+			rel: "canonical",
+			href: "https://imposter-world.onrender.com/how-to-play"
+		}]
+	}),
 	component: lazyRouteComponent($$splitComponentImporter$9, "component")
 });
 var $$splitComponentImporter$8 = () => import("./imposter-game-online-DWyeRZce.mjs");
@@ -377,12 +515,12 @@ var Route$8 = createFileRoute("/imposter-game-online")({
 			},
 			{
 				property: "og:image",
-				content: "https://imposterworld.xyz/classroom-bg.jpg"
+				content: "https://imposter-world.onrender.com/classroom-bg.jpg"
 			}
 		],
 		links: [{
 			rel: "canonical",
-			href: "https://imposterworld.xyz/imposter-game-online"
+			href: "https://imposter-world.onrender.com/imposter-game-online"
 		}]
 	}),
 	component: lazyRouteComponent($$splitComponentImporter$8, "component")
@@ -410,12 +548,12 @@ var Route$7 = createFileRoute("/imposter-game-questions")({
 			},
 			{
 				property: "og:image",
-				content: "https://imposterworld.xyz/classroom-bg.jpg"
+				content: "https://imposter-world.onrender.com/classroom-bg.jpg"
 			}
 		],
 		links: [{
 			rel: "canonical",
-			href: "https://imposterworld.xyz/imposter-game-questions"
+			href: "https://imposter-world.onrender.com/imposter-game-questions"
 		}]
 	}),
 	component: lazyRouteComponent($$splitComponentImporter$7, "component")
@@ -443,12 +581,12 @@ var Route$6 = createFileRoute("/imposter-game-with-friends")({
 			},
 			{
 				property: "og:image",
-				content: "https://imposterworld.xyz/classroom-bg.jpg"
+				content: "https://imposter-world.onrender.com/classroom-bg.jpg"
 			}
 		],
 		links: [{
 			rel: "canonical",
-			href: "https://imposterworld.xyz/imposter-game-with-friends"
+			href: "https://imposter-world.onrender.com/imposter-game-with-friends"
 		}]
 	}),
 	component: lazyRouteComponent($$splitComponentImporter$6, "component")
@@ -476,124 +614,186 @@ var Route$5 = createFileRoute("/imposter-word-list")({
 			},
 			{
 				property: "og:image",
-				content: "https://imposterworld.xyz/classroom-bg.jpg"
+				content: "https://imposter-world.onrender.com/classroom-bg.jpg"
 			}
 		],
 		links: [{
 			rel: "canonical",
-			href: "https://imposterworld.xyz/imposter-word-list"
+			href: "https://imposter-world.onrender.com/imposter-word-list"
 		}]
 	}),
 	component: lazyRouteComponent($$splitComponentImporter$5, "component")
 });
 var $$splitComponentImporter$4 = () => import("./notice-board-BDcYg_G-.mjs");
-var Route$4 = createFileRoute("/notice-board")({ component: lazyRouteComponent($$splitComponentImporter$4, "component") });
+var Route$4 = createFileRoute("/notice-board")({
+	head: () => ({
+		meta: [
+			{ title: "Classroom Notice Board — Imposter World Updates & Hall of Fame" },
+			{
+				name: "description",
+				content: "Official Imposter World Classroom Notice Board: Season leaderboards, updates, audio features, and community announcements."
+			},
+			{
+				property: "og:title",
+				content: "Classroom Notice Board — Imposter World"
+			},
+			{
+				property: "og:description",
+				content: "Check the daily top detective champion and latest game patch notes."
+			},
+			{
+				property: "og:image",
+				content: "https://imposter-world.onrender.com/classroom-bg.jpg"
+			}
+		],
+		links: [{
+			rel: "canonical",
+			href: "https://imposter-world.onrender.com/notice-board"
+		}]
+	}),
+	component: lazyRouteComponent($$splitComponentImporter$4, "component")
+});
 var $$splitComponentImporter$3 = () => import("./privacy-qpHUcyLt.mjs");
-var Route$3 = createFileRoute("/privacy")({ component: lazyRouteComponent($$splitComponentImporter$3, "component") });
-var $$splitComponentImporter$2 = () => import("./support-BeHdclsF.mjs");
-var Route$2 = createFileRoute("/support")({
-	head: () => ({ meta: [
-		{ title: "Support the Developer — Imposter World ☕" },
-		{
+var Route$3 = createFileRoute("/privacy")({
+	head: () => ({
+		meta: [{ title: "Privacy Policy — Imposter World" }, {
 			name: "description",
-			content: "Voluntary developer funding for Imposter World — servers, hosting, and classroom party multiplayer kept 100% free."
-		},
-		{
-			property: "og:title",
-			content: "Support the Developer — Imposter World ☕"
-		},
-		{
-			property: "og:description",
-			content: "Voluntary developer funding for Imposter World — servers, hosting, and classroom party multiplayer kept 100% free."
-		},
-		{
-			property: "og:type",
-			content: "website"
-		},
-		{
-			name: "twitter:card",
-			content: "summary_large_image"
-		}
-	] }),
+			content: "Privacy policy for Imposter World game. Learn how we protect player privacy and respect student data."
+		}],
+		links: [{
+			rel: "canonical",
+			href: "https://imposter-world.onrender.com/privacy"
+		}]
+	}),
+	component: lazyRouteComponent($$splitComponentImporter$3, "component")
+});
+var $$splitComponentImporter$2 = () => import("./support-Djitskim.mjs");
+var Route$2 = createFileRoute("/support")({
+	head: () => ({
+		meta: [
+			{ title: "Support the Developer — Imposter World ☕" },
+			{
+				name: "description",
+				content: "Voluntary developer funding for Imposter World — servers, hosting, and classroom party multiplayer kept 100% free."
+			},
+			{
+				property: "og:title",
+				content: "Support the Developer — Imposter World ☕"
+			},
+			{
+				property: "og:description",
+				content: "Voluntary developer funding for Imposter World — servers, hosting, and classroom party multiplayer kept 100% free."
+			},
+			{
+				property: "og:type",
+				content: "website"
+			},
+			{
+				name: "twitter:card",
+				content: "summary_large_image"
+			}
+		],
+		links: [{
+			rel: "canonical",
+			href: "https://imposter-world.onrender.com/support"
+		}]
+	}),
 	component: lazyRouteComponent($$splitComponentImporter$2, "component")
 });
 var $$splitComponentImporter$1 = () => import("./terms-CT-bPoAi.mjs");
-var Route$1 = createFileRoute("/terms")({ component: lazyRouteComponent($$splitComponentImporter$1, "component") });
+var Route$1 = createFileRoute("/terms")({
+	head: () => ({
+		meta: [{ title: "Terms of Use — Imposter World" }, {
+			name: "description",
+			content: "Terms of use and fair play guidelines for Imposter World multiplayer party game."
+		}],
+		links: [{
+			rel: "canonical",
+			href: "https://imposter-world.onrender.com/terms"
+		}]
+	}),
+	component: lazyRouteComponent($$splitComponentImporter$1, "component")
+});
 var $$splitComponentImporter = () => import("./api.auth.google.callback-CZ-RFQb8.mjs");
 var Route = createFileRoute("/api/auth/google/callback")({ component: lazyRouteComponent($$splitComponentImporter, "component") });
 var rootRouteChildren = {
-	IndexRoute: Route$13.update({
+	IndexRoute: Route$14.update({
 		id: "/",
 		path: "/",
-		getParentRoute: () => Route$14
+		getParentRoute: () => Route$15
 	}),
-	AdminRoute: Route$12.update({
+	AdminRoute: Route$13.update({
 		id: "/admin",
 		path: "/admin",
-		getParentRoute: () => Route$14
+		getParentRoute: () => Route$15
+	}),
+	ArticlesRoute: Route$12.update({
+		id: "/articles",
+		path: "/articles",
+		getParentRoute: () => Route$15
 	}),
 	DeleteAccountRoute: Route$11.update({
 		id: "/delete-account",
 		path: "/delete-account",
-		getParentRoute: () => Route$14
+		getParentRoute: () => Route$15
 	}),
 	FaqRoute: Route$10.update({
 		id: "/faq",
 		path: "/faq",
-		getParentRoute: () => Route$14
+		getParentRoute: () => Route$15
 	}),
 	HowToPlayRoute: Route$9.update({
 		id: "/how-to-play",
 		path: "/how-to-play",
-		getParentRoute: () => Route$14
+		getParentRoute: () => Route$15
 	}),
 	ImposterGameOnlineRoute: Route$8.update({
 		id: "/imposter-game-online",
 		path: "/imposter-game-online",
-		getParentRoute: () => Route$14
+		getParentRoute: () => Route$15
 	}),
 	ImposterGameQuestionsRoute: Route$7.update({
 		id: "/imposter-game-questions",
 		path: "/imposter-game-questions",
-		getParentRoute: () => Route$14
+		getParentRoute: () => Route$15
 	}),
 	ImposterGameWithFriendsRoute: Route$6.update({
 		id: "/imposter-game-with-friends",
 		path: "/imposter-game-with-friends",
-		getParentRoute: () => Route$14
+		getParentRoute: () => Route$15
 	}),
 	ImposterWordListRoute: Route$5.update({
 		id: "/imposter-word-list",
 		path: "/imposter-word-list",
-		getParentRoute: () => Route$14
+		getParentRoute: () => Route$15
 	}),
 	NoticeBoardRoute: Route$4.update({
 		id: "/notice-board",
 		path: "/notice-board",
-		getParentRoute: () => Route$14
+		getParentRoute: () => Route$15
 	}),
 	PrivacyRoute: Route$3.update({
 		id: "/privacy",
 		path: "/privacy",
-		getParentRoute: () => Route$14
+		getParentRoute: () => Route$15
 	}),
 	SupportRoute: Route$2.update({
 		id: "/support",
 		path: "/support",
-		getParentRoute: () => Route$14
+		getParentRoute: () => Route$15
 	}),
 	TermsRoute: Route$1.update({
 		id: "/terms",
 		path: "/terms",
-		getParentRoute: () => Route$14
+		getParentRoute: () => Route$15
 	}),
 	ApiAuthGoogleCallbackRoute: Route.update({
 		id: "/api/auth/google/callback",
 		path: "/api/auth/google/callback",
-		getParentRoute: () => Route$14
+		getParentRoute: () => Route$15
 	})
 };
-var routeTree = Route$14._addFileChildren(rootRouteChildren)._addFileTypes();
+var routeTree = Route$15._addFileChildren(rootRouteChildren)._addFileTypes();
 var getRouter = () => {
 	const queryClient = new QueryClient();
 	return createRouter({

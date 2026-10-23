@@ -1,6 +1,6 @@
 import { n as require_jsx_runtime } from "../_libs/react+tanstack__react-query.mjs";
 import { b as Link } from "../_libs/@tanstack/react-router+[...].mjs";
-import { R as Globe, Y as CircleCheck, i as Users, nt as ArrowLeft, p as Shield, w as Play } from "../_libs/lucide-react.mjs";
+import { R as Globe, X as CircleCheck, i as Users, p as Shield, rt as ArrowLeft, w as Play } from "../_libs/lucide-react.mjs";
 //#region node_modules/.nitro/vite/services/ssr/assets/imposter-game-online-DWyeRZce.js
 var import_jsx_runtime = require_jsx_runtime();
 function ImposterGameOnlinePage() {

@@ -8,7 +8,9 @@ export const Route = createFileRoute("/how-to-play")({
       { name: "description", content: "Learn how to play Imposter World step-by-step. Discover secret word reveal, drawing & text clue turns, debate interrogation, and voting rules with visual illustrations." },
       { property: "og:title", content: "How To Play Imposter World — Classroom Guide" },
       { property: "og:description", content: "Learn how to play Imposter World step-by-step with illustrated rules and strategies." },
+      { property: "og:image", content: "https://imposter-world.onrender.com/classroom-bg.jpg" },
     ],
+    links: [{ rel: "canonical", href: "https://imposter-world.onrender.com/how-to-play" }],
   }),
   component: HowToPlayPage,
 });

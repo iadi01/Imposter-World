@@ -4,6 +4,16 @@ import { useEffect, useState } from "react";
 import { API_BASE } from "../lib/api";
 
 export const Route = createFileRoute("/notice-board")({
+  head: () => ({
+    meta: [
+      { title: "Classroom Notice Board — Imposter World Updates & Hall of Fame" },
+      { name: "description", content: "Official Imposter World Classroom Notice Board: Season leaderboards, updates, audio features, and community announcements." },
+      { property: "og:title", content: "Classroom Notice Board — Imposter World" },
+      { property: "og:description", content: "Check the daily top detective champion and latest game patch notes." },
+      { property: "og:image", content: "https://imposter-world.onrender.com/classroom-bg.jpg" },
+    ],
+    links: [{ rel: "canonical", href: "https://imposter-world.onrender.com/notice-board" }],
+  }),
   component: NoticeBoardPage,
 });
 

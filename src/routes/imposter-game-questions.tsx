@@ -13,10 +13,10 @@ export const Route = createFileRoute("/imposter-game-questions")({
       { name: "keywords", content: "imposter game questions, imposter game hints, imposter questions, how to interrogate in imposter game, imposter clue ideas" },
       { property: "og:title", content: "Best Imposter Game Questions & Clue Giving Ideas — Imposter World" },
       { property: "og:description", content: "Master the interrogation round with clever questions that catch the bluffer." },
-      { property: "og:image", content: "https://imposterworld.xyz/classroom-bg.jpg" },
+      { property: "og:image", content: "https://imposter-world.onrender.com/classroom-bg.jpg" },
     ],
     links: [
-      { rel: "canonical", href: "https://imposterworld.xyz/imposter-game-questions" },
+      { rel: "canonical", href: "https://imposter-world.onrender.com/imposter-game-questions" },
     ],
   }),
   component: ImposterGameQuestionsPage,

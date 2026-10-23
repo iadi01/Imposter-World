@@ -14,10 +14,10 @@ export const Route = createFileRoute("/faq")({
       { name: "keywords", content: "imposter game FAQ, how to play imposter game, imposter game rules, is imposter world free, how many players can play imposter" },
       { property: "og:title", content: "Frequently Asked Questions (FAQ) — Imposter World" },
       { property: "og:description", content: "Find quick answers to common questions about Imposter World." },
-      { property: "og:image", content: "https://imposterworld.xyz/classroom-bg.jpg" },
+      { property: "og:image", content: "https://imposter-world.onrender.com/classroom-bg.jpg" },
     ],
     links: [
-      { rel: "canonical", href: "https://imposterworld.xyz/faq" },
+      { rel: "canonical", href: "https://imposter-world.onrender.com/faq" },
     ],
     scripts: [
       {

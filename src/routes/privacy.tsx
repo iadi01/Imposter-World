@@ -2,6 +2,13 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowLeft, ShieldCheck, Lock, Mail } from "lucide-react";
 
 export const Route = createFileRoute("/privacy")({
+  head: () => ({
+    meta: [
+      { title: "Privacy Policy — Imposter World" },
+      { name: "description", content: "Privacy policy for Imposter World game. Learn how we protect player privacy and respect student data." },
+    ],
+    links: [{ rel: "canonical", href: "https://imposter-world.onrender.com/privacy" }],
+  }),
   component: PrivacyPage,
 });
 
