@@ -388,10 +388,10 @@ export function securityHeaders(_req: Request, res: Response, next: NextFunction
   // Restrict unused browser device APIs
   res.setHeader("Permissions-Policy", "camera=(), microphone=*, geolocation=()");
 
-  // Strict Content-Security-Policy (with Cloudflare Turnstile & Analytics & WebSocket support)
+  // Strict Content-Security-Policy (with Cloudflare Turnstile, Google Tag Manager & Analytics & WebSocket support)
   res.setHeader(
     "Content-Security-Policy",
-    "default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https://fonts.googleapis.com https://fonts.gstatic.com https://challenges.cloudflare.com https://static.cloudflareinsights.com http://localhost:* ws://localhost:* http://127.0.0.1:* ws://127.0.0.1:* https://lh3.googleusercontent.com https://accounts.google.com; connect-src 'self' wss: ws: https: http:; frame-src 'self' https://challenges.cloudflare.com; frame-ancestors 'self';"
+    "default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https://fonts.googleapis.com https://fonts.gstatic.com https://challenges.cloudflare.com https://static.cloudflareinsights.com https://www.googletagmanager.com https://www.google-analytics.com http://localhost:* ws://localhost:* http://127.0.0.1:* ws://127.0.0.1:* https://lh3.googleusercontent.com https://accounts.google.com; connect-src 'self' wss: ws: https: http: https://www.google-analytics.com https://www.googletagmanager.com; frame-src 'self' https://challenges.cloudflare.com; frame-ancestors 'self';"
   );
 
   next();

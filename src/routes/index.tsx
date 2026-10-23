@@ -1024,7 +1024,7 @@ function Index() {
           {/* NOTEBOOK CLASSROOM FOOTER */}
           <footer className="mt-12 text-center space-y-1.5 font-hand border-t border-foreground/15 pt-5">
             <div className="text-xs sm:text-sm text-foreground/75 flex items-center justify-center gap-1">
-              <span>made on the last bench by <span className="underline decoration-foreground/40 font-bold">adi</span> and <span className="underline decoration-foreground/40 font-bold">shreya</span></span>
+              <span>made on the last bench by <span className="underline decoration-foreground/40 font-bold">adi</span></span>
             </div>
 
             <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-2.5 text-xs sm:text-sm text-primary font-bold">

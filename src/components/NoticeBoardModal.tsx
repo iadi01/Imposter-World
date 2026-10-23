@@ -118,7 +118,7 @@ export function NoticeBoardModal({
                 <span>Last Bench Scribble</span> <Heart className="h-4 w-4 text-accent fill-accent" />
               </h3>
               <p className="text-sm italic text-foreground pt-1">
-                "made on the last bench by adi and shreya"
+                "made on the last bench by adi"
               </p>
             </div>
             <div className="text-[11px] text-muted-foreground pt-2">
@@ -130,7 +130,7 @@ export function NoticeBoardModal({
         {/* Footer */}
         <div className="pt-2 border-t-2 border-foreground/30 flex justify-between items-center font-hand">
           <span className="text-xs text-muted-foreground italic">
-            made on the last bench by adi and shreya
+            made on the last bench by adi
           </span>
           <button
             onClick={() => {

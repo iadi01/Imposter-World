@@ -1,7 +1,7 @@
 import { n as require_jsx_runtime, t as QueryClientProvider } from "../_libs/react+tanstack__react-query.mjs";
 import { S as useRouter, _ as lazyRouteComponent, b as Link, f as Scripts, g as Outlet, h as createRouter, p as HeadContent, v as createFileRoute, y as createRootRouteWithContext } from "../_libs/@tanstack/react-router+[...].mjs";
 import { t as QueryClient } from "../_libs/tanstack__query-core.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/router-Cfws6-0C.js
+//#region node_modules/.nitro/vite/services/ssr/assets/router-C9nPiPm1.js
 var import_jsx_runtime = require_jsx_runtime();
 var styles_default = "/assets/styles-OR35Fqi9.css";
 function NotFoundComponent() {
@@ -121,6 +121,10 @@ var Route$14 = createRootRouteWithContext()({
 			{
 				name: "twitter:image",
 				content: "https://imposterworld.xyz/classroom-bg.jpg"
+			},
+			{
+				name: "google-site-verification",
+				content: "lCqNkkCEBBU4MDc48vu3_ZwiS8Ml0cFtmn8JyQ6iDIA"
 			}
 		],
 		links: [
@@ -155,39 +159,49 @@ var Route$14 = createRootRouteWithContext()({
 				href: "/detective.png"
 			}
 		],
-		scripts: [{
-			type: "application/ld+json",
-			children: JSON.stringify({
-				"@context": "https://schema.org",
-				"@graph": [{
-					"@type": "WebSite",
-					"@id": "https://imposterworld.xyz/#website",
-					"url": "https://imposterworld.xyz/",
-					"name": "Imposter World",
-					"description": "Free Online Multiplayer Imposter Word Game with Friends",
-					"inLanguage": "en-US"
-				}, {
-					"@type": "VideoGame",
-					"@id": "https://imposterworld.xyz/#game",
-					"name": "Imposter World",
-					"url": "https://imposterworld.xyz/",
-					"description": "Multiplayer classroom notebook party game where players receive secret words, give subtle clues, and deduce who the imposter is.",
-					"genre": [
-						"Party Game",
-						"Word Game",
-						"Social Deduction",
-						"Multiplayer"
-					],
-					"gamePlatform": ["Web Browser", "Mobile Browser"],
-					"numberOfPlayers": {
-						"@type": "QuantitativeValue",
-						"minValue": 3,
-						"maxValue": 14
-					},
-					"image": "https://imposterworld.xyz/detective.png"
-				}]
-			})
-		}]
+		scripts: [
+			{
+				src: "https://www.googletagmanager.com/gtag/js?id=G-DPETXW891Q",
+				async: true
+			},
+			{ children: `window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-DPETXW891Q');` },
+			{
+				type: "application/ld+json",
+				children: JSON.stringify({
+					"@context": "https://schema.org",
+					"@graph": [{
+						"@type": "WebSite",
+						"@id": "https://imposterworld.xyz/#website",
+						"url": "https://imposterworld.xyz/",
+						"name": "Imposter World",
+						"description": "Free Online Multiplayer Imposter Word Game with Friends",
+						"inLanguage": "en-US"
+					}, {
+						"@type": "VideoGame",
+						"@id": "https://imposterworld.xyz/#game",
+						"name": "Imposter World",
+						"url": "https://imposterworld.xyz/",
+						"description": "Multiplayer classroom notebook party game where players receive secret words, give subtle clues, and deduce who the imposter is.",
+						"genre": [
+							"Party Game",
+							"Word Game",
+							"Social Deduction",
+							"Multiplayer"
+						],
+						"gamePlatform": ["Web Browser", "Mobile Browser"],
+						"numberOfPlayers": {
+							"@type": "QuantitativeValue",
+							"minValue": 3,
+							"maxValue": 14
+						},
+						"image": "https://imposterworld.xyz/detective.png"
+					}]
+				})
+			}
+		]
 	}),
 	shellComponent: RootShell,
 	component: RootComponent,
@@ -197,7 +211,21 @@ var Route$14 = createRootRouteWithContext()({
 function RootShell({ children }) {
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("html", {
 		lang: "en",
-		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("head", { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(HeadContent, {}) }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("body", { children: [children, /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Scripts, {})] })]
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("head", { children: [
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("meta", {
+				name: "google-site-verification",
+				content: "lCqNkkCEBBU4MDc48vu3_ZwiS8Ml0cFtmn8JyQ6iDIA"
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("script", {
+				async: true,
+				src: "https://www.googletagmanager.com/gtag/js?id=G-DPETXW891Q"
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("script", { dangerouslySetInnerHTML: { __html: `window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-DPETXW891Q');` } }),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(HeadContent, {})
+		] }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("body", { children: [children, /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Scripts, {})] })]
 	});
 }
 function RootComponent() {
@@ -207,7 +235,7 @@ function RootComponent() {
 		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Outlet, {})
 	});
 }
-var $$splitComponentImporter$13 = () => import("./routes-vaRMzM9b.mjs");
+var $$splitComponentImporter$13 = () => import("./routes-DAX0RjF7.mjs");
 var Route$13 = createFileRoute("/")({
 	head: () => ({ meta: [{ title: "Imposter World — Real-Time Multiplayer Party Game" }, {
 		name: "description",
@@ -458,7 +486,7 @@ var Route$5 = createFileRoute("/imposter-word-list")({
 	}),
 	component: lazyRouteComponent($$splitComponentImporter$5, "component")
 });
-var $$splitComponentImporter$4 = () => import("./notice-board-CYucQwf3.mjs");
+var $$splitComponentImporter$4 = () => import("./notice-board-BDcYg_G-.mjs");
 var Route$4 = createFileRoute("/notice-board")({ component: lazyRouteComponent($$splitComponentImporter$4, "component") });
 var $$splitComponentImporter$3 = () => import("./privacy-qpHUcyLt.mjs");
 var Route$3 = createFileRoute("/privacy")({ component: lazyRouteComponent($$splitComponentImporter$3, "component") });

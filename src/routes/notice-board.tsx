@@ -51,7 +51,7 @@ function NoticeBoardPage() {
               Class announcements, patch updates, and competitive tournament notices.
             </p>
             <p className="text-xs text-muted-foreground">
-              Pinned by Classroom Monitors: Adi & Shreya · Last updated 21 October 2026
+              Pinned by Classroom Monitor: Adi · Last updated 21 October 2026
             </p>
           </header>
 

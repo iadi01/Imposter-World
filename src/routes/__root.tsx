@@ -90,6 +90,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "twitter:title", content: "Imposter World — Online Imposter Party Game" },
       { name: "twitter:description", content: "Play the nostalgic classroom notebook multiplayer imposter game with friends." },
       { name: "twitter:image", content: "https://imposterworld.xyz/classroom-bg.jpg" },
+      { name: "google-site-verification", content: "lCqNkkCEBBU4MDc48vu3_ZwiS8Ml0cFtmn8JyQ6iDIA" },
     ],
     links: [
       {
@@ -107,6 +108,16 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "apple-touch-icon", href: "/detective.png" },
     ],
     scripts: [
+      {
+        src: "https://www.googletagmanager.com/gtag/js?id=G-DPETXW891Q",
+        async: true,
+      },
+      {
+        children: `window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-DPETXW891Q');`,
+      },
       {
         type: "application/ld+json",
         children: JSON.stringify({
@@ -151,6 +162,17 @@ function RootShell({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
       <head>
+        <meta name="google-site-verification" content="lCqNkkCEBBU4MDc48vu3_ZwiS8Ml0cFtmn8JyQ6iDIA" />
+        {/* Google tag (gtag.js) */}
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-DPETXW891Q" />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-DPETXW891Q');`,
+          }}
+        />
         <HeadContent />
       </head>
       <body>

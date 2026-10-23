@@ -3,7 +3,7 @@ import { t as API_BASE } from "./api-OZfBBcXI.mjs";
 import { n as require_jsx_runtime, r as require_react } from "../_libs/react+tanstack__react-query.mjs";
 import { b as Link } from "../_libs/@tanstack/react-router+[...].mjs";
 import { j as Mic, nt as ArrowLeft, p as Shield, s as Trophy } from "../_libs/lucide-react.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/notice-board-CYucQwf3.js
+//#region node_modules/.nitro/vite/services/ssr/assets/notice-board-BDcYg_G-.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 function NoticeBoardPage() {
@@ -55,7 +55,7 @@ function NoticeBoardPage() {
 							}),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 								className: "text-xs text-muted-foreground",
-								children: "Pinned by Classroom Monitors: Adi & Shreya · Last updated 21 October 2026"
+								children: "Pinned by Classroom Monitor: Adi · Last updated 21 October 2026"
 							})
 						]
 					}),

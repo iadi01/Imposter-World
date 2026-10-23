@@ -5,7 +5,7 @@ import { b as Link } from "../_libs/@tanstack/react-router+[...].mjs";
 import { t as toast } from "../_libs/sonner.mjs";
 import { $ as Building2, A as Music, B as Flag, C as Plus, D as Pause, F as LoaderCircle, G as Copy, H as EyeOff, K as Compass, L as Heart, M as MapPin, N as LogOut, O as Paintbrush, P as Lock, Q as Check, R as Globe, T as Pin, V as Eye, W as Eraser, X as CircleAlert, _ as Send, a as UserCheck, b as RefreshCw, d as Square, h as Settings, i as Users, j as Mic, k as PaintBucket, l as Trash2, n as VolumeX, nt as ArrowLeft, o as Undo2, q as Clock, r as Volume2, s as Trophy, t as X, tt as AtSign, v as Search, w as Play, y as RotateCcw, z as Flame } from "../_libs/lucide-react.mjs";
 import { t as lookup } from "../_libs/socket.io-client+[...].mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/routes-vaRMzM9b.js
+//#region node_modules/.nitro/vite/services/ssr/assets/routes-DAX0RjF7.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 function hexToRgba(hex) {
@@ -3575,7 +3575,7 @@ function NoticeBoardModal({ onClose, championName }) {
 									]
 								}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 									className: "text-sm italic text-foreground pt-1",
-									children: "\"made on the last bench by adi and shreya\""
+									children: "\"made on the last bench by adi\""
 								})] }),
 								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 									className: "text-[11px] text-muted-foreground pt-2",
@@ -3589,7 +3589,7 @@ function NoticeBoardModal({ onClose, championName }) {
 					className: "pt-2 border-t-2 border-foreground/30 flex justify-between items-center font-hand",
 					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 						className: "text-xs text-muted-foreground italic",
-						children: "made on the last bench by adi and shreya"
+						children: "made on the last bench by adi"
 					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 						onClick: () => {
 							sound.playPop();
@@ -4760,18 +4760,10 @@ function Index() {
 						className: "mt-12 text-center space-y-1.5 font-hand border-t border-foreground/15 pt-5",
 						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 							className: "text-xs sm:text-sm text-foreground/75 flex items-center justify-center gap-1",
-							children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: [
-								"made on the last bench by ",
-								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-									className: "underline decoration-foreground/40 font-bold",
-									children: "adi"
-								}),
-								" and ",
-								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-									className: "underline decoration-foreground/40 font-bold",
-									children: "shreya"
-								})
-							] })
+							children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { children: ["made on the last bench by ", /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+								className: "underline decoration-foreground/40 font-bold",
+								children: "adi"
+							})] })
 						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 							className: "flex flex-wrap items-center justify-center gap-2 sm:gap-2.5 text-xs sm:text-sm text-primary font-bold",
 							children: [
