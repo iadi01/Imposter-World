@@ -59,15 +59,14 @@ app.use("/auth", authRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api", apiRoutes);
 
-// Health probe (detailed diagnostics)
-app.get("/health", (_req, res) => {
-  const ssrPath = path.resolve(process.cwd(), ".output/server/index.mjs");
-  const publicPath = path.resolve(process.cwd(), ".output/public");
-  res.json({
-    status: "healthy",
-    hasSsr: fs.existsSync(ssrPath),
-    hasPublic: fs.existsSync(publicPath),
-    version: "1.0.1",
+// Production-Ready Health Check Endpoint for Render & UptimeRobot Monitoring
+// Responds instantly with HTTP 200 and fresh ISO timestamp to keep instance warm
+app.get(["/health", "/api/health"], (_req: Request, res: Response) => {
+  res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+  res.status(200).json({
+    success: true,
+    status: "ok",
+    timestamp: new Date().toISOString(),
   });
 });
 
@@ -85,7 +84,7 @@ if (fs.existsSync(ssrIndexPath)) {
     const { middleware } = await import(ssrIndexPath);
     if (middleware) {
       app.use(async (req, res, next) => {
-        if (req.path.startsWith("/api") || req.path === "/health" || req.path.startsWith("/socket.io")) {
+        if (req.path.startsWith("/api") || req.path.startsWith("/health") || req.path.startsWith("/socket.io")) {
           return next();
         }
         try {
