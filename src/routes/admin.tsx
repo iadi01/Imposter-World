@@ -189,6 +189,12 @@ function AdminPage() {
   const [editUsername, setEditUsername] = useState("");
   const [editWins, setEditWins] = useState(0);
 
+  // Tab loaded cache states for 0ms instantaneous tab switching
+  const [hasLoadedUsers, setHasLoadedUsers] = useState(false);
+  const [hasLoadedWords, setHasLoadedWords] = useState(false);
+  const [hasLoadedSupporters, setHasLoadedSupporters] = useState(false);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+
   // 1. Verify Authorization on load (Stealth Mode)
   const verifyAdmin = async () => {
     setLoading(true);
@@ -201,6 +207,7 @@ function AdminPage() {
         if (data.isAdmin) {
           setAuthorized(true);
           setCurrentUserEmail(data.displayName || "Principal");
+          // Fetch overview stats and live rooms in parallel
           loadDashboardData();
           return;
         }
@@ -217,11 +224,12 @@ function AdminPage() {
     verifyAdmin();
   }, []);
 
-  // 2. Load Dashboard Data
-  const loadDashboardData = async () => {
+  // 2. Load Dashboard Data (Supports fast background refresh)
+  const loadDashboardData = async (force = false) => {
     try {
+      const freshParam = force ? "?fresh=true" : "";
       const [statsRes, roomsRes, supportersRes] = await Promise.all([
-        fetch(`${API_BASE}/api/admin/stats`, { credentials: "include" }),
+        fetch(`${API_BASE}/api/admin/stats${freshParam}`, { credentials: "include" }),
         fetch(`${API_BASE}/api/admin/rooms`, { credentials: "include" }),
         fetch(`${API_BASE}/api/admin/supporters?limit=1`, { credentials: "include" }),
       ]);
@@ -239,7 +247,7 @@ function AdminPage() {
     }
   };
 
-  // 3. Load Users
+  // 3. Load Users (Cached per tab session)
   const loadUsers = async () => {
     try {
       const params = new URLSearchParams({
@@ -253,6 +261,7 @@ function AdminPage() {
       const data = await res.json();
       if (data.success) {
         setUsers(data.users);
+        setHasLoadedUsers(true);
       }
     } catch {
       toast.error("Failed to load users list");
@@ -260,12 +269,18 @@ function AdminPage() {
   };
 
   useEffect(() => {
-    if (authorized && activeTab === "users") {
+    if (authorized && activeTab === "users" && !hasLoadedUsers) {
       loadUsers();
     }
-  }, [authorized, activeTab, userFilter]);
+  }, [authorized, activeTab, hasLoadedUsers]);
 
-  // 4. Load Words
+  useEffect(() => {
+    if (authorized && activeTab === "users" && hasLoadedUsers) {
+      loadUsers();
+    }
+  }, [userFilter]);
+
+  // 4. Load Words (Cached per tab session)
   const loadWords = async () => {
     try {
       const params = new URLSearchParams({
@@ -280,6 +295,7 @@ function AdminPage() {
       if (data.success) {
         setWords(data.words);
         setWordCategories(data.categories || []);
+        setHasLoadedWords(true);
       }
     } catch {
       toast.error("Failed to load word pairs");
@@ -287,12 +303,18 @@ function AdminPage() {
   };
 
   useEffect(() => {
-    if (authorized && activeTab === "words") {
+    if (authorized && activeTab === "words" && !hasLoadedWords) {
       loadWords();
     }
-  }, [authorized, activeTab, wordCategoryFilter]);
+  }, [authorized, activeTab, hasLoadedWords]);
 
-  // 5. Load Supporters
+  useEffect(() => {
+    if (authorized && activeTab === "words" && hasLoadedWords) {
+      loadWords();
+    }
+  }, [wordCategoryFilter]);
+
+  // 5. Load Supporters (Cached per tab session)
   const loadSupporters = async () => {
     setLoadingSupporters(true);
     try {
@@ -308,6 +330,7 @@ function AdminPage() {
       if (data.success) {
         setSupporters(data.supporters);
         if (data.counts) setSupporterCounts(data.counts);
+        setHasLoadedSupporters(true);
       }
     } catch {
       toast.error("Failed to load supporters list");
@@ -317,10 +340,32 @@ function AdminPage() {
   };
 
   useEffect(() => {
-    if (authorized && activeTab === "supporters") {
+    if (authorized && activeTab === "supporters" && !hasLoadedSupporters) {
       loadSupporters();
     }
-  }, [authorized, activeTab, supporterFilter]);
+  }, [authorized, activeTab, hasLoadedSupporters]);
+
+  useEffect(() => {
+    if (authorized && activeTab === "supporters" && hasLoadedSupporters) {
+      loadSupporters();
+    }
+  }, [supporterFilter]);
+
+  // Force Full Cache Refresh
+  const forceRefresh = async () => {
+    setIsRefreshing(true);
+    try {
+      await loadDashboardData(true);
+      if (activeTab === "users") await loadUsers();
+      if (activeTab === "words") await loadWords();
+      if (activeTab === "supporters") await loadSupporters();
+      toast.success("All classroom records refreshed! ⚡");
+    } catch {
+      toast.error("Failed to refresh records");
+    } finally {
+      setIsRefreshing(false);
+    }
+  };
 
   // Supporter Action Handlers
   const handleVerifySupporter = async (
@@ -634,7 +679,7 @@ function AdminPage() {
             </p>
           </div>
 
-          <div className="pt-2">
+          <div className="pt-2 flex flex-col gap-3">
             <Link
               to="/"
               className="sketch inline-flex items-center justify-center gap-2 bg-primary text-primary-foreground px-6 py-2.5 font-display text-base font-bold shadow-[2px_2px_0_0_rgba(0,0,0,1)] hover:brightness-110 no-underline cursor-pointer"
@@ -642,6 +687,14 @@ function AdminPage() {
               <ArrowLeft className="h-4 w-4" />
               Return to Classroom
             </Link>
+
+            <a
+              href={`${API_BASE}/auth/google`}
+              className="sketch inline-flex items-center justify-center gap-2 bg-card text-foreground px-5 py-2 font-display text-xs font-bold border-2 border-foreground shadow-[2px_2px_0_0_rgba(0,0,0,1)] hover:bg-muted no-underline cursor-pointer"
+            >
+              <Lock className="h-3.5 w-3.5 text-primary" />
+              Sign In with Authorized Google Account
+            </a>
           </div>
         </div>
       </main>
@@ -675,6 +728,15 @@ function AdminPage() {
           </div>
 
           <div className="flex items-center gap-2">
+            <button
+              onClick={forceRefresh}
+              disabled={isRefreshing}
+              className="sketch bg-primary text-primary-foreground px-3 py-1.5 text-xs font-bold hover:brightness-110 flex items-center gap-1.5 cursor-pointer disabled:opacity-50 shadow-[1px_1px_0_0_rgba(0,0,0,1)]"
+              title="Force-refresh all database counts and records"
+            >
+              <RefreshCw className={`h-3.5 w-3.5 ${isRefreshing ? "animate-spin" : ""}`} />
+              <span>{isRefreshing ? "Refreshing..." : "Fast Refresh"}</span>
+            </button>
             <Link
               to="/"
               className="sketch bg-secondary px-3 py-1.5 text-xs font-bold text-foreground hover:bg-secondary/80 flex items-center gap-1.5 cursor-pointer"

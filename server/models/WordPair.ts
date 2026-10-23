@@ -23,5 +23,7 @@ const WordPairSchema = new Schema<IWordPair>(
 
 // Compound index for random queries with category & difficulty
 WordPairSchema.index({ active: 1, category: 1, difficulty: 1, language: 1 });
+WordPairSchema.index({ createdAt: -1 });
+WordPairSchema.index({ category: 1, active: 1 });
 
 export const WordPair = mongoose.models["WordPair"] || mongoose.model<IWordPair>("WordPair", WordPairSchema);

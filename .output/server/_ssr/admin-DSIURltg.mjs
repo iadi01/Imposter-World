@@ -3,8 +3,8 @@ import { t as API_BASE } from "./api-OZfBBcXI.mjs";
 import { n as require_jsx_runtime, r as require_react } from "../_libs/react+tanstack__react-query.mjs";
 import { b as Link } from "../_libs/@tanstack/react-router+[...].mjs";
 import { t as toast } from "../_libs/sonner.mjs";
-import { C as Plus, E as PenLine, H as EyeOff, L as Heart, N as LogOut, Q as Check, V as Eye, Y as CircleCheck, _ as Send, b as RefreshCw, c as TriangleAlert, et as BookOpen, g as Server, i as Users, l as Trash2, nt as ArrowLeft, q as Clock, rt as Activity, t as X, u as Terminal, v as Search, x as Radio } from "../_libs/lucide-react.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/admin-ElebGS4g.js
+import { C as Plus, E as PenLine, H as EyeOff, L as Heart, N as LogOut, P as Lock, Q as Check, V as Eye, Y as CircleCheck, _ as Send, b as RefreshCw, c as TriangleAlert, et as BookOpen, g as Server, i as Users, l as Trash2, nt as ArrowLeft, q as Clock, rt as Activity, t as X, u as Terminal, v as Search, x as Radio } from "../_libs/lucide-react.mjs";
+//#region node_modules/.nitro/vite/services/ssr/assets/admin-DSIURltg.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 function AdminPage() {
@@ -58,6 +58,10 @@ function AdminPage() {
 	const [editDisplayName, setEditDisplayName] = (0, import_react.useState)("");
 	const [editUsername, setEditUsername] = (0, import_react.useState)("");
 	const [editWins, setEditWins] = (0, import_react.useState)(0);
+	const [hasLoadedUsers, setHasLoadedUsers] = (0, import_react.useState)(false);
+	const [hasLoadedWords, setHasLoadedWords] = (0, import_react.useState)(false);
+	const [hasLoadedSupporters, setHasLoadedSupporters] = (0, import_react.useState)(false);
+	const [isRefreshing, setIsRefreshing] = (0, import_react.useState)(false);
 	const verifyAdmin = async () => {
 		setLoading(true);
 		try {
@@ -81,10 +85,11 @@ function AdminPage() {
 	(0, import_react.useEffect)(() => {
 		verifyAdmin();
 	}, []);
-	const loadDashboardData = async () => {
+	const loadDashboardData = async (force = false) => {
 		try {
+			const freshParam = force ? "?fresh=true" : "";
 			const [statsRes, roomsRes, supportersRes] = await Promise.all([
-				fetch(`${API_BASE}/api/admin/stats`, { credentials: "include" }),
+				fetch(`${API_BASE}/api/admin/stats${freshParam}`, { credentials: "include" }),
 				fetch(`${API_BASE}/api/admin/rooms`, { credentials: "include" }),
 				fetch(`${API_BASE}/api/admin/supporters?limit=1`, { credentials: "include" })
 			]);
@@ -106,18 +111,24 @@ function AdminPage() {
 				limit: "50"
 			});
 			const data = await (await fetch(`${API_BASE}/api/admin/users?${params.toString()}`, { credentials: "include" })).json();
-			if (data.success) setUsers(data.users);
+			if (data.success) {
+				setUsers(data.users);
+				setHasLoadedUsers(true);
+			}
 		} catch {
 			toast.error("Failed to load users list");
 		}
 	};
 	(0, import_react.useEffect)(() => {
-		if (authorized && activeTab === "users") loadUsers();
+		if (authorized && activeTab === "users" && !hasLoadedUsers) loadUsers();
 	}, [
 		authorized,
 		activeTab,
-		userFilter
+		hasLoadedUsers
 	]);
+	(0, import_react.useEffect)(() => {
+		if (authorized && activeTab === "users" && hasLoadedUsers) loadUsers();
+	}, [userFilter]);
 	const loadWords = async () => {
 		try {
 			const params = new URLSearchParams({
@@ -129,18 +140,22 @@ function AdminPage() {
 			if (data.success) {
 				setWords(data.words);
 				setWordCategories(data.categories || []);
+				setHasLoadedWords(true);
 			}
 		} catch {
 			toast.error("Failed to load word pairs");
 		}
 	};
 	(0, import_react.useEffect)(() => {
-		if (authorized && activeTab === "words") loadWords();
+		if (authorized && activeTab === "words" && !hasLoadedWords) loadWords();
 	}, [
 		authorized,
 		activeTab,
-		wordCategoryFilter
+		hasLoadedWords
 	]);
+	(0, import_react.useEffect)(() => {
+		if (authorized && activeTab === "words" && hasLoadedWords) loadWords();
+	}, [wordCategoryFilter]);
 	const loadSupporters = async () => {
 		setLoadingSupporters(true);
 		try {
@@ -153,6 +168,7 @@ function AdminPage() {
 			if (data.success) {
 				setSupporters(data.supporters);
 				if (data.counts) setSupporterCounts(data.counts);
+				setHasLoadedSupporters(true);
 			}
 		} catch {
 			toast.error("Failed to load supporters list");
@@ -161,12 +177,29 @@ function AdminPage() {
 		}
 	};
 	(0, import_react.useEffect)(() => {
-		if (authorized && activeTab === "supporters") loadSupporters();
+		if (authorized && activeTab === "supporters" && !hasLoadedSupporters) loadSupporters();
 	}, [
 		authorized,
 		activeTab,
-		supporterFilter
+		hasLoadedSupporters
 	]);
+	(0, import_react.useEffect)(() => {
+		if (authorized && activeTab === "supporters" && hasLoadedSupporters) loadSupporters();
+	}, [supporterFilter]);
+	const forceRefresh = async () => {
+		setIsRefreshing(true);
+		try {
+			await loadDashboardData(true);
+			if (activeTab === "users") await loadUsers();
+			if (activeTab === "words") await loadWords();
+			if (activeTab === "supporters") await loadSupporters();
+			toast.success("All classroom records refreshed! ⚡");
+		} catch {
+			toast.error("Failed to refresh records");
+		} finally {
+			setIsRefreshing(false);
+		}
+	};
 	const handleVerifySupporter = async (id, isVerified, status) => {
 		try {
 			const data = await (await fetch(`${API_BASE}/api/admin/supporters/${id}/verify`, {
@@ -432,13 +465,17 @@ function AdminPage() {
 						children: "Looks like this page was torn out or never existed in the classroom ledger. The imposter might have erased the clues!"
 					})]
 				}),
-				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-					className: "pt-2",
-					children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+					className: "pt-2 flex flex-col gap-3",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
 						to: "/",
 						className: "sketch inline-flex items-center justify-center gap-2 bg-primary text-primary-foreground px-6 py-2.5 font-display text-base font-bold shadow-[2px_2px_0_0_rgba(0,0,0,1)] hover:brightness-110 no-underline cursor-pointer",
 						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ArrowLeft, { className: "h-4 w-4" }), "Return to Classroom"]
-					})
+					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("a", {
+						href: `${API_BASE}/auth/google`,
+						className: "sketch inline-flex items-center justify-center gap-2 bg-card text-foreground px-5 py-2 font-display text-xs font-bold border-2 border-foreground shadow-[2px_2px_0_0_rgba(0,0,0,1)] hover:bg-muted no-underline cursor-pointer",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Lock, { className: "h-3.5 w-3.5 text-primary" }), "Sign In with Authorized Google Account"]
+					})]
 				})
 			]
 		})
@@ -474,19 +511,29 @@ function AdminPage() {
 							})] })]
 						}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 							className: "flex items-center gap-2",
-							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
-								to: "/",
-								className: "sketch bg-secondary px-3 py-1.5 text-xs font-bold text-foreground hover:bg-secondary/80 flex items-center gap-1.5 cursor-pointer",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ArrowLeft, { className: "h-3.5 w-3.5" }), " Back to Game"]
-							}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
-								onClick: () => {
-									fetch(`${API_BASE}/api/auth/logout`, { method: "POST" }).then(() => {
-										window.location.href = "/";
-									});
-								},
-								className: "sketch bg-accent text-accent-foreground px-3 py-1.5 text-xs font-bold hover:brightness-110 flex items-center gap-1.5 cursor-pointer",
-								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(LogOut, { className: "h-3.5 w-3.5" }), " Sign Out"]
-							})]
+							children: [
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+									onClick: forceRefresh,
+									disabled: isRefreshing,
+									className: "sketch bg-primary text-primary-foreground px-3 py-1.5 text-xs font-bold hover:brightness-110 flex items-center gap-1.5 cursor-pointer disabled:opacity-50 shadow-[1px_1px_0_0_rgba(0,0,0,1)]",
+									title: "Force-refresh all database counts and records",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(RefreshCw, { className: `h-3.5 w-3.5 ${isRefreshing ? "animate-spin" : ""}` }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: isRefreshing ? "Refreshing..." : "Fast Refresh" })]
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Link, {
+									to: "/",
+									className: "sketch bg-secondary px-3 py-1.5 text-xs font-bold text-foreground hover:bg-secondary/80 flex items-center gap-1.5 cursor-pointer",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ArrowLeft, { className: "h-3.5 w-3.5" }), " Back to Game"]
+								}),
+								/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+									onClick: () => {
+										fetch(`${API_BASE}/api/auth/logout`, { method: "POST" }).then(() => {
+											window.location.href = "/";
+										});
+									},
+									className: "sketch bg-accent text-accent-foreground px-3 py-1.5 text-xs font-bold hover:brightness-110 flex items-center gap-1.5 cursor-pointer",
+									children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(LogOut, { className: "h-3.5 w-3.5" }), " Sign Out"]
+								})
+							]
 						})]
 					}),
 					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("nav", {

@@ -14,27 +14,56 @@ export function getAdminEmail(): string {
 }
 
 /**
- * Constant-time comparison between user email and admin email.
+ * Constant-time comparison between user email and authorized admin emails.
+ * Supports single email or comma-separated list of admin emails in ADMIN_EMAIL.
  * Prevents side-channel timing attacks from leaking email characters or length.
  */
 export function isUserAdmin(email?: string | null): boolean {
   if (!email || typeof email !== "string") return false;
 
-  const adminEmail = getAdminEmail();
-  if (!adminEmail) return false;
+  const rawAdminEmails = (process.env.ADMIN_EMAIL || "").trim();
+  if (!rawAdminEmails) return false;
 
   const normalizedUser = email.toLowerCase().trim();
-  const normalizedAdmin = adminEmail.toLowerCase().trim();
+  const adminList = rawAdminEmails
+    .split(",")
+    .map((e) => e.toLowerCase().trim())
+    .filter(Boolean);
 
-  // Hash both with SHA-256 to produce fixed 32-byte buffers for timingSafeEqual
+  if (adminList.length === 0) return false;
+
   const userHash = crypto.createHash("sha256").update(normalizedUser).digest();
-  const adminHash = crypto.createHash("sha256").update(normalizedAdmin).digest();
 
-  return crypto.timingSafeEqual(userHash, adminHash);
+  let matched = false;
+  for (const adminEmail of adminList) {
+    const adminHash = crypto.createHash("sha256").update(adminEmail).digest();
+    if (crypto.timingSafeEqual(userHash, adminHash)) {
+      matched = true;
+    }
+  }
+
+  return matched;
 }
 
 export interface AuthenticatedAdminRequest extends Request {
   adminUser?: any;
+}
+
+// In-memory cache for validated admin sessions to eliminate DB roundtrip latency on consecutive requests
+interface VerifiedAdminCacheEntry {
+  userId: string;
+  email: string;
+  user: any;
+  expiresAt: number;
+}
+const verifiedAdminCache = new Map<string, VerifiedAdminCacheEntry>();
+
+export function invalidateAdminUserCache(userId?: string) {
+  if (userId) {
+    verifiedAdminCache.delete(userId);
+  } else {
+    verifiedAdminCache.clear();
+  }
 }
 
 // Helper to extract real client IP behind Cloudflare, reverse proxies, and direct connections
@@ -54,6 +83,11 @@ export function getClientIp(req: Request): string {
  * Strict Admin Middleware.
  * Stealth Protection: Unauthorized requests receive generic HTTP 404 (Not Found).
  * NEVER reveals what email is expected or that an admin console even exists.
+ * Features:
+ * - Alg-restricted HS256 JWT validation
+ * - Instant IP-lockout for probes (3 strikes in 5 mins)
+ * - In-memory admin session cache for sub-millisecond route execution
+ * - Guest user hard-rejection
  */
 export async function requireAdmin(
   req: AuthenticatedAdminRequest,
@@ -61,6 +95,13 @@ export async function requireAdmin(
   next: NextFunction
 ): Promise<any> {
   const clientIp = getClientIp(req);
+
+  // 1. IP Ban check (Drop immediately with 404 to conserve server resources)
+  const ban = ipBanMap.get(clientIp);
+  if (ban && ban.bannedUntil > Date.now()) {
+    return res.status(404).json({ error: "Not found" });
+  }
+
   const token =
     req.cookies?.session_token ||
     (req.headers.authorization?.startsWith("Bearer ")
@@ -73,7 +114,8 @@ export async function requireAdmin(
   }
 
   try {
-    const decoded = jwt.verify(token, JWT_SECRET) as any;
+    // Restrict algorithm to HS256 to eliminate JWT 'none' and key confusion attacks
+    const decoded = jwt.verify(token, JWT_SECRET, { algorithms: ["HS256"] }) as any;
     if (!decoded || !decoded.userId || typeof decoded.userId !== "string") {
       recordFailedAdminProbe(clientIp);
       return res.status(404).json({ error: "Not found" });
@@ -84,8 +126,20 @@ export async function requireAdmin(
       return res.status(404).json({ error: "Not found" });
     }
 
+    const now = Date.now();
+    const cached = verifiedAdminCache.get(decoded.userId);
+    if (cached && cached.expiresAt > now) {
+      if (cached.user.isGuest === true || !isUserAdmin(cached.email)) {
+        verifiedAdminCache.delete(decoded.userId);
+        recordFailedAdminProbe(clientIp);
+        return res.status(404).json({ error: "Not found" });
+      }
+      req.adminUser = cached.user;
+      return next();
+    }
+
     const user = await User.findById(decoded.userId).lean();
-    if (!user) {
+    if (!user || user.isGuest === true || !user.email) {
       recordFailedAdminProbe(clientIp);
       return res.status(404).json({ error: "Not found" });
     }
@@ -94,6 +148,14 @@ export async function requireAdmin(
       recordFailedAdminProbe(clientIp);
       return res.status(404).json({ error: "Not found" });
     }
+
+    // Cache verified admin identity for 60 seconds (sub-millisecond subsequent requests)
+    verifiedAdminCache.set(decoded.userId, {
+      userId: decoded.userId,
+      email: user.email,
+      user,
+      expiresAt: now + 60 * 1000,
+    });
 
     req.adminUser = user;
     next();
@@ -124,7 +186,8 @@ function recordFailedAdminProbe(ip: string) {
   const now = Date.now();
   const entry = failedAdminProbes.get(ip) || { count: 0, firstAt: now };
 
-  if (now - entry.firstAt > 60000) {
+  // Sliding window of 5 minutes
+  if (now - entry.firstAt > 5 * 60 * 1000) {
     entry.count = 1;
     entry.firstAt = now;
   } else {
@@ -133,19 +196,19 @@ function recordFailedAdminProbe(ip: string) {
 
   failedAdminProbes.set(ip, entry);
 
-  // If 5 unauthorized admin probes occur within 1 minute, auto-ban IP!
-  // In development: 5 seconds lockout; In production: 15 minutes lockout
-  if (entry.count >= 5) {
+  // If 3 unauthorized admin probes occur within 5 minutes, auto-ban IP!
+  // In development: 10 seconds lockout; In production: 30 minutes lockout
+  if (entry.count >= 3) {
     const isDevLocal =
       process.env.NODE_ENV === "development" &&
       (ip === "127.0.0.1" || ip === "::1" || ip === "::ffff:127.0.0.1");
-    const banDurationMs = isDevLocal ? 5 * 1000 : 15 * 60 * 1000;
+    const banDurationMs = isDevLocal ? 10 * 1000 : 30 * 60 * 1000;
 
     ipBanMap.set(ip, {
       bannedUntil: now + banDurationMs,
       failCount: entry.count,
     });
-    console.warn(`[Security Alert] IP ${ip} has been temporarily locked out for repeated unauthorized admin probes.`);
+    console.warn(`[Security Alert] IP ${ip} has been locked out for 30 minutes for unauthorized admin probes.`);
   }
 }
 

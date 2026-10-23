@@ -32,6 +32,10 @@ const SupporterSchema = new Schema<ISupporter>(
   { timestamps: true }
 );
 
+SupporterSchema.index({ status: 1, isVerified: 1, paidAt: -1 });
+SupporterSchema.index({ createdAt: -1 });
+SupporterSchema.index({ paidAt: -1 });
+
 if (mongoose.models["Supporter"]) {
   delete mongoose.models["Supporter"];
 }

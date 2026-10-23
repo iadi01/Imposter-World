@@ -44,6 +44,11 @@ const UserSchema = new Schema<IUser>(
   { timestamps: true }
 );
 
+// Indexes for ultra-fast admin filtering and leaderboard sorting
+UserSchema.index({ isGuest: 1, createdAt: -1 });
+UserSchema.index({ createdAt: -1 });
+UserSchema.index({ wins: -1, matchesPlayed: -1 });
+
 // Method to recalculate win rate
 UserSchema.methods["recalcStats"] = function (this: IUser, won: boolean, wasImposter: boolean) {
   this.matchesPlayed += 1;
