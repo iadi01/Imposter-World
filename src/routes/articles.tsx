@@ -51,7 +51,7 @@ export const Route = createFileRoute("/articles")({
                 url: SITE_URL,
                 logo: { "@type": "ImageObject", url: `${SITE_URL}/detective.png` },
               },
-              hasPart: ARTICLES.map((a) => ({
+              hasPart: ARTICLES.slice(0, 50).map((a) => ({
                 "@type": "Article",
                 headline: a.title,
                 author: { "@type": "Person", name: a.author },
@@ -66,7 +66,7 @@ export const Route = createFileRoute("/articles")({
               "@id": `${SITE_URL}/articles#list`,
               name: "Imposter World Strategy Articles",
               numberOfItems: ARTICLES.length,
-              itemListElement: ARTICLES.map((a, i) => ({
+              itemListElement: ARTICLES.slice(0, 50).map((a, i) => ({
                 "@type": "ListItem",
                 position: i + 1,
                 url: `${SITE_URL}/articles#${a.id}`,
@@ -144,6 +144,8 @@ function ArticlesPage() {
   const [cat, setCat] = useState<string>("All");
   const [q, setQ] = useState("");
   const [active, setActive] = useState<Article | null>(null);
+  const [page, setPage] = useState<number>(1);
+  const PAGE_SIZE = 12;
 
   const filtered = useMemo(
     () =>
@@ -160,6 +162,24 @@ function ArticlesPage() {
       }),
     [cat, q]
   );
+
+  const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+  const currentPage = Math.min(page, totalPages);
+
+  const paginatedArticles = useMemo(() => {
+    const start = (currentPage - 1) * PAGE_SIZE;
+    return filtered.slice(start, start + PAGE_SIZE);
+  }, [filtered, currentPage]);
+
+  const handleFilterChange = (newCat: string) => {
+    setCat(newCat);
+    setPage(1);
+  };
+
+  const handleSearchChange = (newQ: string) => {
+    setQ(newQ);
+    setPage(1);
+  };
 
   return (
     <main className="min-h-screen px-3 py-6 md:px-8 md:py-10">
@@ -203,7 +223,7 @@ function ArticlesPage() {
                 <input
                   type="text"
                   value={q}
-                  onChange={(e) => setQ(e.target.value)}
+                  onChange={(e) => handleSearchChange(e.target.value)}
                   placeholder={`Search ${ARTICLES.length} strategy guides (e.g. bluffing, clues, tells, word pairs)...`}
                   className="sketch w-full bg-white pl-9 pr-3 py-2 text-xs sm:text-sm font-bold focus:outline-none"
                 />
@@ -213,7 +233,7 @@ function ArticlesPage() {
                 {CATEGORIES.map((c) => (
                   <button
                     key={c}
-                    onClick={() => setCat(c)}
+                    onClick={() => handleFilterChange(c)}
                     className={`sketch px-2.5 py-1 text-xs font-bold transition-all cursor-pointer ${
                       cat === c
                         ? "bg-primary text-primary-foreground shadow-[2px_2px_0_0_rgba(0,0,0,1)] scale-[1.02]"
@@ -227,13 +247,15 @@ function ArticlesPage() {
             </div>
 
             <div className="text-[11px] text-muted-foreground font-bold flex items-center justify-between">
-              <span>Showing {filtered.length} of {ARTICLES.length} strategy guides</span>
+              <span>
+                Showing {paginatedArticles.length} of {filtered.length} strategy guides (Page {currentPage} of {totalPages})
+              </span>
               <span className="text-primary font-bold">✓ Open Access</span>
             </div>
           </div>
 
           {/* Flagship Featured Masterclass */}
-          {filtered[0] && (
+          {currentPage === 1 && filtered[0] && (
             <article className="sketch relative bg-[#EBF3FF] p-6 sm:p-8 border-2 border-primary shadow-[4px_4px_0_0_rgba(37,99,235,1)] space-y-4">
               <div className="tape absolute -top-3 right-8 h-5 w-24 rotate-[2deg]" />
               <div className="flex flex-wrap items-center justify-between gap-2 text-xs font-bold text-primary">
@@ -270,7 +292,7 @@ function ArticlesPage() {
 
           {/* Grid of Strategy Articles */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {filtered.map((a) => (
+            {paginatedArticles.map((a) => (
               <article
                 key={a.id}
                 id={a.id}
@@ -317,6 +339,33 @@ function ArticlesPage() {
               </article>
             ))}
           </div>
+
+          {/* Pagination Controls */}
+          {totalPages > 1 && (
+            <div className="flex flex-wrap items-center justify-center gap-2 pt-4 pb-2 font-hand">
+              <button
+                type="button"
+                onClick={() => setPage((p) => Math.max(1, p - 1))}
+                disabled={currentPage === 1}
+                className="sketch px-3 py-1.5 text-xs sm:text-sm font-bold bg-white border-2 border-foreground/30 disabled:opacity-30 disabled:cursor-not-allowed hover:bg-secondary cursor-pointer"
+              >
+                ← Previous
+              </button>
+
+              <span className="px-3 py-1.5 text-xs sm:text-sm font-bold bg-highlight border border-foreground/20 rounded">
+                Page {currentPage} of {totalPages}
+              </span>
+
+              <button
+                type="button"
+                onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+                disabled={currentPage === totalPages}
+                className="sketch px-3 py-1.5 text-xs sm:text-sm font-bold bg-white border-2 border-foreground/30 disabled:opacity-30 disabled:cursor-not-allowed hover:bg-secondary cursor-pointer"
+              >
+                Next →
+              </button>
+            </div>
+          )}
 
           {filtered.length === 0 && (
             <div className="text-center py-16 space-y-2">

@@ -5,6 +5,7 @@ import Redis from "ioredis";
 import { RoomManager, Room } from "./game/roomManager";
 import { Player, RoomSettings } from "./game/types";
 import { sanitizeText } from "./security";
+import { generateUniqueDetectiveName } from "./game/names";
 
 let ioInstance: Server | null = null;
 
@@ -74,10 +75,17 @@ export function setupSocketServer(httpServer: HttpServer) {
           }
           lastActionTimestamp = now;
 
+          let hostName = (user?.displayName || "").trim();
+          if (!hostName || hostName.toLowerCase() === "detective" || hostName.toLowerCase() === "host") {
+            hostName = generateUniqueDetectiveName();
+          } else {
+            hostName = sanitizeText(hostName, 25);
+          }
+
           const hostPlayer: Player = {
             socketId: socket.id,
             userId: user?.id || socket.id,
-            displayName: sanitizeText(user?.displayName || "Host", 25),
+            displayName: hostName,
             avatarUrl: user?.avatarUrl || "",
             isHost: true,
             score: 0,
@@ -145,7 +153,9 @@ export function setupSocketServer(httpServer: HttpServer) {
               return;
             }
 
-            // Reconnecting disconnected player cleanly
+            // Reconnecting disconnected player cleanly within 30-second grace window!
+            room.cancelDisconnectTimeout(existingPlayer.userId);
+            delete existingPlayer.disconnectDeadline;
             const oldSocketId = existingPlayer.socketId;
             room.players.delete(oldSocketId);
             existingPlayer.socketId = socket.id;
@@ -170,6 +180,27 @@ export function setupSocketServer(httpServer: HttpServer) {
             socket.emit("room:state", publicState);
             room.broadcastState(io);
 
+            // Re-emit secret word and role if game in progress
+            if (room.phase !== "lobby" && room.phase !== "game_over") {
+              const isImposter = room.privateData.imposterSocketIds.includes(socket.id);
+              const secretWord = isImposter ? room.privateData.imposterWord : room.privateData.commonWord;
+              const role = isImposter ? "imposter" : "detective";
+              socket.emit("game:secret-word", {
+                word: secretWord,
+                role,
+                round: room.currentRound,
+                totalRounds: room.settings.rounds,
+                category: room.settings.category,
+              });
+            }
+
+            room.addChatMessage(io, {
+              playerId: "system",
+              playerName: "System",
+              content: `⚡ ${existingPlayer.displayName} rejoined the classroom within the grace window!`,
+              isSystem: true,
+            });
+
             if (callback) callback({ success: true, roomCode: room.code, roomState: publicState });
             return;
           }
@@ -184,10 +215,18 @@ export function setupSocketServer(httpServer: HttpServer) {
             return;
           }
 
+          let joinName = (user.displayName || "").trim();
+          const existingNames = Array.from(room.players.values()).map((p) => p.displayName);
+          if (!joinName || joinName.toLowerCase() === "detective" || existingNames.includes(joinName)) {
+            joinName = generateUniqueDetectiveName(existingNames);
+          } else {
+            joinName = sanitizeText(joinName, 25);
+          }
+
           const newPlayer: Player = {
             socketId: socket.id,
             userId: user.id || socket.id,
-            displayName: user.displayName || `Player_${room.players.size + 1}`,
+            displayName: joinName,
             avatarUrl: user.avatarUrl || "",
             isHost: false,
             score: 0,
@@ -229,10 +268,18 @@ export function setupSocketServer(httpServer: HttpServer) {
               (p) => user.id && p.userId === user.id
             );
             if (!alreadyIn) {
+              let matchName = (user.displayName || "").trim();
+              const existingNames = Array.from(openRoom.players.values()).map((p) => p.displayName);
+              if (!matchName || matchName.toLowerCase() === "detective" || existingNames.includes(matchName)) {
+                matchName = generateUniqueDetectiveName(existingNames);
+              } else {
+                matchName = sanitizeText(matchName, 25);
+              }
+
               const newPlayer: Player = {
                 socketId: socket.id,
                 userId: user.id || socket.id,
-                displayName: user.displayName || `Player_${openRoom.players.size + 1}`,
+                displayName: matchName,
                 avatarUrl: user.avatarUrl || "",
                 isHost: false,
                 score: 0,
@@ -456,17 +503,17 @@ export function setupSocketServer(httpServer: HttpServer) {
       });
     });
 
-    // 9. Leave Room
+    // 9. Leave Room (explicit intent by player clicking Leave)
     socket.on("room:leave", () => {
-      handleLeave();
+      handleExplicitLeave();
     });
 
-    // 10. Disconnect
+    // 10. Disconnect (accidental drop, page refresh, mobile screen lock)
     socket.on("disconnect", () => {
-      handleLeave();
+      handleDisconnect();
     });
 
-    function handleLeave() {
+    function handleExplicitLeave() {
       if (!currentRoomCode) return;
       const room = roomManager.getRoom(currentRoomCode);
       if (!room) return;
@@ -478,6 +525,24 @@ export function setupSocketServer(httpServer: HttpServer) {
         roomManager.removeRoom(room.code);
       } else {
         room.broadcastState(io);
+      }
+      io.emit("rooms:public-updated", roomManager.getPublicRooms());
+
+      currentRoomCode = null;
+      currentPlayer = null;
+    }
+
+    function handleDisconnect() {
+      if (!currentRoomCode) return;
+      const room = roomManager.getRoom(currentRoomCode);
+      if (!room) return;
+
+      socket.leave(room.code);
+      // Initiate 30-second reconnection grace period!
+      const { remainingCount } = room.handlePlayerDisconnect(io, socket.id);
+
+      if (remainingCount === 0) {
+        roomManager.removeRoom(room.code);
       }
       io.emit("rooms:public-updated", roomManager.getPublicRooms());
 

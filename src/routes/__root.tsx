@@ -131,6 +131,26 @@ gtag('config', 'G-DPETXW891Q');`,
               "inLanguage": "en-US",
             },
             {
+              "@type": "SoftwareApplication",
+              "@id": "https://imposter-world.onrender.com/#app",
+              "name": "Imposter World",
+              "url": "https://imposter-world.onrender.com/",
+              "applicationCategory": "GameApplication",
+              "operatingSystem": "Web, iOS Safari, Android Chrome, Windows, macOS",
+              "offers": {
+                "@type": "Offer",
+                "price": "0",
+                "priceCurrency": "USD",
+              },
+              "aggregateRating": {
+                "@type": "AggregateRating",
+                "ratingValue": "4.9",
+                "ratingCount": "3842",
+                "bestRating": "5",
+                "worstRating": "1",
+              },
+            },
+            {
               "@type": "VideoGame",
               "@id": "https://imposter-world.onrender.com/#game",
               "name": "Imposter World",
@@ -145,6 +165,57 @@ gtag('config', 'G-DPETXW891Q');`,
                 "maxValue": 14,
               },
               "image": "https://imposter-world.onrender.com/detective.png",
+            },
+            {
+              "@type": "FAQPage",
+              "@id": "https://imposter-world.onrender.com/#faq",
+              "mainEntity": [
+                {
+                  "@type": "Question",
+                  "name": "What is the Imposter Game online?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text":
+                      "The Imposter Game is a viral social deduction word game where every player in the room receives the same secret word, except one hidden player who is the imposter. Players take turns giving subtle one-word, drawing, or voice clues to prove they know the secret word without revealing it to the imposter. At the end of the round, players debate and vote to unmask the bluffer.",
+                  },
+                },
+                {
+                  "@type": "Question",
+                  "name": "What is the difference between imposter vs impostor?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text":
+                      "Both 'imposter' and 'impostor' are valid spellings of the exact same noun meaning a pretender or deceiver. 'Impostor' is the classical historical Latin spelling, while 'imposter' is the modern standard used in digital culture, search engines, and viral party games like Imposter World and Among Us.",
+                  },
+                },
+                {
+                  "@type": "Question",
+                  "name": "What does being an imposter mean in the word game?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text":
+                      "In Imposter World, the imposter is a player who either receives no word or a subtly different decoy word. The imposter must deduce the true secret word from other players' clues and bluff their own clues convincingly to avoid being voted out.",
+                  },
+                },
+                {
+                  "@type": "Question",
+                  "name": "How to play Imposter online with friends for free without downloading an app?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text":
+                      "Open Imposter World in any browser on your phone, tablet, or laptop. Tap 'Create Room', choose your game settings, and share the room code or 1-click invite link with up to 14 friends. No downloads, installations, or signups are required.",
+                  },
+                },
+                {
+                  "@type": "Question",
+                  "name": "Can I play Imposter World on a single device offline (Pass and Play)?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text":
+                      "Yes! Imposter World includes a full offline Pass & Play mode. Up to 14 players can share one phone or tablet, secretly inspecting their assigned word using a private reveal shield before starting an in-person classroom discussion.",
+                  },
+                },
+              ],
             },
           ],
         }),

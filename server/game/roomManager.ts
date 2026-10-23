@@ -33,6 +33,9 @@ export class Room {
   public lobbyDeadline: number;
   public lobbyExpiryTimer: NodeJS.Timeout | null = null;
 
+  // 30-second accidental disconnect grace timers
+  public disconnectTimeouts: Map<string, NodeJS.Timeout> = new Map();
+
   // Protected private state — never sent to public clients!
   public privateData: PrivateRoundData = {
     commonWord: "",
@@ -90,6 +93,7 @@ export class Room {
         isHost: p.isHost,
         score: p.score,
         isConnected: p.isConnected,
+        disconnectDeadline: p.disconnectDeadline || null,
         hasSubmittedAnswer: Boolean(this.privateData.answers[p.socketId]),
       })),
       activePlayerSocketId: activePlayer ? activePlayer.socketId : null,
@@ -122,6 +126,55 @@ export class Room {
     }
   }
 
+  public cancelDisconnectTimeout(userId: string) {
+    const timer = this.disconnectTimeouts.get(userId);
+    if (timer) {
+      clearTimeout(timer);
+      this.disconnectTimeouts.delete(userId);
+    }
+  }
+
+  public clearAllDisconnectTimeouts() {
+    for (const timer of this.disconnectTimeouts.values()) {
+      clearTimeout(timer);
+    }
+    this.disconnectTimeouts.clear();
+  }
+
+  // Handle accidental socket disconnect with 30-second reconnection shield
+  public handlePlayerDisconnect(io: Server, socketId: string): { remainingCount: number } {
+    const player = this.players.get(socketId);
+    if (!player) return { remainingCount: this.players.size };
+
+    this.cancelDisconnectTimeout(player.userId);
+    player.isConnected = false;
+    player.disconnectDeadline = Date.now() + 30000;
+
+    this.addChatMessage(io, {
+      playerId: "system",
+      playerName: "System",
+      content: `⏳ ${player.displayName} disconnected. Holding slot for 30s...`,
+      isSystem: true,
+    });
+
+    this.broadcastState(io);
+
+    const timer = setTimeout(() => {
+      this.disconnectTimeouts.delete(player.userId);
+      const target = Array.from(this.players.values()).find((p) => p.userId === player.userId);
+      if (target && !target.isConnected) {
+        const { remainingCount } = this.removePlayer(io, target.socketId);
+        this.broadcastState(io);
+        if (remainingCount === 0) {
+          RoomManager.getInstance().removeRoom(this.code);
+        }
+      }
+    }, 30000);
+
+    this.disconnectTimeouts.set(player.userId, timer);
+    return { remainingCount: this.players.size };
+  }
+
   // --- PLAYER REMOVAL & AUTOMATIC HOST / CREATOR OWNERSHIP TRANSFER ---
   public removePlayer(
     io: Server,
@@ -132,6 +185,7 @@ export class Room {
       return { remainingCount: this.players.size, newHost: null };
     }
 
+    this.cancelDisconnectTimeout(player.userId);
     const wasHost = player.isHost;
     this.players.delete(socketId);
     this.skipDiscussionVotes?.delete(socketId);
@@ -741,6 +795,7 @@ export class RoomManager {
     if (room) {
       room.clearTimer();
       room.clearLobbyTimer();
+      room.clearAllDisconnectTimeouts();
       this.rooms.delete(code);
       console.log(`[RoomManager] Room destroyed: #${code}`);
     }

@@ -22,6 +22,7 @@ export interface Player {
   isHost: boolean;
   score: number;
   isConnected: boolean;
+  disconnectDeadline?: number | undefined;
 }
 
 export type GamePhase =

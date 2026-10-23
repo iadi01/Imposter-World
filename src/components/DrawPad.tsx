@@ -290,8 +290,43 @@ export function DrawPad({
   const handleDone = () => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    const dataUrl = canvas.toDataURL("image/png");
-    onDone(dataUrl);
+
+    try {
+      // Normalize to optimal dimensions (max 640px) for millisecond websocket transmission (< 18KB vs 600KB PNG)
+      const maxDim = 640;
+      let targetW = canvas.width;
+      let targetH = canvas.height;
+      if (targetW > maxDim || targetH > maxDim) {
+        if (targetW > targetH) {
+          targetH = Math.round((targetH * maxDim) / targetW);
+          targetW = maxDim;
+        } else {
+          targetW = Math.round((targetW * maxDim) / targetH);
+          targetH = maxDim;
+        }
+      }
+
+      const exportCanvas = document.createElement("canvas");
+      exportCanvas.width = targetW;
+      exportCanvas.height = targetH;
+      const exportCtx = exportCanvas.getContext("2d");
+      if (exportCtx) {
+        exportCtx.fillStyle = "#FFFFFF";
+        exportCtx.fillRect(0, 0, targetW, targetH);
+        exportCtx.drawImage(canvas, 0, 0, targetW, targetH);
+        let dataUrl = exportCanvas.toDataURL("image/webp", 0.72);
+        if (!dataUrl.startsWith("data:image/webp")) {
+          dataUrl = exportCanvas.toDataURL("image/jpeg", 0.72);
+        }
+        onDone(dataUrl);
+        return;
+      }
+    } catch {
+      // Fallback if canvas manipulation fails
+    }
+
+    const fallbackUrl = canvas.toDataURL("image/jpeg", 0.72);
+    onDone(fallbackUrl);
   };
 
   return (

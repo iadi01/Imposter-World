@@ -2,6 +2,7 @@ import { Router, Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import { User, IUser } from "./models/User";
 import { isUserAdmin, authLimiter, isValidObjectId, sanitizeText } from "./security";
+import { generateUniqueDetectiveName } from "./game/names";
 
 const router = Router();
 router.use(authLimiter);
@@ -336,7 +337,7 @@ router.post("/guest", async (req: Request, res: Response): Promise<any> => {
     let finalDisplayName = rawName;
 
     if (!finalDisplayName || finalDisplayName.toLowerCase() === "detective") {
-      finalDisplayName = `Guest_${guestNumber}`;
+      finalDisplayName = generateUniqueDetectiveName();
     } else {
       // Prevent guests from claiming/spoofing a registered user's name or handle
       const registeredConflict = await User.findOne({
