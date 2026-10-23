@@ -2,7 +2,7 @@ import { n as require_jsx_runtime, t as QueryClientProvider } from "../_libs/rea
 import { S as useRouter, _ as lazyRouteComponent, b as Link, f as Scripts, g as Outlet, h as createRouter, p as HeadContent, v as createFileRoute, y as createRootRouteWithContext } from "../_libs/@tanstack/react-router+[...].mjs";
 import { t as ARTICLES } from "./articles-data-810nT1zP.mjs";
 import { t as QueryClient } from "../_libs/tanstack__query-core.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/router-CyoHuGbm.js
+//#region node_modules/.nitro/vite/services/ssr/assets/router-a64zdbBB.js
 var import_jsx_runtime = require_jsx_runtime();
 var styles_default = "/assets/styles-cXzavuhb.css";
 function NotFoundComponent() {
@@ -232,7 +232,7 @@ function RootComponent() {
 		children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Outlet, {})
 	});
 }
-var $$splitComponentImporter$14 = () => import("./routes-C6xeE_y9.mjs");
+var $$splitComponentImporter$14 = () => import("./routes-C10pi1MU.mjs");
 var Route$14 = createFileRoute("/")({
 	head: () => ({
 		meta: [{ title: "Imposter World — Real-Time Multiplayer Party Game" }, {

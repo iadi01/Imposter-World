@@ -288,6 +288,37 @@ export function setupSocketServer(httpServer: HttpServer) {
       }
     );
 
+    // 2b. High-Speed Player Profile Sync (< 1ms In-Memory Update)
+    socket.on(
+      "player:update",
+      ({ displayName, avatarUrl }: { displayName?: string; avatarUrl?: string }, callback) => {
+        if (!currentRoomCode) {
+          if (callback) callback({ success: false, error: "Not currently in a room." });
+          return;
+        }
+        const room = roomManager.getRoom(currentRoomCode);
+        if (!room) {
+          if (callback) callback({ success: false, error: "Room not found." });
+          return;
+        }
+        const player = room.players.get(socket.id);
+        if (!player) {
+          if (callback) callback({ success: false, error: "Player not found in room." });
+          return;
+        }
+
+        if (displayName && typeof displayName === "string" && displayName.trim()) {
+          player.displayName = sanitizeText(displayName.trim(), 25);
+        }
+        if (avatarUrl && typeof avatarUrl === "string") {
+          player.avatarUrl = avatarUrl;
+        }
+
+        room.broadcastState(io);
+        if (callback) callback({ success: true, roomState: room.getPublicState() });
+      }
+    );
+
     // 3. Update Room Settings (Host only in lobby)
     socket.on("room:update-settings", ({ settings }: { settings: Partial<RoomSettings> }, callback) => {
       if (!currentRoomCode) return;

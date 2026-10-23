@@ -1,4 +1,4 @@
-//#region node_modules/.nitro/vite/services/ssr/assets/_tanstack-start-manifest_v-CAGyU96D.js
+//#region node_modules/.nitro/vite/services/ssr/assets/_tanstack-start-manifest_v-DbEOXnCp.js
 var tsrStartManifest = () => ({ routes: {
 	__root__: {
 		filePath: "/Users/aadi/Downloads/f8225c15-5378-482e-bfe4-be001f84d384/src/routes/__root.tsx",
@@ -19,19 +19,19 @@ var tsrStartManifest = () => ({ routes: {
 			"/terms",
 			"/api/auth/google/callback"
 		],
-		preloads: ["/assets/index-OAGjAQ-V.js", "/assets/useRouter-BDM5lgEm.js"],
+		preloads: ["/assets/index-CXxg3srT.js", "/assets/useRouter-BDM5lgEm.js"],
 		scripts: [{ attrs: {
 			type: "module",
 			async: !0,
-			src: "/assets/index-OAGjAQ-V.js"
+			src: "/assets/index-CXxg3srT.js"
 		} }]
 	},
 	"/": {
 		filePath: "/Users/aadi/Downloads/f8225c15-5378-482e-bfe4-be001f84d384/src/routes/index.tsx",
 		children: void 0,
 		preloads: [
-			"/assets/routes-248eqRCs.js",
-			"/assets/x-CsWMZV2j.js",
+			"/assets/routes-BLaRHmDH.js",
+			"/assets/x-DfIEYm69.js",
 			"/assets/api-C8wKn3Xo.js",
 			"/assets/arrow-left-Bz104g7-.js",
 			"/assets/loader-circle-DtRrY3oy.js",
@@ -48,8 +48,8 @@ var tsrStartManifest = () => ({ routes: {
 		filePath: "/Users/aadi/Downloads/f8225c15-5378-482e-bfe4-be001f84d384/src/routes/admin.tsx",
 		children: void 0,
 		preloads: [
-			"/assets/admin-CmpVFh0t.js",
-			"/assets/x-CsWMZV2j.js",
+			"/assets/admin-CsXKKREW.js",
+			"/assets/x-DfIEYm69.js",
 			"/assets/api-C8wKn3Xo.js",
 			"/assets/arrow-left-Bz104g7-.js",
 			"/assets/book-open-BWBVmdfx.js",
@@ -64,7 +64,7 @@ var tsrStartManifest = () => ({ routes: {
 		filePath: "/Users/aadi/Downloads/f8225c15-5378-482e-bfe4-be001f84d384/src/routes/articles.tsx",
 		children: void 0,
 		preloads: [
-			"/assets/articles-DE74H8aA.js",
+			"/assets/articles-CcDosaAD.js",
 			"/assets/arrow-left-Bz104g7-.js",
 			"/assets/book-open-BWBVmdfx.js",
 			"/assets/search-DA2Cls3L.js"
@@ -73,13 +73,13 @@ var tsrStartManifest = () => ({ routes: {
 	"/delete-account": {
 		filePath: "/Users/aadi/Downloads/f8225c15-5378-482e-bfe4-be001f84d384/src/routes/delete-account.tsx",
 		children: void 0,
-		preloads: ["/assets/delete-account-BsoOnAoi.js", "/assets/arrow-left-Bz104g7-.js"]
+		preloads: ["/assets/delete-account-Mw-M4IKd.js", "/assets/arrow-left-Bz104g7-.js"]
 	},
 	"/faq": {
 		filePath: "/Users/aadi/Downloads/f8225c15-5378-482e-bfe4-be001f84d384/src/routes/faq.tsx",
 		children: void 0,
 		preloads: [
-			"/assets/faq-CcnEU2sG.js",
+			"/assets/faq-B7URAT8F.js",
 			"/assets/arrow-left-Bz104g7-.js",
 			"/assets/play-RGtFfEeT.js"
 		]
@@ -87,13 +87,13 @@ var tsrStartManifest = () => ({ routes: {
 	"/how-to-play": {
 		filePath: "/Users/aadi/Downloads/f8225c15-5378-482e-bfe4-be001f84d384/src/routes/how-to-play.tsx",
 		children: void 0,
-		preloads: ["/assets/how-to-play-CRWQx3m9.js", "/assets/arrow-left-Bz104g7-.js"]
+		preloads: ["/assets/how-to-play-D2iZzwcd.js", "/assets/arrow-left-Bz104g7-.js"]
 	},
 	"/imposter-game-online": {
 		filePath: "/Users/aadi/Downloads/f8225c15-5378-482e-bfe4-be001f84d384/src/routes/imposter-game-online.tsx",
 		children: void 0,
 		preloads: [
-			"/assets/imposter-game-online-BLtWCE6b.js",
+			"/assets/imposter-game-online-CaCDIzwM.js",
 			"/assets/arrow-left-Bz104g7-.js",
 			"/assets/circle-check-DCMKUb1C.js",
 			"/assets/globe-8wkWn1oW.js",
@@ -106,7 +106,7 @@ var tsrStartManifest = () => ({ routes: {
 		filePath: "/Users/aadi/Downloads/f8225c15-5378-482e-bfe4-be001f84d384/src/routes/imposter-game-questions.tsx",
 		children: void 0,
 		preloads: [
-			"/assets/imposter-game-questions-DOxHu8qJ.js",
+			"/assets/imposter-game-questions-UqgNXVku.js",
 			"/assets/arrow-left-Bz104g7-.js",
 			"/assets/play-RGtFfEeT.js"
 		]
@@ -115,7 +115,7 @@ var tsrStartManifest = () => ({ routes: {
 		filePath: "/Users/aadi/Downloads/f8225c15-5378-482e-bfe4-be001f84d384/src/routes/imposter-game-with-friends.tsx",
 		children: void 0,
 		preloads: [
-			"/assets/imposter-game-with-friends-ChwnGJGI.js",
+			"/assets/imposter-game-with-friends-DBdEwiln.js",
 			"/assets/arrow-left-Bz104g7-.js",
 			"/assets/users-6J9o0lHB.js"
 		]
@@ -124,7 +124,7 @@ var tsrStartManifest = () => ({ routes: {
 		filePath: "/Users/aadi/Downloads/f8225c15-5378-482e-bfe4-be001f84d384/src/routes/imposter-word-list.tsx",
 		children: void 0,
 		preloads: [
-			"/assets/imposter-word-list-BECNl4Aa.js",
+			"/assets/imposter-word-list-C-qdaQ4V.js",
 			"/assets/arrow-left-Bz104g7-.js",
 			"/assets/play-RGtFfEeT.js"
 		]
@@ -133,7 +133,7 @@ var tsrStartManifest = () => ({ routes: {
 		filePath: "/Users/aadi/Downloads/f8225c15-5378-482e-bfe4-be001f84d384/src/routes/notice-board.tsx",
 		children: void 0,
 		preloads: [
-			"/assets/notice-board-C8NdhxpD.js",
+			"/assets/notice-board-CxpP6i_z.js",
 			"/assets/api-C8wKn3Xo.js",
 			"/assets/arrow-left-Bz104g7-.js",
 			"/assets/trophy-zRkg5hVi.js",
@@ -143,14 +143,14 @@ var tsrStartManifest = () => ({ routes: {
 	"/privacy": {
 		filePath: "/Users/aadi/Downloads/f8225c15-5378-482e-bfe4-be001f84d384/src/routes/privacy.tsx",
 		children: void 0,
-		preloads: ["/assets/privacy-s-H1leiP.js", "/assets/arrow-left-Bz104g7-.js"]
+		preloads: ["/assets/privacy-dwOFkpcX.js", "/assets/arrow-left-Bz104g7-.js"]
 	},
 	"/support": {
 		filePath: "/Users/aadi/Downloads/f8225c15-5378-482e-bfe4-be001f84d384/src/routes/support.tsx",
 		children: void 0,
 		preloads: [
-			"/assets/support-Bfi1CInk.js",
-			"/assets/x-CsWMZV2j.js",
+			"/assets/support-7Vtpr8ay.js",
+			"/assets/x-DfIEYm69.js",
 			"/assets/api-C8wKn3Xo.js",
 			"/assets/arrow-left-Bz104g7-.js",
 			"/assets/circle-check-DCMKUb1C.js",
@@ -161,13 +161,13 @@ var tsrStartManifest = () => ({ routes: {
 	"/terms": {
 		filePath: "/Users/aadi/Downloads/f8225c15-5378-482e-bfe4-be001f84d384/src/routes/terms.tsx",
 		children: void 0,
-		preloads: ["/assets/terms-BEwOCpK0.js", "/assets/arrow-left-Bz104g7-.js"]
+		preloads: ["/assets/terms-BIzj6_JY.js", "/assets/arrow-left-Bz104g7-.js"]
 	},
 	"/api/auth/google/callback": {
 		filePath: "/Users/aadi/Downloads/f8225c15-5378-482e-bfe4-be001f84d384/src/routes/api.auth.google.callback.tsx",
 		children: void 0,
 		preloads: [
-			"/assets/api.auth.google.callback-z5RiGWk-.js",
+			"/assets/api.auth.google.callback-BK0IqGDA.js",
 			"/assets/api-C8wKn3Xo.js",
 			"/assets/arrow-left-Bz104g7-.js",
 			"/assets/loader-circle-DtRrY3oy.js"

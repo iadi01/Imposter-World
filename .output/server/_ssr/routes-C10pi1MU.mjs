@@ -5,7 +5,7 @@ import { b as Link } from "../_libs/@tanstack/react-router+[...].mjs";
 import { t as toast } from "../_libs/sonner.mjs";
 import { $ as Check, A as Music, B as Flag, C as Plus, D as Pause, F as LoaderCircle, H as EyeOff, J as Clock, K as Copy, L as Heart, M as MapPin, N as LogOut, O as Paintbrush, P as Lock, R as Globe, T as Pin, V as Eye, W as Eraser, Z as CircleAlert, _ as Send, a as UserCheck, b as RefreshCw, d as Square, et as Building2, h as Settings, i as Users, j as Mic, k as PaintBucket, l as Trash2, n as VolumeX, nt as AtSign, o as Undo2, q as Compass, r as Volume2, rt as ArrowLeft, s as Trophy, t as X, v as Search, w as Play, y as RotateCcw, z as Flame } from "../_libs/lucide-react.mjs";
 import { t as lookup } from "../_libs/socket.io-client+[...].mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/routes-C6xeE_y9.js
+//#region node_modules/.nitro/vite/services/ssr/assets/routes-C10pi1MU.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 function hexToRgba(hex) {
@@ -3879,13 +3879,16 @@ function getSocket() {
 		socket = lookup(socketUrl, {
 			autoConnect: true,
 			reconnection: true,
-			reconnectionAttempts: 20,
-			reconnectionDelay: 1e3,
+			reconnectionAttempts: 25,
+			reconnectionDelay: 400,
+			reconnectionDelayMax: 1500,
+			timeout: 4e3,
 			transports: ["websocket", "polling"],
+			upgrade: true,
 			withCredentials: true
 		});
 		socket.on("connect", () => {
-			console.log("[Socket Client] Connected to real-time game server:", socket?.id);
+			console.log("[Socket Client] Ultra-fast WebSocket connected:", socket?.id);
 		});
 		socket.on("disconnect", (reason) => {
 			console.warn("[Socket Client] Disconnected:", reason);
@@ -3896,6 +3899,9 @@ function getSocket() {
 	}
 	return socket;
 }
+if (typeof window !== "undefined") try {
+	getSocket();
+} catch {}
 function Btn({ children, onClick, variant = "primary", disabled, className = "" }) {
 	const styles = {
 		primary: "bg-primary text-primary-foreground",
@@ -3913,6 +3919,28 @@ function Btn({ children, onClick, variant = "primary", disabled, className = "" 
 		children
 	});
 }
+function getInitialUser() {
+	if (typeof window === "undefined") return null;
+	try {
+		const raw = localStorage.getItem("imposter_user");
+		if (raw) return JSON.parse(raw);
+	} catch {}
+	return null;
+}
+function getInstantGuestId() {
+	if (typeof window === "undefined") return "";
+	try {
+		return localStorage.getItem("imposter_guest_id") || "";
+	} catch {}
+	return "";
+}
+function getInstantGuestName() {
+	if (typeof window === "undefined") return "Detective";
+	try {
+		return localStorage.getItem("imposter_guest_name") || "Detective";
+	} catch {}
+	return "Detective";
+}
 function Index() {
 	const [showSettings, setShowSettings] = (0, import_react.useState)(false);
 	const [showAccount, setShowAccount] = (0, import_react.useState)(false);
@@ -3923,7 +3951,7 @@ function Index() {
 	const [isMuted, setIsMuted] = (0, import_react.useState)(sound.isMuted);
 	const [isBgmActive, setIsBgmActive] = (0, import_react.useState)(!sound.isMuted);
 	const [championName, setChampionName] = (0, import_react.useState)("Loading...");
-	const [user, setUser] = (0, import_react.useState)(null);
+	const [user, setUser] = (0, import_react.useState)(getInitialUser);
 	const [roomCodeInput, setRoomCodeInput] = (0, import_react.useState)("");
 	const [roomState, setRoomState] = (0, import_react.useState)(null);
 	const [secretInfo, setSecretInfo] = (0, import_react.useState)(null);
@@ -4010,7 +4038,23 @@ function Index() {
 		const interval = setInterval(updateTimer, 1e3);
 		return () => clearInterval(interval);
 	}, [roomState?.lobbyDeadline, roomState?.phase]);
+	const syncUserToStorage = (u) => {
+		try {
+			setUser(u);
+			localStorage.setItem("imposter_user", JSON.stringify(u));
+			if (u.isGuest) {
+				localStorage.setItem("imposter_guest_id", u.id);
+				localStorage.setItem("imposter_guest_name", u.displayName);
+			}
+			if (socketRef.current?.connected && roomState) socketRef.current.emit("player:update", {
+				displayName: u.displayName,
+				avatarUrl: u.avatarUrl
+			});
+		} catch {}
+	};
 	(0, import_react.useEffect)(() => {
+		const savedGuestId = getInstantGuestId();
+		const savedGuestName = getInstantGuestName();
 		if (typeof window !== "undefined") {
 			const searchParams = new URLSearchParams(window.location.search);
 			const googleCode = searchParams.get("code");
@@ -4023,7 +4067,7 @@ function Index() {
 					body: JSON.stringify({ code: googleCode })
 				}).then((res) => res.json()).then((data) => {
 					if (data.user) {
-						setUser(data.user);
+						syncUserToStorage(data.user);
 						window.history.replaceState({}, document.title, window.location.pathname);
 					}
 				}).catch((err) => console.error("Google code exchange error:", err));
@@ -4033,23 +4077,29 @@ function Index() {
 			if (loginStatus === "success") window.history.replaceState({}, document.title, window.location.pathname);
 		}
 		fetch(`${API_BASE}/api/auth/me`, { credentials: "include" }).then((res) => res.json()).then((data) => {
-			if (data.user) setUser(data.user);
+			if (data.user) syncUserToStorage(data.user);
 			else fetch(`${API_BASE}/api/auth/guest`, {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
 				credentials: "include",
-				body: JSON.stringify({ name: "Detective" })
+				body: JSON.stringify({
+					guestId: savedGuestId || void 0,
+					name: savedGuestName
+				})
 			}).then((r) => r.json()).then((gData) => {
-				if (gData.user) setUser(gData.user);
+				if (gData.user) syncUserToStorage(gData.user);
 			}).catch((err) => console.error("Guest login fallback error:", err));
 		}).catch(() => {
 			fetch(`${API_BASE}/api/auth/guest`, {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
 				credentials: "include",
-				body: JSON.stringify({ name: "Detective" })
+				body: JSON.stringify({
+					guestId: savedGuestId || void 0,
+					name: savedGuestName
+				})
 			}).then((r) => r.json()).then((gData) => {
-				if (gData.user) setUser(gData.user);
+				if (gData.user) syncUserToStorage(gData.user);
 			}).catch((err) => console.error("Guest login fallback error:", err));
 		});
 		fetchPublicRooms();
@@ -4063,7 +4113,7 @@ function Index() {
 		setRoomCodeInput(cleanCode);
 		toast.info(`Connecting to Classroom Room #${cleanCode}...`);
 		handleJoinRoom(cleanCode);
-	}, [user]);
+	}, []);
 	const fetchPublicRooms = () => {
 		fetch(`${API_BASE}/api/rooms/public`).then((res) => res.json()).then((data) => {
 			if (data.rooms) setPublicRooms(data.rooms);
@@ -4178,9 +4228,9 @@ function Index() {
 		sound.playPop();
 		const socket = socketRef.current;
 		if (!socket.connected) socket.connect();
-		const creatorUser = user || {
-			id: socket.id || `guest-${Math.random().toString(36).substring(2, 9)}`,
-			displayName: "Detective",
+		const creatorUser = user || getInitialUser() || {
+			id: getInstantGuestId() || socket.id || `guest-${Math.random().toString(36).substring(2, 9)}`,
+			displayName: getInstantGuestName(),
 			avatarUrl: ""
 		};
 		socket.emit("room:create", {
@@ -4206,9 +4256,9 @@ function Index() {
 		sound.playPop();
 		const socket = socketRef.current;
 		if (!socket.connected) socket.connect();
-		const joinUser = user || {
-			id: socket.id || `guest-${Math.random().toString(36).substring(2, 9)}`,
-			displayName: "Detective",
+		const joinUser = user || getInitialUser() || {
+			id: getInstantGuestId() || socket.id || `guest-${Math.random().toString(36).substring(2, 9)}`,
+			displayName: getInstantGuestName(),
 			avatarUrl: ""
 		};
 		socket.emit("room:join", {
@@ -4234,9 +4284,9 @@ function Index() {
 		sound.playPop();
 		const socket = socketRef.current;
 		if (!socket.connected) socket.connect();
-		const matchUser = user || {
-			id: socket.id || `guest-${Math.random().toString(36).substring(2, 9)}`,
-			displayName: "Detective",
+		const matchUser = user || getInitialUser() || {
+			id: getInstantGuestId() || socket.id || `guest-${Math.random().toString(36).substring(2, 9)}`,
+			displayName: getInstantGuestName(),
 			avatarUrl: ""
 		};
 		socket.emit("room:instant-match", { user: {
@@ -5883,7 +5933,29 @@ function Index() {
 				user,
 				onClose: () => setShowAccount(false),
 				onLogout: () => {
-					fetch(`${API_BASE}/api/auth/logout`, { method: "POST" }).then(() => {
+					const savedGuestId = getInstantGuestId();
+					fetch(`${API_BASE}/api/auth/logout`, {
+						method: "POST",
+						headers: { "Content-Type": "application/json" },
+						credentials: "include",
+						body: JSON.stringify({ guestId: savedGuestId || void 0 })
+					}).then((res) => res.json()).then((data) => {
+						if (data.guestUser) {
+							syncUserToStorage(data.guestUser);
+							toast.success(`Logged out! Switched back to Guest: ${data.guestUser.displayName}`);
+						} else fetch(`${API_BASE}/api/auth/guest`, {
+							method: "POST",
+							headers: { "Content-Type": "application/json" },
+							credentials: "include",
+							body: JSON.stringify({
+								guestId: savedGuestId || void 0,
+								name: getInstantGuestName()
+							})
+						}).then((r) => r.json()).then((gData) => {
+							if (gData.user) syncUserToStorage(gData.user);
+						});
+						setShowAccount(false);
+					}).catch(() => {
 						setUser(null);
 						setShowAccount(false);
 					});
@@ -5893,6 +5965,7 @@ function Index() {
 					if (user) fetch(`${API_BASE}/api/user/update`, {
 						method: "POST",
 						headers: { "Content-Type": "application/json" },
+						credentials: "include",
 						body: JSON.stringify({
 							userId: user.id,
 							displayName: profileData.displayName,
@@ -5902,7 +5975,10 @@ function Index() {
 							city: profileData.city
 						})
 					}).then((res) => res.json()).then((data) => {
-						if (data.user) setUser(data.user);
+						if (data.user) {
+							syncUserToStorage(data.user);
+							toast.success("Detective Profile updated!");
+						}
 					});
 				}
 			}),

@@ -163,8 +163,17 @@ async function exchangeGoogleAuthCode(code: string, redirectUriOverride?: string
       isGuest: false,
     });
   } else {
-    user.displayName = googleUser.name || user.displayName;
-    user.avatarUrl = googleUser.picture || user.avatarUrl;
+    // CRITICAL: Preserve custom chosen displayName!
+    // NEVER overwrite user's saved displayName with googleUser.name on re-login
+    if (!user.displayName || user.displayName.trim() === "" || user.displayName.toLowerCase() === "detective") {
+      user.displayName = googleUser.name || googleUser.given_name || "Detective";
+    }
+    if (googleUser.picture && !user.avatarUrl) {
+      user.avatarUrl = googleUser.picture;
+    }
+    if (googleUser.sub && !user.googleId) {
+      user.googleId = googleUser.sub;
+    }
     user.isGuest = false;
     await user.save();
   }
@@ -253,13 +262,77 @@ router.get("/google/callback", async (req: Request, res: Response): Promise<any>
   }
 });
 
-// 3. Guest Login (Instant Play with Unique ID & Anti-Collision)
+// 3. Guest Login (Instant Play with Persistent Guest ID & Anti-Collision)
 router.post("/guest", async (req: Request, res: Response): Promise<any> => {
-  const { name } = req.body;
-  const rawName = (name || "").trim().slice(0, 30);
-  const guestNumber = Math.floor(1000 + Math.random() * 9000);
+  const { name, guestId } = req.body || {};
+  const cookieGuestId = req.cookies?.guest_id;
+  const targetGuestId =
+    guestId && isValidObjectId(guestId)
+      ? guestId
+      : cookieGuestId && isValidObjectId(cookieGuestId)
+      ? cookieGuestId
+      : null;
 
   try {
+    // 1. If an existing persistent guest ID is provided, reuse that exact guest record!
+    if (targetGuestId) {
+      const existingGuest = await User.findOne({ _id: targetGuestId, isGuest: true });
+      if (existingGuest) {
+        if (
+          name &&
+          typeof name === "string" &&
+          name.trim() &&
+          name.trim().toLowerCase() !== "detective" &&
+          existingGuest.displayName.startsWith("Guest_")
+        ) {
+          existingGuest.displayName = sanitizeText(name.trim(), 25);
+          await existingGuest.save();
+        }
+
+        const token = generateToken({
+          _id: existingGuest._id.toString(),
+          email: existingGuest.email,
+          displayName: existingGuest.displayName,
+          isGuest: true,
+        });
+
+        res.cookie("session_token", token, {
+          httpOnly: true,
+          sameSite: "lax",
+          maxAge: 365 * 24 * 60 * 60 * 1000,
+        });
+        res.cookie("guest_id", existingGuest._id.toString(), {
+          httpOnly: true,
+          sameSite: "lax",
+          maxAge: 365 * 24 * 60 * 60 * 1000,
+        });
+
+        return res.json({
+          success: true,
+          token,
+          user: {
+            id: existingGuest._id.toString(),
+            displayName: existingGuest.displayName,
+            username: existingGuest.username,
+            email: existingGuest.email,
+            avatarUrl: "",
+            country: existingGuest.country || "India",
+            state: existingGuest.state || "Maharashtra",
+            city: existingGuest.city || "Mumbai",
+            matchesPlayed: existingGuest.matchesPlayed || 0,
+            wins: existingGuest.wins || 0,
+            imposterWins: existingGuest.imposterWins || 0,
+            winRate: existingGuest.winRate || 0,
+            isGuest: true,
+            isAdmin: false,
+          },
+        });
+      }
+    }
+
+    // 2. Otherwise create a fresh guest user
+    const rawName = (name || "").trim().slice(0, 30);
+    const guestNumber = Math.floor(1000 + Math.random() * 9000);
     let finalDisplayName = rawName;
 
     if (!finalDisplayName || finalDisplayName.toLowerCase() === "detective") {
@@ -303,7 +376,12 @@ router.post("/guest", async (req: Request, res: Response): Promise<any> => {
     res.cookie("session_token", token, {
       httpOnly: true,
       sameSite: "lax",
-      maxAge: 7 * 24 * 60 * 60 * 1000,
+      maxAge: 365 * 24 * 60 * 60 * 1000,
+    });
+    res.cookie("guest_id", guestUser._id.toString(), {
+      httpOnly: true,
+      sameSite: "lax",
+      maxAge: 365 * 24 * 60 * 60 * 1000,
     });
 
     return res.json({
@@ -323,6 +401,7 @@ router.post("/guest", async (req: Request, res: Response): Promise<any> => {
         imposterWins: 0,
         winRate: 0,
         isGuest: true,
+        isAdmin: false,
       },
     });
   } catch (err: any) {
@@ -370,10 +449,61 @@ router.get("/me", async (req: Request, res: Response): Promise<any> => {
   }
 });
 
-// 5. Logout
-router.post("/logout", (req: Request, res: Response) => {
+// 5. Logout (Clears session cookie and restores previous persistent Guest account)
+router.post("/logout", async (req: Request, res: Response): Promise<any> => {
+  const { guestId } = req.body || {};
+  const cookieGuestId = req.cookies?.guest_id;
+  const targetGuestId =
+    guestId && isValidObjectId(guestId)
+      ? guestId
+      : cookieGuestId && isValidObjectId(cookieGuestId)
+      ? cookieGuestId
+      : null;
+
   res.clearCookie("session_token");
-  res.json({ success: true });
+
+  if (targetGuestId) {
+    try {
+      const guestUser = await User.findOne({ _id: targetGuestId, isGuest: true });
+      if (guestUser) {
+        const guestToken = generateToken({
+          _id: guestUser._id.toString(),
+          email: guestUser.email,
+          displayName: guestUser.displayName,
+          isGuest: true,
+        });
+
+        res.cookie("session_token", guestToken, {
+          httpOnly: true,
+          sameSite: "lax",
+          maxAge: 365 * 24 * 60 * 60 * 1000,
+        });
+
+        return res.json({
+          success: true,
+          guestRestored: true,
+          guestUser: {
+            id: guestUser._id.toString(),
+            displayName: guestUser.displayName,
+            username: guestUser.username,
+            email: guestUser.email,
+            avatarUrl: "",
+            country: guestUser.country || "India",
+            state: guestUser.state || "Maharashtra",
+            city: guestUser.city || "Mumbai",
+            matchesPlayed: guestUser.matchesPlayed || 0,
+            wins: guestUser.wins || 0,
+            imposterWins: guestUser.imposterWins || 0,
+            winRate: guestUser.winRate || 0,
+            isGuest: true,
+            isAdmin: false,
+          },
+        });
+      }
+    } catch {}
+  }
+
+  res.json({ success: true, guestRestored: false, guestUser: null });
 });
 
 export default router;

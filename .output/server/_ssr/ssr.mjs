@@ -1,7 +1,7 @@
 //#region node_modules/.nitro/vite/services/ssr/index.js
 var serverEntryPromise;
 async function getServerEntry() {
-	if (!serverEntryPromise) serverEntryPromise = import("./server-D_YJIGZ-.mjs").then((m) => m.default ?? m);
+	if (!serverEntryPromise) serverEntryPromise = import("./server-DZztu9PB.mjs").then((m) => m.default ?? m);
 	return serverEntryPromise;
 }
 var server_default = { async fetch(request, env, ctx) {

@@ -6,6 +6,7 @@ import { Supporter } from "./models/Supporter";
 import { getRandomWordPair } from "./game/words";
 import { RoomManager } from "./game/roomManager";
 import { generalApiLimiter, isValidObjectId, sanitizeText } from "./security";
+import { generateToken, isUserAdmin } from "./auth";
 
 const router = Router();
 router.use(generalApiLimiter);
@@ -325,8 +326,33 @@ router.post("/user/update", async (req: Request, res: Response): Promise<any> =>
 
     await user.save();
 
+    // Re-issue refreshed JWT session token so user's changed name is preserved everywhere
+    const newToken = generateToken({
+      _id: user._id.toString(),
+      email: user.email,
+      displayName: user.displayName,
+      avatarUrl: user.avatarUrl,
+      isGuest: user.isGuest,
+    });
+
+    res.cookie("session_token", newToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      maxAge: 30 * 24 * 60 * 60 * 1000,
+    });
+
+    if (user.isGuest) {
+      res.cookie("guest_id", user._id.toString(), {
+        httpOnly: true,
+        sameSite: "lax",
+        maxAge: 365 * 24 * 60 * 60 * 1000,
+      });
+    }
+
     return res.json({
       success: true,
+      token: newToken,
       user: {
         id: user._id.toString(),
         displayName: user.displayName,
@@ -336,9 +362,12 @@ router.post("/user/update", async (req: Request, res: Response): Promise<any> =>
         country: user.country || "India",
         state: user.state || "Maharashtra",
         city: user.city || "Mumbai",
-        matchesPlayed: user.matchesPlayed,
-        wins: user.wins,
-        winRate: user.winRate,
+        matchesPlayed: user.matchesPlayed || 0,
+        wins: user.wins || 0,
+        imposterWins: user.imposterWins || 0,
+        winRate: user.winRate || 0,
+        isGuest: user.isGuest,
+        isAdmin: isUserAdmin(user.email),
       },
     });
   } catch (err: any) {

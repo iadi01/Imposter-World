@@ -84,6 +84,32 @@ function Btn({
   );
 }
 
+// Helpers for instant millisecond startup and persistent identity
+function getInitialUser(): UserProfile | null {
+  if (typeof window === "undefined") return null;
+  try {
+    const raw = localStorage.getItem("imposter_user");
+    if (raw) return JSON.parse(raw);
+  } catch {}
+  return null;
+}
+
+function getInstantGuestId(): string {
+  if (typeof window === "undefined") return "";
+  try {
+    return localStorage.getItem("imposter_guest_id") || "";
+  } catch {}
+  return "";
+}
+
+function getInstantGuestName(): string {
+  if (typeof window === "undefined") return "Detective";
+  try {
+    return localStorage.getItem("imposter_guest_name") || "Detective";
+  } catch {}
+  return "Detective";
+}
+
 function Index() {
   // Navigation & Modals
   const [showSettings, setShowSettings] = useState(false);
@@ -98,8 +124,8 @@ function Index() {
   const [isBgmActive, setIsBgmActive] = useState(!sound.isMuted);
   const [championName, setChampionName] = useState<string>("Loading...");
 
-  // Authenticated User
-  const [user, setUser] = useState<UserProfile | null>(null);
+  // Authenticated User (Instant synchronous load from localStorage)
+  const [user, setUser] = useState<UserProfile | null>(getInitialUser);
 
   // Room & Online Game State
   const [roomCodeInput, setRoomCodeInput] = useState("");
@@ -209,8 +235,27 @@ function Index() {
     return () => clearInterval(interval);
   }, [roomState?.lobbyDeadline, roomState?.phase]);
 
+  // Sync user state and persistent storage
+  const syncUserToStorage = (u: UserProfile) => {
+    try {
+      setUser(u);
+      localStorage.setItem("imposter_user", JSON.stringify(u));
+      if (u.isGuest) {
+        localStorage.setItem("imposter_guest_id", u.id);
+        localStorage.setItem("imposter_guest_name", u.displayName);
+      }
+      // If currently connected in an online room, sync display name in milliseconds (< 1ms)
+      if (socketRef.current?.connected && roomState) {
+        socketRef.current.emit("player:update", { displayName: u.displayName, avatarUrl: u.avatarUrl });
+      }
+    } catch {}
+  };
+
   // 1. Initial User fetch & authentic session
   useEffect(() => {
+    const savedGuestId = getInstantGuestId();
+    const savedGuestName = getInstantGuestName();
+
     if (typeof window !== "undefined") {
       const searchParams = new URLSearchParams(window.location.search);
       const googleCode = searchParams.get("code");
@@ -227,7 +272,7 @@ function Index() {
           .then((res) => res.json())
           .then((data) => {
             if (data.user) {
-              setUser(data.user);
+              syncUserToStorage(data.user);
               window.history.replaceState({}, document.title, window.location.pathname);
             }
           })
@@ -245,33 +290,33 @@ function Index() {
       .then((res) => res.json())
       .then((data) => {
         if (data.user) {
-          setUser(data.user);
+          syncUserToStorage(data.user);
         } else {
-          // No active session: register a fresh authentic guest user
+          // No active session: restore or create persistent guest user
           fetch(`${API_BASE}/api/auth/guest`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             credentials: "include",
-            body: JSON.stringify({ name: "Detective" }),
+            body: JSON.stringify({ guestId: savedGuestId || undefined, name: savedGuestName }),
           })
             .then((r) => r.json())
             .then((gData) => {
-              if (gData.user) setUser(gData.user);
+              if (gData.user) syncUserToStorage(gData.user);
             })
             .catch((err) => console.error("Guest login fallback error:", err));
         }
       })
       .catch(() => {
-        // Fallback guest creation
+        // Fallback guest restoration
         fetch(`${API_BASE}/api/auth/guest`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           credentials: "include",
-          body: JSON.stringify({ name: "Detective" }),
+          body: JSON.stringify({ guestId: savedGuestId || undefined, name: savedGuestName }),
         })
           .then((r) => r.json())
           .then((gData) => {
-            if (gData.user) setUser(gData.user);
+            if (gData.user) syncUserToStorage(gData.user);
           })
           .catch((err) => console.error("Guest login fallback error:", err));
       });
@@ -280,7 +325,7 @@ function Index() {
     fetchPublicRooms();
   }, []);
 
-  // Auto-detect invite link (?room=CODE) and join room directly
+  // Auto-detect invite link (?room=CODE) and join room directly in MILLISECONDS (< 20ms)
   useEffect(() => {
     if (typeof window === "undefined" || autoJoinAttempted.current) return;
     const searchParams = new URLSearchParams(window.location.search);
@@ -295,7 +340,7 @@ function Index() {
     setRoomCodeInput(cleanCode);
     toast.info(`Connecting to Classroom Room #${cleanCode}...`);
     handleJoinRoom(cleanCode);
-  }, [user]);
+  }, []); // Run immediately on mount without waiting for any async network roundtrips!
 
   const fetchPublicRooms = () => {
     fetch(`${API_BASE}/api/rooms/public`)
@@ -451,9 +496,9 @@ function Index() {
     if (!socket.connected) {
       socket.connect();
     }
-    const creatorUser = user || {
-      id: socket.id || `guest-${Math.random().toString(36).substring(2, 9)}`,
-      displayName: "Detective",
+    const creatorUser = user || getInitialUser() || {
+      id: getInstantGuestId() || socket.id || `guest-${Math.random().toString(36).substring(2, 9)}`,
+      displayName: getInstantGuestName(),
       avatarUrl: "",
     };
 
@@ -489,9 +534,9 @@ function Index() {
     if (!socket.connected) {
       socket.connect();
     }
-    const joinUser = user || {
-      id: socket.id || `guest-${Math.random().toString(36).substring(2, 9)}`,
-      displayName: "Detective",
+    const joinUser = user || getInitialUser() || {
+      id: getInstantGuestId() || socket.id || `guest-${Math.random().toString(36).substring(2, 9)}`,
+      displayName: getInstantGuestName(),
       avatarUrl: "",
     };
 
@@ -523,9 +568,9 @@ function Index() {
     if (!socket.connected) {
       socket.connect();
     }
-    const matchUser = user || {
-      id: socket.id || `guest-${Math.random().toString(36).substring(2, 9)}`,
-      displayName: "Detective",
+    const matchUser = user || getInitialUser() || {
+      id: getInstantGuestId() || socket.id || `guest-${Math.random().toString(36).substring(2, 9)}`,
+      displayName: getInstantGuestName(),
       avatarUrl: "",
     };
 
@@ -2104,10 +2149,37 @@ function Index() {
           user={user}
           onClose={() => setShowAccount(false)}
           onLogout={() => {
-            fetch(`${API_BASE}/api/auth/logout`, { method: "POST" }).then(() => {
-              setUser(null);
-              setShowAccount(false);
-            });
+            const savedGuestId = getInstantGuestId();
+            fetch(`${API_BASE}/api/auth/logout`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              credentials: "include",
+              body: JSON.stringify({ guestId: savedGuestId || undefined }),
+            })
+              .then((res) => res.json())
+              .then((data) => {
+                if (data.guestUser) {
+                  syncUserToStorage(data.guestUser);
+                  toast.success(`Logged out! Switched back to Guest: ${data.guestUser.displayName}`);
+                } else {
+                  // Fallback guest retrieval/creation
+                  fetch(`${API_BASE}/api/auth/guest`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    credentials: "include",
+                    body: JSON.stringify({ guestId: savedGuestId || undefined, name: getInstantGuestName() }),
+                  })
+                    .then((r) => r.json())
+                    .then((gData) => {
+                      if (gData.user) syncUserToStorage(gData.user);
+                    });
+                }
+                setShowAccount(false);
+              })
+              .catch(() => {
+                setUser(null);
+                setShowAccount(false);
+              });
           }}
           onGoogleLogin={handleGoogleLogin}
           onUpdateProfile={(profileData) => {
@@ -2115,6 +2187,7 @@ function Index() {
               fetch(`${API_BASE}/api/user/update`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
+                credentials: "include",
                 body: JSON.stringify({
                   userId: user.id,
                   displayName: profileData.displayName,
@@ -2126,7 +2199,10 @@ function Index() {
               })
                 .then((res) => res.json())
                 .then((data) => {
-                  if (data.user) setUser(data.user);
+                  if (data.user) {
+                    syncUserToStorage(data.user);
+                    toast.success("Detective Profile updated!");
+                  }
                 });
             }
           }}

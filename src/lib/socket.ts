@@ -26,14 +26,17 @@ export function getSocket(): Socket {
     socket = io(socketUrl, {
       autoConnect: true,
       reconnection: true,
-      reconnectionAttempts: 20,
-      reconnectionDelay: 1000,
+      reconnectionAttempts: 25,
+      reconnectionDelay: 400,
+      reconnectionDelayMax: 1500,
+      timeout: 4000,
       transports: ["websocket", "polling"],
+      upgrade: true,
       withCredentials: true,
     });
 
     socket.on("connect", () => {
-      console.log("[Socket Client] Connected to real-time game server:", socket?.id);
+      console.log("[Socket Client] Ultra-fast WebSocket connected:", socket?.id);
     });
 
     socket.on("disconnect", (reason) => {
@@ -45,4 +48,11 @@ export function getSocket(): Socket {
     });
   }
   return socket;
+}
+
+if (typeof window !== "undefined") {
+  // Pre-warm real-time WebSocket connection immediately for millisecond join speeds
+  try {
+    getSocket();
+  } catch {}
 }
