@@ -6,7 +6,7 @@ import { t as require_jsx_dev_runtime } from "../_libs/react.mjs";
 import { t as toast } from "../_libs/sonner.mjs";
 import { $ as CircleCheck, A as Music, B as Globe, C as Plus, D as Pause, F as Lock, G as EyeOff, H as Flag, I as LoaderCircle, M as MicOff, N as MapPin, O as Paintbrush, P as LogOut, R as Heart, T as Pin, U as FastForward, V as Flame, W as Eye, X as Compass, Y as Copy, Z as Clock, _ as Send, a as UserCheck, at as AtSign, b as RefreshCw, d as Square, et as CircleAlert, h as Settings, i as Users, j as Mic, k as PaintBucket, l as Trash2, n as VolumeX, nt as Check, o as Undo2, ot as ArrowLeft, q as Eraser, r as Volume2, rt as Building2, s as Trophy, t as X, v as Search, w as Play, y as RotateCcw, z as Hand } from "../_libs/lucide-react.mjs";
 import { t as lookup } from "../_libs/socket.io-client+[...].mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/routes-DnmykWHC.js
+//#region node_modules/.nitro/vite/services/ssr/assets/routes-meT7ZuZe.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_dev_runtime = require_jsx_dev_runtime();
 var _jsxFileName$10 = "/Users/aadi/Downloads/f8225c15-5378-482e-bfe4-be001f84d384/src/components/DrawPad.tsx";
@@ -5842,11 +5842,8 @@ var _jsxFileName$2 = "/Users/aadi/Downloads/f8225c15-5378-482e-bfe4-be001f84d384
 var ICE_SERVERS = { iceServers: [{ urls: "stun:stun.l.google.com:19302" }, { urls: "stun:stun1.l.google.com:19302" }] };
 function VoiceDiscussionFloor({ socket, roomCode, myPlayer, players, speakerFloor, remainingTime, skipDiscussionVotesCount, skipDiscussionRequired, hasVotedSkip, onVoteSkip }) {
 	const [isMicOn, setIsMicOn] = (0, import_react.useState)(false);
-	const [isMicPermissionGranted, setIsMicPermissionGranted] = (0, import_react.useState)(false);
 	const [isSpeakingLocally, setIsSpeakingLocally] = (0, import_react.useState)(false);
 	const [activeSpeakers, setActiveSpeakers] = (0, import_react.useState)(/* @__PURE__ */ new Set());
-	const [mutedPeers, setMutedPeers] = (0, import_react.useState)(/* @__PURE__ */ new Set());
-	const [reactions, setReactions] = (0, import_react.useState)([]);
 	const localStreamRef = (0, import_react.useRef)(null);
 	const peerConnectionsRef = (0, import_react.useRef)(/* @__PURE__ */ new Map());
 	const audioContextRef = (0, import_react.useRef)(null);
@@ -5869,13 +5866,6 @@ function VoiceDiscussionFloor({ socket, roomCode, myPlayer, players, speakerFloo
 		const interval = setInterval(updateTimer, 500);
 		return () => clearInterval(interval);
 	}, [speakerFloor?.speakerDeadline]);
-	(0, import_react.useEffect)(() => {
-		if (reactions.length === 0) return;
-		const timer = setTimeout(() => {
-			setReactions((prev) => prev.slice(1));
-		}, 2800);
-		return () => clearTimeout(timer);
-	}, [reactions]);
 	const createPeerConnection = (0, import_react.useCallback)((targetSocketId) => {
 		if (peerConnectionsRef.current.has(targetSocketId)) return peerConnectionsRef.current.get(targetSocketId);
 		const pc = new RTCPeerConnection(ICE_SERVERS);
@@ -5914,7 +5904,7 @@ function VoiceDiscussionFloor({ socket, roomCode, myPlayer, players, speakerFloo
 			setIsSpeakingLocally(false);
 			socket.emit("voice:speaking", { isSpeaking: false });
 			socket.emit("voice:state-change", { isMuted: true });
-			toast.info("Microphone muted 🔇");
+			toast.info("Mic Muted 🔇");
 		} else try {
 			if (!localStreamRef.current) {
 				const stream = await navigator.mediaDevices.getUserMedia({ audio: {
@@ -5923,7 +5913,6 @@ function VoiceDiscussionFloor({ socket, roomCode, myPlayer, players, speakerFloo
 					autoGainControl: true
 				} });
 				localStreamRef.current = stream;
-				setIsMicPermissionGranted(true);
 				const AudioContextClass = window.AudioContext || window.webkitAudioContext;
 				if (AudioContextClass) {
 					const audioCtx = new AudioContextClass();
@@ -5970,10 +5959,9 @@ function VoiceDiscussionFloor({ socket, roomCode, myPlayer, players, speakerFloo
 			});
 			setIsMicOn(true);
 			socket.emit("voice:state-change", { isMuted: false });
-			toast.success("Live Microphone ON! 🎙️ Everyone can hear you.");
+			toast.success("Mic Live 🎙️");
 		} catch (err) {
-			console.error("[VoiceFloor] Mic access error:", err);
-			toast.error("Could not access microphone. Please allow mic permission in your browser.");
+			toast.error("Microphone permission required");
 		}
 	};
 	(0, import_react.useEffect)(() => {
@@ -5992,9 +5980,7 @@ function VoiceDiscussionFloor({ socket, roomCode, myPlayer, players, speakerFloo
 					});
 				} else if (type === "answer") await pc.setRemoteDescription(new RTCSessionDescription(signal));
 				else if (type === "candidate") await pc.addIceCandidate(new RTCIceCandidate(signal));
-			} catch (err) {
-				console.warn("[VoiceFloor] Signal error:", err);
-			}
+			} catch (err) {}
 		};
 		const handleSpeaking = ({ socketId, isSpeaking }) => {
 			setActiveSpeakers((prev) => {
@@ -6004,21 +5990,11 @@ function VoiceDiscussionFloor({ socket, roomCode, myPlayer, players, speakerFloo
 				return next;
 			});
 		};
-		const handleStateChange = ({ socketId, isMuted }) => {
-			setMutedPeers((prev) => {
-				const next = new Set(prev);
-				if (isMuted) next.add(socketId);
-				else next.delete(socketId);
-				return next;
-			});
-		};
 		socket.on("voice:signal", handleSignal);
 		socket.on("voice:speaking", handleSpeaking);
-		socket.on("voice:state-change", handleStateChange);
 		return () => {
 			socket.off("voice:signal", handleSignal);
 			socket.off("voice:speaking", handleSpeaking);
-			socket.off("voice:state-change", handleStateChange);
 		};
 	}, [socket, createPeerConnection]);
 	(0, import_react.useEffect)(() => {
@@ -6038,453 +6014,245 @@ function VoiceDiscussionFloor({ socket, roomCode, myPlayer, players, speakerFloo
 	const handlePassFloor = () => {
 		sound.playDing();
 		socket.emit("game:pass-speaker-floor", {}, (res) => {
-			if (res && res.success) toast.success("Floor passed to next student! 🎙️");
+			if (res && res.success) toast.success("Floor passed 🎙️");
 			else if (res && res.error) toast.error(res.error);
 		});
 	};
 	const handleToggleRaiseHand = () => {
 		sound.playPop();
 		socket.emit("game:raise-hand", {}, (res) => {
-			if (res && res.success) if (res.raised) toast.info("Hand raised! The classroom sees you want to speak. 🙋‍♂️");
-			else toast.info("Hand lowered.");
+			if (res && res.success) if (res.raised) toast.info("Hand raised 🙋");
+			else toast.info("Hand lowered");
 		});
 	};
-	const sendReaction = (emoji) => {
-		sound.playPop();
-		const newReaction = {
-			id: Math.random().toString(),
-			emoji,
-			playerName: myPlayer?.displayName || "Student"
-		};
-		setReactions((prev) => [...prev.slice(-5), newReaction]);
-	};
+	const currentSpeakerIsTalking = Boolean(speakerFloor?.currentSpeakerSocketId && activeSpeakers.has(speakerFloor.currentSpeakerSocketId) || isMyFloor && isSpeakingLocally);
 	return /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", {
-		className: "space-y-3 font-hand",
+		className: "font-hand",
 		children: /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", {
-			className: `sketch relative p-4 sm:p-5 border-2 shadow-md transition-all duration-300 overflow-hidden ${isMyFloor ? "bg-amber-50/95 border-amber-500 ring-2 ring-amber-400/50" : speakerFloor?.isOpenFloor ? "bg-emerald-50/95 border-emerald-500" : "bg-white/95 border-primary shadow-xs"}`,
-			children: [
-				/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", { className: "tape absolute -top-3 left-8 h-5 w-24 rotate-[-1deg]" }, void 0, false, {
-					fileName: _jsxFileName$2,
-					lineNumber: 394,
-					columnNumber: 9
-				}, this),
-				reactions.length > 0 && /* @__PURE__ */ (void 0)("div", {
-					className: "absolute right-4 top-2 flex flex-col items-end gap-1 pointer-events-none z-10",
-					children: reactions.map((r) => /* @__PURE__ */ (void 0)("div", {
-						className: "animate-in fade-in slide-in-from-bottom-3 duration-300 bg-black/80 text-white text-xs px-2.5 py-1 rounded-full flex items-center gap-1.5 shadow-lg",
-						children: [/* @__PURE__ */ (void 0)("span", {
-							className: "text-base",
-							children: r.emoji
-						}, void 0, false, {
-							fileName: _jsxFileName$2,
-							lineNumber: 404,
-							columnNumber: 17
-						}, this), /* @__PURE__ */ (void 0)("span", {
-							className: "font-mono text-[10px] font-bold opacity-80",
-							children: r.playerName
-						}, void 0, false, {
-							fileName: _jsxFileName$2,
-							lineNumber: 405,
-							columnNumber: 17
-						}, this)]
-					}, r.id, true, {
-						fileName: _jsxFileName$2,
-						lineNumber: 400,
-						columnNumber: 15
-					}, this))
-				}, void 0, false, {
-					fileName: _jsxFileName$2,
-					lineNumber: 398,
-					columnNumber: 11
-				}, this),
-				/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", {
-					className: "flex flex-col md:flex-row md:items-center justify-between gap-4",
+			className: `sketch relative p-2.5 sm:p-3.5 border-2 shadow-xs transition-all ${isMyFloor ? "bg-amber-50/95 border-amber-500 ring-2 ring-amber-400/40" : speakerFloor?.isOpenFloor ? "bg-emerald-50/95 border-emerald-500" : "bg-white/95 border-primary shadow-xs"}`,
+			children: [/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", { className: "tape absolute -top-2.5 left-6 h-4 w-16 rotate-[-1deg]" }, void 0, false, {
+				fileName: _jsxFileName$2,
+				lineNumber: 348,
+				columnNumber: 9
+			}, this), /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", {
+				className: "flex flex-col sm:flex-row sm:items-center justify-between gap-2.5",
+				children: [/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", {
+					className: "flex items-center gap-2.5 min-w-0",
 					children: [/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", {
-						className: "flex items-start sm:items-center gap-3.5 min-w-0",
+						className: "relative shrink-0",
 						children: [/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", {
-							className: "relative shrink-0",
-							children: [/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", {
-								className: `h-14 w-14 sm:h-16 sm:w-16 rounded-full flex items-center justify-center text-2xl font-bold shadow-inner border-2 ${isMyFloor ? "bg-amber-400 text-amber-950 border-amber-600 animate-pulse ring-4 ring-amber-300" : speakerFloor?.isOpenFloor ? "bg-emerald-400 text-emerald-950 border-emerald-600" : "bg-primary/20 text-primary border-primary"}`,
-								children: isMyFloor ? "🌟" : speakerFloor?.isOpenFloor ? "🗣️" : "🎙️"
-							}, void 0, false, {
+							className: `h-9 w-9 sm:h-10 sm:w-10 rounded-full flex items-center justify-center text-lg font-bold border ${isMyFloor ? "bg-amber-400 text-amber-950 border-amber-600 animate-pulse" : speakerFloor?.isOpenFloor ? "bg-emerald-400 text-emerald-950 border-emerald-600" : "bg-primary/15 text-primary border-primary/40"}`,
+							children: isMyFloor ? "🌟" : speakerFloor?.isOpenFloor ? "🗣️" : "🎙️"
+						}, void 0, false, {
+							fileName: _jsxFileName$2,
+							lineNumber: 355,
+							columnNumber: 15
+						}, this), currentSpeakerIsTalking && /* @__PURE__ */ (void 0)("span", {
+							className: "absolute -top-0.5 -right-0.5 flex h-3 w-3",
+							children: [/* @__PURE__ */ (void 0)("span", { className: "animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" }, void 0, false, {
 								fileName: _jsxFileName$2,
-								lineNumber: 415,
-								columnNumber: 15
-							}, this), (isSpeakingLocally || speakerFloor?.currentSpeakerSocketId && activeSpeakers.has(speakerFloor.currentSpeakerSocketId)) && /* @__PURE__ */ (void 0)("span", {
-								className: "absolute -top-1 -right-1 flex h-4 w-4",
-								children: [/* @__PURE__ */ (void 0)("span", { className: "animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" }, void 0, false, {
-									fileName: _jsxFileName$2,
-									lineNumber: 430,
-									columnNumber: 19
-								}, this), /* @__PURE__ */ (void 0)("span", { className: "relative inline-flex rounded-full h-4 w-4 bg-emerald-500" }, void 0, false, {
-									fileName: _jsxFileName$2,
-									lineNumber: 431,
-									columnNumber: 19
-								}, this)]
-							}, void 0, true, {
+								lineNumber: 369,
+								columnNumber: 19
+							}, this), /* @__PURE__ */ (void 0)("span", { className: "relative inline-flex rounded-full h-3 w-3 bg-emerald-500" }, void 0, false, {
 								fileName: _jsxFileName$2,
-								lineNumber: 429,
-								columnNumber: 17
+								lineNumber: 370,
+								columnNumber: 19
 							}, this)]
 						}, void 0, true, {
 							fileName: _jsxFileName$2,
-							lineNumber: 414,
-							columnNumber: 13
-						}, this), /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", {
-							className: "space-y-1 min-w-0",
-							children: [
-								/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", {
-									className: "flex items-center gap-2 flex-wrap",
-									children: [/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("span", {
-										className: `text-[11px] font-bold uppercase tracking-wider px-2 py-0.5 rounded font-mono ${isMyFloor ? "bg-amber-500 text-white animate-bounce" : speakerFloor?.isOpenFloor ? "bg-emerald-600 text-white" : "bg-primary text-primary-foreground"}`,
-										children: isMyFloor ? "🌟 You Have The Floor!" : speakerFloor?.isOpenFloor ? "🗣️ Open Floor Discussion" : `Speaker Turn ${(speakerFloor?.speakerIndex || 0) + 1}/${speakerFloor?.totalSpeakers || players.length}`
-									}, void 0, false, {
-										fileName: _jsxFileName$2,
-										lineNumber: 438,
-										columnNumber: 17
-									}, this), !speakerFloor?.isOpenFloor && speakerTimeRemaining > 0 && /* @__PURE__ */ (void 0)("span", {
-										className: "sketch bg-accent text-accent-foreground text-xs font-mono font-bold px-2 py-0.5",
-										children: [
-											"⏱️ ",
-											speakerTimeRemaining,
-											"s"
-										]
-									}, void 0, true, {
-										fileName: _jsxFileName$2,
-										lineNumber: 456,
-										columnNumber: 19
-									}, this)]
-								}, void 0, true, {
-									fileName: _jsxFileName$2,
-									lineNumber: 437,
-									columnNumber: 15
-								}, this),
-								/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("h3", {
-									className: "text-xl sm:text-2xl font-display font-bold text-foreground truncate",
-									children: isMyFloor ? /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("span", {
-										className: "text-amber-800",
-										children: "Your Turn To Speak! Explain your clue."
-									}, void 0, false, {
-										fileName: _jsxFileName$2,
-										lineNumber: 465,
-										columnNumber: 19
-									}, this) : speakerFloor?.isOpenFloor ? /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("span", {
-										className: "text-emerald-800",
-										children: "Anyone can talk & interrogate freely!"
-									}, void 0, false, {
-										fileName: _jsxFileName$2,
-										lineNumber: 467,
-										columnNumber: 19
-									}, this) : /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("span", { children: [
-										"Now Speaking:",
-										" ",
-										/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("strong", {
-											className: "text-primary underline decoration-wavy",
-											children: speakerFloor?.currentSpeakerName || "Classmate"
-										}, void 0, false, {
-											fileName: _jsxFileName$2,
-											lineNumber: 471,
-											columnNumber: 21
-										}, this)
-									] }, void 0, true, {
-										fileName: _jsxFileName$2,
-										lineNumber: 469,
-										columnNumber: 19
-									}, this)
-								}, void 0, false, {
-									fileName: _jsxFileName$2,
-									lineNumber: 463,
-									columnNumber: 15
-								}, this),
-								/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("p", {
-									className: "text-xs sm:text-sm text-foreground/80",
-									children: isMyFloor ? /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("span", { children: [
-										"Sabka mic live on hai. Aap apna clue justify karein, phir neeche ",
-										/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("strong", { children: "\"Done\"" }, void 0, false, {
-											fileName: _jsxFileName$2,
-											lineNumber: 482,
-											columnNumber: 86
-										}, this),
-										" click karke agle student ko pass karein!"
-									] }, void 0, true, {
-										fileName: _jsxFileName$2,
-										lineNumber: 481,
-										columnNumber: 19
-									}, this) : speakerFloor?.isOpenFloor ? /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("span", { children: "Sabhi students ne apna clue share kar diya hai. Remaining time me cross-examination aur voting discuss karein." }, void 0, false, {
-										fileName: _jsxFileName$2,
-										lineNumber: 485,
-										columnNumber: 19
-									}, this) : /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("span", { children: "Inka point suniye! Aapka mic bhi on hai — par floor inka hai. Interjection ke liye \"Raise Hand\" use karein." }, void 0, false, {
-										fileName: _jsxFileName$2,
-										lineNumber: 489,
-										columnNumber: 19
-									}, this)
-								}, void 0, false, {
-									fileName: _jsxFileName$2,
-									lineNumber: 479,
-									columnNumber: 15
-								}, this)
-							]
-						}, void 0, true, {
-							fileName: _jsxFileName$2,
-							lineNumber: 436,
-							columnNumber: 13
+							lineNumber: 368,
+							columnNumber: 17
 						}, this)]
 					}, void 0, true, {
 						fileName: _jsxFileName$2,
-						lineNumber: 413,
-						columnNumber: 11
+						lineNumber: 354,
+						columnNumber: 13
 					}, this), /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", {
-						className: "flex flex-wrap items-center gap-2.5 shrink-0 self-stretch sm:self-auto justify-end",
-						children: [
-							isMyFloor && /* @__PURE__ */ (void 0)("button", {
-								type: "button",
-								onClick: handlePassFloor,
-								className: "sketch bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 font-bold text-sm sm:text-base flex items-center gap-2 shadow-sm transition-transform active:scale-95 animate-pulse",
-								children: [/* @__PURE__ */ (void 0)(CircleCheck, { className: "h-5 w-5" }, void 0, false, {
-									fileName: _jsxFileName$2,
-									lineNumber: 506,
-									columnNumber: 17
-								}, this), /* @__PURE__ */ (void 0)("span", { children: "Done / Pass Floor ➔" }, void 0, false, {
-									fileName: _jsxFileName$2,
-									lineNumber: 507,
-									columnNumber: 17
-								}, this)]
+						className: "min-w-0 leading-tight",
+						children: [/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", {
+							className: "flex items-center gap-1.5 flex-wrap",
+							children: [/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("span", {
+								className: `text-[9px] sm:text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.2 rounded font-mono ${isMyFloor ? "bg-amber-500 text-white" : speakerFloor?.isOpenFloor ? "bg-emerald-600 text-white" : "bg-secondary text-foreground"}`,
+								children: isMyFloor ? "YOUR TURN" : speakerFloor?.isOpenFloor ? "OPEN FLOOR" : `TURN ${(speakerFloor?.speakerIndex || 0) + 1}/${speakerFloor?.totalSpeakers || players.length}`
+							}, void 0, false, {
+								fileName: _jsxFileName$2,
+								lineNumber: 378,
+								columnNumber: 17
+							}, this), !speakerFloor?.isOpenFloor && speakerTimeRemaining > 0 && /* @__PURE__ */ (void 0)("span", {
+								className: "text-[10px] sm:text-xs font-mono font-bold text-accent",
+								children: [speakerTimeRemaining, "s"]
 							}, void 0, true, {
 								fileName: _jsxFileName$2,
-								lineNumber: 501,
-								columnNumber: 15
-							}, this),
-							!isMyFloor && !speakerFloor?.isOpenFloor && /* @__PURE__ */ (void 0)("button", {
-								type: "button",
-								onClick: handleToggleRaiseHand,
-								className: `sketch px-3.5 py-1.5 text-xs sm:text-sm font-bold flex items-center gap-1.5 transition-all shadow-xs ${isHandRaised ? "bg-amber-400 text-amber-950 border-amber-600 ring-2 ring-amber-300" : "bg-secondary text-foreground hover:bg-secondary/80"}`,
-								children: [/* @__PURE__ */ (void 0)(Hand, { className: `h-4 w-4 ${isHandRaised ? "animate-bounce" : ""}` }, void 0, false, {
-									fileName: _jsxFileName$2,
-									lineNumber: 522,
-									columnNumber: 17
-								}, this), /* @__PURE__ */ (void 0)("span", { children: isHandRaised ? "✋ Hand Raised" : "🙋 Raise Hand" }, void 0, false, {
-									fileName: _jsxFileName$2,
-									lineNumber: 523,
-									columnNumber: 17
-								}, this)]
-							}, void 0, true, {
+								lineNumber: 395,
+								columnNumber: 19
+							}, this)]
+						}, void 0, true, {
+							fileName: _jsxFileName$2,
+							lineNumber: 377,
+							columnNumber: 15
+						}, this), /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", {
+							className: "text-sm sm:text-base font-display font-bold text-foreground truncate mt-0.5",
+							children: isMyFloor ? /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("span", {
+								className: "text-amber-800",
+								children: "You are speaking"
+							}, void 0, false, {
 								fileName: _jsxFileName$2,
-								lineNumber: 513,
-								columnNumber: 15
-							}, this),
-							/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("button", {
-								type: "button",
-								onClick: onVoteSkip,
-								disabled: hasVotedSkip,
-								className: `sketch flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold transition-all shadow-xs ${hasVotedSkip ? "bg-secondary text-foreground/50 border-foreground/30 cursor-not-allowed" : "bg-accent/80 hover:bg-accent text-accent-foreground"}`,
-								title: "Skip remaining discussion and jump to secret voting",
-								children: [
-									/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(FastForward, { className: "h-3.5 w-3.5" }, void 0, false, {
-										fileName: _jsxFileName$2,
-										lineNumber: 539,
-										columnNumber: 15
-									}, this),
-									/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("span", { children: hasVotedSkip ? "Voted Skip" : "Skip Debate" }, void 0, false, {
-										fileName: _jsxFileName$2,
-										lineNumber: 540,
-										columnNumber: 15
-									}, this),
-									/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("span", {
-										className: "bg-black/15 text-[10px] px-1.5 py-0.2 rounded font-mono font-bold",
-										children: [
-											skipDiscussionVotesCount,
-											"/",
-											skipDiscussionRequired
-										]
-									}, void 0, true, {
-										fileName: _jsxFileName$2,
-										lineNumber: 541,
-										columnNumber: 15
-									}, this)
-								]
-							}, void 0, true, {
+								lineNumber: 403,
+								columnNumber: 19
+							}, this) : speakerFloor?.isOpenFloor ? /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("span", {
+								className: "text-emerald-800",
+								children: "Open Debate"
+							}, void 0, false, {
 								fileName: _jsxFileName$2,
-								lineNumber: 528,
-								columnNumber: 13
+								lineNumber: 405,
+								columnNumber: 19
+							}, this) : /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("span", { children: [
+								"Speaking:",
+								" ",
+								/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("strong", {
+									className: "text-primary",
+									children: speakerFloor?.currentSpeakerName || "Classmate"
+								}, void 0, false, {
+									fileName: _jsxFileName$2,
+									lineNumber: 409,
+									columnNumber: 21
+								}, this)
+							] }, void 0, true, {
+								fileName: _jsxFileName$2,
+								lineNumber: 407,
+								columnNumber: 19
 							}, this)
-						]
+						}, void 0, false, {
+							fileName: _jsxFileName$2,
+							lineNumber: 401,
+							columnNumber: 15
+						}, this)]
 					}, void 0, true, {
 						fileName: _jsxFileName$2,
-						lineNumber: 498,
-						columnNumber: 11
+						lineNumber: 376,
+						columnNumber: 13
 					}, this)]
 				}, void 0, true, {
 					fileName: _jsxFileName$2,
-					lineNumber: 411,
-					columnNumber: 9
-				}, this),
-				/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", {
-					className: "mt-4 pt-3 border-t border-foreground/15 flex flex-wrap items-center justify-between gap-3 text-xs",
-					children: [/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", {
-						className: "flex items-center gap-2",
-						children: [/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("button", {
+					lineNumber: 352,
+					columnNumber: 11
+				}, this), /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", {
+					className: "flex items-center gap-1.5 sm:gap-2 shrink-0 self-end sm:self-auto",
+					children: [
+						/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("button", {
 							type: "button",
 							onClick: toggleMic,
-							className: `sketch flex items-center gap-2 px-3.5 py-1.5 rounded-full font-mono text-xs font-bold transition-all shadow-xs ${isMicOn ? "bg-emerald-600 text-white animate-pulse" : "bg-muted text-foreground hover:bg-muted/80"}`,
-							children: [isMicOn ? /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(Mic, { className: "h-4 w-4" }, void 0, false, {
+							className: `sketch px-2.5 py-1 text-xs font-bold font-mono flex items-center gap-1 transition-all ${isMicOn ? "bg-emerald-600 text-white animate-pulse" : "bg-secondary text-foreground hover:bg-secondary/80"}`,
+							title: isMicOn ? "Mute Microphone" : "Turn on Microphone",
+							children: [isMicOn ? /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(Mic, { className: "h-3.5 w-3.5" }, void 0, false, {
 								fileName: _jsxFileName$2,
-								lineNumber: 561,
+								lineNumber: 431,
 								columnNumber: 26
-							}, this) : /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(MicOff, { className: "h-4 w-4 text-muted-foreground" }, void 0, false, {
+							}, this) : /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(MicOff, { className: "h-3.5 w-3.5 text-muted-foreground" }, void 0, false, {
 								fileName: _jsxFileName$2,
-								lineNumber: 561,
-								columnNumber: 56
-							}, this), /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("span", { children: isMicOn ? "Live Mic: ON 🟢" : "Turn On Mic 🎙️" }, void 0, false, {
+								lineNumber: 431,
+								columnNumber: 60
+							}, this), /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("span", { children: isMicOn ? "Mic ON" : "Mic" }, void 0, false, {
 								fileName: _jsxFileName$2,
-								lineNumber: 562,
+								lineNumber: 432,
 								columnNumber: 15
 							}, this)]
 						}, void 0, true, {
 							fileName: _jsxFileName$2,
-							lineNumber: 552,
+							lineNumber: 421,
 							columnNumber: 13
-						}, this), isMicOn && isSpeakingLocally && /* @__PURE__ */ (void 0)("span", {
-							className: "sketch bg-emerald-100 text-emerald-800 text-[10px] font-mono px-2 py-0.5 font-bold animate-pulse",
-							children: "Speaking... 🔊"
-						}, void 0, false, {
-							fileName: _jsxFileName$2,
-							lineNumber: 566,
-							columnNumber: 15
-						}, this)]
-					}, void 0, true, {
-						fileName: _jsxFileName$2,
-						lineNumber: 551,
-						columnNumber: 11
-					}, this), /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", {
-						className: "flex items-center gap-1.5 overflow-x-auto py-1",
-						children: [/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("span", {
-							className: "text-[11px] font-bold text-muted-foreground mr-1 hidden sm:inline",
-							children: "React:"
-						}, void 0, false, {
-							fileName: _jsxFileName$2,
-							lineNumber: 574,
-							columnNumber: 13
-						}, this), [
-							{
-								emoji: "🚨",
-								label: "Sus"
-							},
-							{
-								emoji: "🧢",
-								label: "Cap"
-							},
-							{
-								emoji: "😂",
-								label: "Lol"
-							},
-							{
-								emoji: "🤝",
-								label: "Agree"
-							},
-							{
-								emoji: "👀",
-								label: "Hmm"
-							}
-						].map((btn) => /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("button", {
+						}, this),
+						isMyFloor && /* @__PURE__ */ (void 0)("button", {
 							type: "button",
-							onClick: () => sendReaction(btn.emoji),
-							className: "sketch bg-secondary/70 hover:bg-secondary px-2 py-1 rounded text-xs font-bold flex items-center gap-1 transition-transform active:scale-90",
-							children: [/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("span", { children: btn.emoji }, void 0, false, {
+							onClick: handlePassFloor,
+							className: "sketch bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1 font-bold text-xs sm:text-sm flex items-center gap-1 shadow-xs transition-transform active:scale-95 animate-pulse",
+							children: [/* @__PURE__ */ (void 0)(CircleCheck, { className: "h-4 w-4" }, void 0, false, {
 								fileName: _jsxFileName$2,
-								lineNumber: 588,
+								lineNumber: 442,
 								columnNumber: 17
-							}, this), /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("span", {
-								className: "text-[10px] font-mono",
-								children: btn.label
-							}, void 0, false, {
+							}, this), /* @__PURE__ */ (void 0)("span", { children: "Done ➔" }, void 0, false, {
 								fileName: _jsxFileName$2,
-								lineNumber: 589,
+								lineNumber: 443,
 								columnNumber: 17
 							}, this)]
-						}, btn.emoji, true, {
+						}, void 0, true, {
 							fileName: _jsxFileName$2,
-							lineNumber: 582,
+							lineNumber: 437,
 							columnNumber: 15
-						}, this))]
-					}, void 0, true, {
-						fileName: _jsxFileName$2,
-						lineNumber: 573,
-						columnNumber: 11
-					}, this)]
-				}, void 0, true, {
-					fileName: _jsxFileName$2,
-					lineNumber: 549,
-					columnNumber: 9
-				}, this),
-				/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", {
-					className: "mt-3 flex items-center gap-2 overflow-x-auto pb-1 text-xs",
-					children: players.map((p) => {
-						const isSpeaker = speakerFloor?.currentSpeakerSocketId === p.socketId;
-						const hasHand = speakerFloor?.handsRaised?.includes(p.socketId);
-						const isTalking = activeSpeakers.has(p.socketId) || p.socketId === myPlayer?.socketId && isSpeakingLocally;
-						return /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", {
-							className: `sketch shrink-0 px-2.5 py-1 rounded-sm flex items-center gap-1.5 transition-all border ${isSpeaker ? "bg-amber-100 border-amber-500 font-bold text-amber-950 ring-2 ring-amber-300" : isTalking ? "bg-emerald-100 border-emerald-500 font-bold text-emerald-950 animate-pulse" : "bg-white/80 border-foreground/20 text-foreground"}`,
+						}, this),
+						!isMyFloor && !speakerFloor?.isOpenFloor && /* @__PURE__ */ (void 0)("button", {
+							type: "button",
+							onClick: handleToggleRaiseHand,
+							className: `sketch px-2.5 py-1 text-xs font-bold flex items-center gap-1 transition-all ${isHandRaised ? "bg-amber-400 text-amber-950 border-amber-600 ring-1 ring-amber-300" : "bg-secondary text-foreground hover:bg-secondary/80"}`,
+							title: isHandRaised ? "Lower Hand" : "Raise Hand to Speak",
+							children: [/* @__PURE__ */ (void 0)(Hand, { className: `h-3.5 w-3.5 ${isHandRaised ? "animate-bounce" : ""}` }, void 0, false, {
+								fileName: _jsxFileName$2,
+								lineNumber: 459,
+								columnNumber: 17
+							}, this), /* @__PURE__ */ (void 0)("span", { children: isHandRaised ? "✋ Hand" : "Hand" }, void 0, false, {
+								fileName: _jsxFileName$2,
+								lineNumber: 460,
+								columnNumber: 17
+							}, this)]
+						}, void 0, true, {
+							fileName: _jsxFileName$2,
+							lineNumber: 449,
+							columnNumber: 15
+						}, this),
+						/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("button", {
+							type: "button",
+							onClick: onVoteSkip,
+							disabled: hasVotedSkip,
+							className: `sketch px-2.5 py-1 text-xs font-bold flex items-center gap-1 transition-all ${hasVotedSkip ? "bg-secondary text-foreground/50 border-foreground/30 cursor-not-allowed" : "bg-accent/80 hover:bg-accent text-accent-foreground"}`,
+							title: "Skip debate and start secret voting",
 							children: [
-								isSpeaker ? /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("span", {
-									className: "text-amber-600 font-bold",
-									children: "🎙️"
-								}, void 0, false, {
+								/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(FastForward, { className: "h-3 w-3" }, void 0, false, {
 									fileName: _jsxFileName$2,
-									lineNumber: 614,
-									columnNumber: 19
-								}, this) : isTalking ? /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("span", {
-									className: "text-emerald-600 font-bold",
-									children: "🔊"
-								}, void 0, false, {
+									lineNumber: 476,
+									columnNumber: 15
+								}, this),
+								/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("span", { children: hasVotedSkip ? "Voted" : "Skip" }, void 0, false, {
 									fileName: _jsxFileName$2,
-									lineNumber: 616,
-									columnNumber: 19
-								}, this) : /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("span", {
-									className: "text-muted-foreground",
-									children: "👤"
-								}, void 0, false, {
-									fileName: _jsxFileName$2,
-									lineNumber: 618,
-									columnNumber: 19
+									lineNumber: 477,
+									columnNumber: 15
 								}, this),
 								/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("span", {
-									className: "truncate max-w-[90px]",
-									children: p.displayName
-								}, void 0, false, {
+									className: "bg-black/15 text-[9px] px-1 py-0.2 rounded font-mono font-bold",
+									children: [
+										skipDiscussionVotesCount,
+										"/",
+										skipDiscussionRequired
+									]
+								}, void 0, true, {
 									fileName: _jsxFileName$2,
-									lineNumber: 620,
-									columnNumber: 17
-								}, this),
-								hasHand && /* @__PURE__ */ (void 0)("span", {
-									className: "text-xs animate-bounce",
-									children: "✋"
-								}, void 0, false, {
-									fileName: _jsxFileName$2,
-									lineNumber: 621,
-									columnNumber: 29
+									lineNumber: 478,
+									columnNumber: 15
 								}, this)
 							]
-						}, p.socketId, true, {
+						}, void 0, true, {
 							fileName: _jsxFileName$2,
-							lineNumber: 603,
-							columnNumber: 15
-						}, this);
-					})
-				}, void 0, false, {
+							lineNumber: 465,
+							columnNumber: 13
+						}, this)
+					]
+				}, void 0, true, {
 					fileName: _jsxFileName$2,
-					lineNumber: 596,
-					columnNumber: 9
-				}, this)
-			]
+					lineNumber: 419,
+					columnNumber: 11
+				}, this)]
+			}, void 0, true, {
+				fileName: _jsxFileName$2,
+				lineNumber: 350,
+				columnNumber: 9
+			}, this)]
 		}, void 0, true, {
 			fileName: _jsxFileName$2,
-			lineNumber: 385,
+			lineNumber: 339,
 			columnNumber: 7
 		}, this)
 	}, void 0, false, {
 		fileName: _jsxFileName$2,
-		lineNumber: 383,
+		lineNumber: 337,
 		columnNumber: 5
 	}, this);
 }
