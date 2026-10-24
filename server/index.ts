@@ -96,6 +96,21 @@ app.get("/sitemap.xml", (req: Request, res: Response) => {
   res.send(xml);
 });
 
+// Sitemap XSL Stylesheet Handler (Enables clean browser styling without XML warning)
+app.get("/sitemap.xsl", (req: Request, res: Response) => {
+  const publicXsl = path.resolve(publicDir, "sitemap.xsl");
+  const fallbackXsl = path.resolve(projectRoot, "public/sitemap.xsl");
+  const xslPath = fs.existsSync(publicXsl) ? publicXsl : fallbackXsl;
+
+  if (fs.existsSync(xslPath)) {
+    const text = fs.readFileSync(xslPath, "utf-8");
+    res.setHeader("Content-Type", "text/xsl; charset=utf-8");
+    res.setHeader("Cache-Control", "public, max-age=86400");
+    return res.send(text);
+  }
+  res.status(404).send("Not found");
+});
+
 // Robots.txt Handler
 app.get("/robots.txt", (req: Request, res: Response) => {
   const publicRobots = path.resolve(publicDir, "robots.txt");
@@ -142,6 +157,7 @@ if (fs.existsSync(ssrIndexPath)) {
           req.path.startsWith("/api") ||
           req.path.startsWith("/health") ||
           req.path === "/sitemap.xml" ||
+          req.path === "/sitemap.xsl" ||
           req.path === "/robots.txt" ||
           req.path === "/llms.txt" ||
           req.path.startsWith("/socket.io")
