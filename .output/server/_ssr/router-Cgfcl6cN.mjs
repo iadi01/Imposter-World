@@ -1,9 +1,9 @@
 import { t as QueryClientProvider } from "../_libs/react+tanstack__react-query.mjs";
 import { S as useRouter, _ as lazyRouteComponent, b as Link, f as Scripts, g as Outlet, h as createRouter, p as HeadContent, v as createFileRoute, y as createRootRouteWithContext } from "../_libs/@tanstack/react-router+[...].mjs";
 import { t as require_jsx_dev_runtime } from "../_libs/react.mjs";
-import { t as ARTICLES } from "./articles-data-Ys_9O1dn.mjs";
+import { t as ARTICLES } from "./articles-data-BkRX9pQa.mjs";
 import { t as QueryClient } from "../_libs/tanstack__query-core.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/router-D0F7o4av.js
+//#region node_modules/.nitro/vite/services/ssr/assets/router-Cgfcl6cN.js
 var import_jsx_dev_runtime = require_jsx_dev_runtime();
 var styles_default = "/assets/styles-cXzavuhb.css";
 var _jsxFileName = "/Users/aadi/Downloads/f8225c15-5378-482e-bfe4-be001f84d384/src/routes/__root.tsx";
@@ -237,23 +237,17 @@ gtag('config', 'G-DPETXW891Q');` },
 							"inLanguage": "en-US"
 						},
 						{
-							"@type": "SoftwareApplication",
+							"@type": "WebApplication",
 							"@id": "https://imposter-world.onrender.com/#app",
 							"name": "Imposter World",
 							"url": "https://imposter-world.onrender.com/",
 							"applicationCategory": "GameApplication",
-							"operatingSystem": "Web, iOS Safari, Android Chrome, Windows, macOS",
+							"operatingSystem": "Any (web browser)",
+							"description": "A multiplayer imposter word game to play online with friends.",
 							"offers": {
 								"@type": "Offer",
 								"price": "0",
 								"priceCurrency": "USD"
-							},
-							"aggregateRating": {
-								"@type": "AggregateRating",
-								"ratingValue": "4.9",
-								"ratingCount": "3842",
-								"bestRating": "5",
-								"worstRating": "1"
 							}
 						},
 						{
@@ -341,7 +335,7 @@ function RootShell({ children }) {
 				content: "lCqNkkCEBBU4MDc48vu3_ZwiS8Ml0cFtmn8JyQ6iDIA"
 			}, void 0, false, {
 				fileName: _jsxFileName,
-				lineNumber: 235,
+				lineNumber: 229,
 				columnNumber: 9
 			}, this),
 			/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("script", {
@@ -349,7 +343,7 @@ function RootShell({ children }) {
 				src: "https://www.googletagmanager.com/gtag/js?id=G-DPETXW891Q"
 			}, void 0, false, {
 				fileName: _jsxFileName,
-				lineNumber: 237,
+				lineNumber: 231,
 				columnNumber: 9
 			}, this),
 			/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("script", { dangerouslySetInnerHTML: { __html: `window.dataLayer = window.dataLayer || [];
@@ -357,30 +351,30 @@ function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
 gtag('config', 'G-DPETXW891Q');` } }, void 0, false, {
 				fileName: _jsxFileName,
-				lineNumber: 238,
+				lineNumber: 232,
 				columnNumber: 9
 			}, this),
 			/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(HeadContent, {}, void 0, false, {
 				fileName: _jsxFileName,
-				lineNumber: 246,
+				lineNumber: 240,
 				columnNumber: 9
 			}, this)
 		] }, void 0, true, {
 			fileName: _jsxFileName,
-			lineNumber: 234,
+			lineNumber: 228,
 			columnNumber: 7
 		}, this), /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("body", { children: [children, /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(Scripts, {}, void 0, false, {
 			fileName: _jsxFileName,
-			lineNumber: 250,
+			lineNumber: 244,
 			columnNumber: 9
 		}, this)] }, void 0, true, {
 			fileName: _jsxFileName,
-			lineNumber: 248,
+			lineNumber: 242,
 			columnNumber: 7
 		}, this)]
 	}, void 0, true, {
 		fileName: _jsxFileName,
-		lineNumber: 233,
+		lineNumber: 227,
 		columnNumber: 5
 	}, this);
 }
@@ -390,12 +384,12 @@ function RootComponent() {
 		client: queryClient,
 		children: /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)(Outlet, {}, void 0, false, {
 			fileName: _jsxFileName,
-			lineNumber: 262,
+			lineNumber: 256,
 			columnNumber: 7
 		}, this)
 	}, void 0, false, {
 		fileName: _jsxFileName,
-		lineNumber: 260,
+		lineNumber: 254,
 		columnNumber: 5
 	}, this);
 }
@@ -421,7 +415,7 @@ var Route$13 = createFileRoute("/admin")({
 	}] }),
 	component: lazyRouteComponent($$splitComponentImporter$13, "component")
 });
-var $$splitComponentImporter$12 = () => import("./articles-DPtkG7yn.mjs");
+var $$splitComponentImporter$12 = () => import("./articles-GptQ7MTU.mjs");
 var SITE_URL = "https://imposter-world.onrender.com";
 var Route$12 = createFileRoute("/articles")({
 	head: () => ({

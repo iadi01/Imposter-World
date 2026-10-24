@@ -1,13 +1,11 @@
 User-agent: *
 Allow: /
+Disallow: /room/
 Disallow: /api/
-Disallow: /admin
+Disallow: /admin/
 
-# Allow Googlebot Images to index all illustrations and game artwork
+# Allow Googlebot Images to index artwork
 User-agent: Googlebot-Image
 Allow: /
-Allow: /*.png$
-Allow: /*.jpg$
-Allow: /*.svg$
 
 Sitemap: https://imposter-world.onrender.com/sitemap.xml

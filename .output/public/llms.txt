@@ -1,0 +1,18 @@
+# Imposter World
+
+> Imposter World is a free multiplayer imposter word game to play online with friends. Players get a secret word, give clues (text, drawing or voice), debate in chat and vote to find the imposter.
+
+## Main pages
+- [Home](https://imposter-world.onrender.com/): Create or join a room
+- [How to Play](https://imposter-world.onrender.com/how-to-play): Rules and steps
+- [Articles](https://imposter-world.onrender.com/articles): Strategy and guides
+
+## Modes
+- Play with Friends: private link rooms
+- Local Pass & Play: one phone
+- Instant Match
+- Tournament
+
+## Notes
+- Free browser-based party game, no download or install required.
+- Supports 3 to 14 players per room across mobile, tablet, and desktop.

@@ -70,6 +70,9 @@ app.get(["/health", "/api/health"], (_req: Request, res: Response) => {
   });
 });
 
+const projectRoot = path.resolve(import.meta.dirname, "..");
+const publicDir = path.resolve(projectRoot, ".output/public");
+
 // Dynamic Sitemap Generator (Always matches current requested host to eliminate Google Search Console errors)
 app.get("/sitemap.xml", (req: Request, res: Response) => {
   const publicSitemap = path.resolve(publicDir, "sitemap.xml");
@@ -93,9 +96,37 @@ app.get("/sitemap.xml", (req: Request, res: Response) => {
   res.send(xml);
 });
 
+// Robots.txt Handler
+app.get("/robots.txt", (req: Request, res: Response) => {
+  const publicRobots = path.resolve(publicDir, "robots.txt");
+  const fallbackRobots = path.resolve(projectRoot, "public/robots.txt");
+  const robotsPath = fs.existsSync(publicRobots) ? publicRobots : fallbackRobots;
+
+  if (fs.existsSync(robotsPath)) {
+    const text = fs.readFileSync(robotsPath, "utf-8");
+    res.setHeader("Content-Type", "text/plain; charset=utf-8");
+    res.setHeader("Cache-Control", "public, max-age=3600");
+    return res.send(text);
+  }
+  res.status(404).send("Not found");
+});
+
+// llms.txt Handler (AI crawlers overview)
+app.get("/llms.txt", (req: Request, res: Response) => {
+  const publicLlms = path.resolve(publicDir, "llms.txt");
+  const fallbackLlms = path.resolve(projectRoot, "public/llms.txt");
+  const llmsPath = fs.existsSync(publicLlms) ? publicLlms : fallbackLlms;
+
+  if (fs.existsSync(llmsPath)) {
+    const text = fs.readFileSync(llmsPath, "utf-8");
+    res.setHeader("Content-Type", "text/plain; charset=utf-8");
+    res.setHeader("Cache-Control", "public, max-age=3600");
+    return res.send(text);
+  }
+  res.status(404).send("Not found");
+});
+
 // 8. Serve Client Static Assets (from .output/public)
-const projectRoot = path.resolve(import.meta.dirname, "..");
-const publicDir = path.resolve(projectRoot, ".output/public");
 if (fs.existsSync(publicDir)) {
   app.use(express.static(publicDir, { maxAge: "1d", index: false }));
 }
@@ -107,7 +138,14 @@ if (fs.existsSync(ssrIndexPath)) {
     const { middleware } = await import(ssrIndexPath);
     if (middleware) {
       app.use(async (req, res, next) => {
-        if (req.path.startsWith("/api") || req.path.startsWith("/health") || req.path === "/sitemap.xml" || req.path.startsWith("/socket.io")) {
+        if (
+          req.path.startsWith("/api") ||
+          req.path.startsWith("/health") ||
+          req.path === "/sitemap.xml" ||
+          req.path === "/robots.txt" ||
+          req.path === "/llms.txt" ||
+          req.path.startsWith("/socket.io")
+        ) {
           return next();
         }
         try {
