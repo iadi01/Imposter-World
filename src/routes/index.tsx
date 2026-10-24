@@ -97,17 +97,23 @@ function getInitialUser(): UserProfile | null {
 }
 
 function getInstantGuestId(): string {
-  if (typeof window === "undefined") return "";
+  if (typeof window === "undefined") return "guest-default";
   try {
-    return localStorage.getItem("imposter_guest_id") || "";
+    let gid = localStorage.getItem("imposter_guest_id");
+    if (!gid || !gid.trim()) {
+      gid = `guest_${Math.random().toString(36).substring(2, 9)}_${Date.now().toString(36)}`;
+      localStorage.setItem("imposter_guest_id", gid);
+    }
+    return gid;
   } catch {}
-  return "";
+  return "guest-default";
 }
 
 function getInstantGuestName(): string {
   if (typeof window === "undefined") return "Detective";
   try {
-    return localStorage.getItem("imposter_guest_name") || "Detective";
+    const saved = localStorage.getItem("imposter_guest_name");
+    if (saved && saved.trim()) return saved.trim();
   } catch {}
   return "Detective";
 }
@@ -700,9 +706,11 @@ function Index() {
 
   const handleLeaveRoom = () => {
     sound.playPop();
-    socketRef.current.emit("room:leave");
+    socketRef.current.emit("room:leave", {}, () => {});
     setRoomState(null);
     setSecretInfo(null);
+    setJoiningCode(null);
+    autoJoinAttempted.current = false;
     pendingInviteCode.current = null;
     if (typeof window !== "undefined") {
       const url = new URL(window.location.href);

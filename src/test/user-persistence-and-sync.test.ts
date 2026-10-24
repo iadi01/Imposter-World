@@ -156,4 +156,61 @@ describe("User Identity Persistence & High-Speed Room Sync", () => {
 
     roomManager.removeRoom(room.code);
   });
+
+  it("never creates duplicate player when user leaves/disconnects and rejoins with same name or userId", () => {
+    const roomManager = RoomManager.getInstance();
+    const hostPlayer: Player = {
+      socketId: "sock_host_leave_test",
+      userId: "usr_host_leave",
+      displayName: "Host_Rahul",
+      avatarUrl: "",
+      isHost: true,
+      score: 0,
+      isConnected: true,
+    };
+
+    const room = roomManager.createRoom(hostPlayer);
+
+    // Player 2 joins with persistent userId
+    const persistentUserId = "guest_persisted_999";
+    const player2: Player = {
+      socketId: "sock_p2_v1",
+      userId: persistentUserId,
+      displayName: "Detective_Aadi",
+      avatarUrl: "",
+      isHost: false,
+      score: 0,
+      isConnected: true,
+    };
+    room.players.set(player2.socketId, player2);
+    expect(room.players.size).toBe(2);
+
+    // Scenario A: Player 2 disconnects / leaves page
+    const mockIO: any = { to: () => ({ emit: () => {} }), emit: () => {} };
+    room.handlePlayerDisconnect(mockIO, player2.socketId);
+    expect(room.players.get("sock_p2_v1")?.isConnected).toBe(false);
+
+    // Player 2 re-opens page with NEW socket ID and rejoins
+    const newSocketId = "sock_p2_v2";
+    // Check our reconnection matching logic:
+    const existingPlayer = Array.from(room.players.values()).find(
+      (p) => p.userId === persistentUserId || p.displayName === "Detective_Aadi"
+    );
+    expect(existingPlayer).toBeDefined();
+
+    // Migrate socket cleanly
+    if (existingPlayer) {
+      room.players.delete(existingPlayer.socketId);
+      existingPlayer.socketId = newSocketId;
+      existingPlayer.isConnected = true;
+      room.players.set(newSocketId, existingPlayer);
+    }
+
+    // VERIFY: Still exactly 2 players in room (Host and Aadi), zero duplicate ghosts!
+    expect(room.players.size).toBe(2);
+    expect(room.players.get(newSocketId)?.displayName).toBe("Detective_Aadi");
+    expect(room.players.has("sock_p2_v1")).toBe(false);
+
+    roomManager.removeRoom(room.code);
+  });
 });

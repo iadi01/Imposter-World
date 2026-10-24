@@ -135,31 +135,42 @@ export function setupSocketServer(httpServer: HttpServer) {
             return;
           }
 
-          // Anti-duplicate / Multi-tab self join check:
-          // Check if a player with this userId is already in the room
-          const existingPlayer = Array.from(room.players.values()).find(
+          // 1. Check if a player with this userId or socketId is already in the room:
+          let existingPlayer = Array.from(room.players.values()).find(
             (p) => (user.id && p.userId === user.id) || p.socketId === socket.id
           );
 
-          if (existingPlayer) {
-            // If already connected on another active socket, block duplicate self-joining!
-            if (existingPlayer.isConnected && existingPlayer.socketId !== socket.id) {
-              if (callback) {
-                callback({
-                  success: false,
-                  error: "You are already active in this room in another tab! Duplicate joins from the same account are blocked.",
-                });
-              }
-              return;
+          // 2. If not found by userId, check if there is a disconnected player with the exact same non-default name:
+          if (!existingPlayer && user.displayName && user.displayName.trim() && user.displayName.trim().toLowerCase() !== "detective") {
+            const matchingDisconnected = Array.from(room.players.values()).find(
+              (p) => !p.isConnected && p.displayName.toLowerCase() === user.displayName.trim().toLowerCase()
+            );
+            if (matchingDisconnected) {
+              existingPlayer = matchingDisconnected;
             }
+          }
 
-            // Reconnecting disconnected player cleanly within 30-second grace window!
+          if (existingPlayer) {
+            // Reconnecting player cleanly within grace window
             room.cancelDisconnectTimeout(existingPlayer.userId);
             delete existingPlayer.disconnectDeadline;
             const oldSocketId = existingPlayer.socketId;
-            room.players.delete(oldSocketId);
+
+            // If the socket ID changed (e.g. page reload or reconnect), remove old socket entry:
+            if (oldSocketId !== socket.id) {
+              const oldSock = io.sockets.sockets.get(oldSocketId);
+              if (oldSock) {
+                oldSock.leave(room.code);
+              }
+              room.players.delete(oldSocketId);
+            }
+
             existingPlayer.socketId = socket.id;
             existingPlayer.isConnected = true;
+            if (user.id) existingPlayer.userId = user.id;
+            if (user.displayName && user.displayName.trim() && user.displayName.trim().toLowerCase() !== "detective") {
+              existingPlayer.displayName = sanitizeText(user.displayName.trim(), 25);
+            }
             room.players.set(socket.id, existingPlayer);
 
             // Re-sync imposter assignment and submitted answer keys if active match
@@ -197,7 +208,7 @@ export function setupSocketServer(httpServer: HttpServer) {
             room.addChatMessage(io, {
               playerId: "system",
               playerName: "System",
-              content: `⚡ ${existingPlayer.displayName} rejoined the classroom within the grace window!`,
+              content: `⚡ ${existingPlayer.displayName} rejoined the classroom!`,
               isSystem: true,
             });
 
@@ -216,7 +227,21 @@ export function setupSocketServer(httpServer: HttpServer) {
           }
 
           let joinName = (user.displayName || "").trim();
-          const existingNames = Array.from(room.players.values()).map((p) => p.displayName);
+
+          // Before assigning a name, if there is a disconnected ghost with the exact same name, purge it:
+          if (joinName && joinName.toLowerCase() !== "detective") {
+            const staleGhost = Array.from(room.players.values()).find(
+              (p) => !p.isConnected && p.displayName.toLowerCase() === joinName.toLowerCase()
+            );
+            if (staleGhost) {
+              room.removePlayer(io, staleGhost.socketId);
+            }
+          }
+
+          const existingNames = Array.from(room.players.values())
+            .filter((p) => p.socketId !== socket.id)
+            .map((p) => p.displayName);
+
           if (!joinName || joinName.toLowerCase() === "detective" || existingNames.includes(joinName)) {
             joinName = generateUniqueDetectiveName(existingNames);
           } else {
@@ -553,8 +578,9 @@ export function setupSocketServer(httpServer: HttpServer) {
     });
 
     // 9. Leave Room (explicit intent by player clicking Leave)
-    socket.on("room:leave", () => {
+    socket.on("room:leave", (_, callback) => {
       handleExplicitLeave();
+      if (callback) callback({ success: true });
     });
 
     // 10. Disconnect (accidental drop, page refresh, mobile screen lock)
@@ -568,9 +594,18 @@ export function setupSocketServer(httpServer: HttpServer) {
       if (!room) return;
 
       socket.leave(room.code);
+      const targetUserId = currentPlayer?.userId;
       const { remainingCount } = room.removePlayer(io, socket.id);
 
-      if (remainingCount === 0) {
+      // Clean up any other slot registered under the same user ID:
+      if (targetUserId) {
+        const duplicate = Array.from(room.players.values()).find((p) => p.userId === targetUserId);
+        if (duplicate) {
+          room.removePlayer(io, duplicate.socketId);
+        }
+      }
+
+      if (remainingCount === 0 || room.players.size === 0) {
         roomManager.removeRoom(room.code);
       } else {
         room.broadcastState(io);

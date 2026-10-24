@@ -6,7 +6,7 @@ import { t as require_jsx_dev_runtime } from "../_libs/react.mjs";
 import { t as toast } from "../_libs/sonner.mjs";
 import { $ as CircleCheck, A as Music, B as Globe, C as Plus, D as Pause, F as Lock, G as EyeOff, H as Flag, I as LoaderCircle, M as MicOff, N as MapPin, O as Paintbrush, P as LogOut, R as Heart, T as Pin, U as FastForward, V as Flame, W as Eye, X as Compass, Y as Copy, Z as Clock, _ as Send, a as UserCheck, at as AtSign, b as RefreshCw, d as Square, et as CircleAlert, h as Settings, i as Users, j as Mic, k as PaintBucket, l as Trash2, n as VolumeX, nt as Check, o as Undo2, ot as ArrowLeft, q as Eraser, r as Volume2, rt as Building2, s as Trophy, t as X, v as Search, w as Play, y as RotateCcw, z as Hand } from "../_libs/lucide-react.mjs";
 import { t as lookup } from "../_libs/socket.io-client+[...].mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/routes-meT7ZuZe.js
+//#region node_modules/.nitro/vite/services/ssr/assets/routes-hZ6ym_7p.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_dev_runtime = require_jsx_dev_runtime();
 var _jsxFileName$10 = "/Users/aadi/Downloads/f8225c15-5378-482e-bfe4-be001f84d384/src/components/DrawPad.tsx";
@@ -6500,16 +6500,22 @@ function getInitialUser() {
 	return null;
 }
 function getInstantGuestId() {
-	if (typeof window === "undefined") return "";
+	if (typeof window === "undefined") return "guest-default";
 	try {
-		return localStorage.getItem("imposter_guest_id") || "";
+		let gid = localStorage.getItem("imposter_guest_id");
+		if (!gid || !gid.trim()) {
+			gid = `guest_${Math.random().toString(36).substring(2, 9)}_${Date.now().toString(36)}`;
+			localStorage.setItem("imposter_guest_id", gid);
+		}
+		return gid;
 	} catch {}
-	return "";
+	return "guest-default";
 }
 function getInstantGuestName() {
 	if (typeof window === "undefined") return "Detective";
 	try {
-		return localStorage.getItem("imposter_guest_name") || "Detective";
+		const saved = localStorage.getItem("imposter_guest_name");
+		if (saved && saved.trim()) return saved.trim();
 	} catch {}
 	return "Detective";
 }
@@ -6953,9 +6959,11 @@ function Index() {
 	};
 	const handleLeaveRoom = () => {
 		sound.playPop();
-		socketRef.current.emit("room:leave");
+		socketRef.current.emit("room:leave", {}, () => {});
 		setRoomState(null);
 		setSecretInfo(null);
+		setJoiningCode(null);
+		autoJoinAttempted.current = false;
 		pendingInviteCode.current = null;
 		if (typeof window !== "undefined") {
 			const url = new URL(window.location.href);
@@ -7078,7 +7086,7 @@ function Index() {
 				}
 			}, void 0, false, {
 				fileName: _jsxFileName,
-				lineNumber: 718,
+				lineNumber: 726,
 				columnNumber: 37
 			}, this),
 			/* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("header", {
@@ -7091,7 +7099,7 @@ function Index() {
 						className: "h-9 w-9 sm:h-12 sm:w-12 object-contain hover:scale-105 transition-transform drop-shadow-xs"
 					}, void 0, false, {
 						fileName: _jsxFileName,
-						lineNumber: 730,
+						lineNumber: 738,
 						columnNumber: 11
 					}, this), /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("button", {
 						onClick: () => {
@@ -7108,17 +7116,17 @@ function Index() {
 							children: "World"
 						}, void 0, false, {
 							fileName: _jsxFileName,
-							lineNumber: 739,
+							lineNumber: 747,
 							columnNumber: 22
 						}, this)]
 					}, void 0, true, {
 						fileName: _jsxFileName,
-						lineNumber: 731,
+						lineNumber: 739,
 						columnNumber: 11
 					}, this)]
 				}, void 0, true, {
 					fileName: _jsxFileName,
-					lineNumber: 729,
+					lineNumber: 737,
 					columnNumber: 9
 				}, this), /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", {
 					className: "flex items-center flex-nowrap gap-1 sm:gap-2 ml-auto shrink-0",
@@ -7134,22 +7142,22 @@ function Index() {
 									className: "hover:text-accent ml-1",
 									children: copiedLink ? /* @__PURE__ */ (void 0)(Check, { className: "h-3.5 w-3.5" }, void 0, false, {
 										fileName: _jsxFileName,
-										lineNumber: 749,
+										lineNumber: 757,
 										columnNumber: 31
 									}, this) : /* @__PURE__ */ (void 0)(Copy, { className: "h-3.5 w-3.5" }, void 0, false, {
 										fileName: _jsxFileName,
-										lineNumber: 749,
+										lineNumber: 757,
 										columnNumber: 67
 									}, this)
 								}, void 0, false, {
 									fileName: _jsxFileName,
-									lineNumber: 748,
+									lineNumber: 756,
 									columnNumber: 15
 								}, this)
 							]
 						}, void 0, true, {
 							fileName: _jsxFileName,
-							lineNumber: 746,
+							lineNumber: 754,
 							columnNumber: 25
 						}, this),
 						isLocalMode && /* @__PURE__ */ (void 0)("span", {
@@ -7157,7 +7165,7 @@ function Index() {
 							children: "📱 Pass & Play"
 						}, void 0, false, {
 							fileName: _jsxFileName,
-							lineNumber: 754,
+							lineNumber: 762,
 							columnNumber: 27
 						}, this),
 						!roomState && !isLocalMode && /* @__PURE__ */ (void 0)(import_jsx_dev_runtime.Fragment, { children: [
@@ -7171,19 +7179,19 @@ function Index() {
 								className: "sketch flex items-center justify-center gap-1 bg-accent text-accent-foreground px-2 sm:px-3 py-1 text-xs sm:text-sm md:text-base font-bold hover:brightness-110 shrink-0",
 								children: [/* @__PURE__ */ (void 0)(Globe, { className: "h-3.5 w-3.5 sm:h-4 sm:w-4" }, void 0, false, {
 									fileName: _jsxFileName,
-									lineNumber: 766,
+									lineNumber: 774,
 									columnNumber: 17
 								}, this), /* @__PURE__ */ (void 0)("span", {
 									className: "hidden sm:inline",
 									children: "Rooms"
 								}, void 0, false, {
 									fileName: _jsxFileName,
-									lineNumber: 767,
+									lineNumber: 775,
 									columnNumber: 17
 								}, this)]
 							}, void 0, true, {
 								fileName: _jsxFileName,
-								lineNumber: 761,
+								lineNumber: 769,
 								columnNumber: 15
 							}, this),
 							/* @__PURE__ */ (void 0)("button", {
@@ -7195,19 +7203,19 @@ function Index() {
 								className: "sketch flex items-center justify-center gap-1 bg-secondary px-2 sm:px-3 py-1 text-xs sm:text-sm md:text-base font-bold hover:bg-secondary/80 shrink-0",
 								children: [/* @__PURE__ */ (void 0)(Pin, { className: "h-3.5 w-3.5 sm:h-4 sm:w-4 text-accent" }, void 0, false, {
 									fileName: _jsxFileName,
-									lineNumber: 775,
+									lineNumber: 783,
 									columnNumber: 17
 								}, this), /* @__PURE__ */ (void 0)("span", {
 									className: "hidden sm:inline",
 									children: "Notice"
 								}, void 0, false, {
 									fileName: _jsxFileName,
-									lineNumber: 776,
+									lineNumber: 784,
 									columnNumber: 17
 								}, this)]
 							}, void 0, true, {
 								fileName: _jsxFileName,
-								lineNumber: 771,
+								lineNumber: 779,
 								columnNumber: 15
 							}, this),
 							/* @__PURE__ */ (void 0)("button", {
@@ -7219,19 +7227,19 @@ function Index() {
 								className: "sketch flex items-center justify-center gap-1 bg-secondary px-2 sm:px-3 py-1 text-xs sm:text-sm md:text-base font-bold hover:bg-secondary/80 shrink-0",
 								children: [/* @__PURE__ */ (void 0)(Trophy, { className: "h-3.5 w-3.5 sm:h-4 sm:w-4 text-accent" }, void 0, false, {
 									fileName: _jsxFileName,
-									lineNumber: 784,
+									lineNumber: 792,
 									columnNumber: 17
 								}, this), /* @__PURE__ */ (void 0)("span", {
 									className: "hidden sm:inline",
 									children: "Rankings"
 								}, void 0, false, {
 									fileName: _jsxFileName,
-									lineNumber: 785,
+									lineNumber: 793,
 									columnNumber: 17
 								}, this)]
 							}, void 0, true, {
 								fileName: _jsxFileName,
-								lineNumber: 780,
+								lineNumber: 788,
 								columnNumber: 15
 							}, this),
 							/* @__PURE__ */ (void 0)("button", {
@@ -7248,28 +7256,28 @@ function Index() {
 									children: "👤"
 								}, void 0, false, {
 									fileName: _jsxFileName,
-									lineNumber: 793,
+									lineNumber: 801,
 									columnNumber: 17
 								}, this)
 							}, void 0, false, {
 								fileName: _jsxFileName,
-								lineNumber: 789,
+								lineNumber: 797,
 								columnNumber: 15
 							}, this)
 						] }, void 0, true, {
 							fileName: _jsxFileName,
-							lineNumber: 759,
+							lineNumber: 767,
 							columnNumber: 42
 						}, this)
 					]
 				}, void 0, true, {
 					fileName: _jsxFileName,
-					lineNumber: 744,
+					lineNumber: 752,
 					columnNumber: 9
 				}, this)]
 			}, void 0, true, {
 				fileName: _jsxFileName,
-				lineNumber: 727,
+				lineNumber: 735,
 				columnNumber: 7
 			}, this),
 			!roomState && !isLocalMode && /* @__PURE__ */ (void 0)("section", {
@@ -7277,7 +7285,7 @@ function Index() {
 				children: [
 					/* @__PURE__ */ (void 0)("div", { className: "tape absolute -top-4 left-1/2 h-7 w-36 -translate-x-1/2 rotate-[-2deg]" }, void 0, false, {
 						fileName: _jsxFileName,
-						lineNumber: 803,
+						lineNumber: 811,
 						columnNumber: 11
 					}, this),
 					/* @__PURE__ */ (void 0)("div", {
@@ -7289,12 +7297,12 @@ function Index() {
 									className: "inline-flex items-center gap-2 rounded-full bg-accent/15 px-3 py-1 text-accent font-bold text-xs sm:text-sm border border-accent/30",
 									children: /* @__PURE__ */ (void 0)("span", { children: "🕵️ Real-Time Multiplayer Party Game" }, void 0, false, {
 										fileName: _jsxFileName,
-										lineNumber: 809,
+										lineNumber: 817,
 										columnNumber: 17
 									}, this)
 								}, void 0, false, {
 									fileName: _jsxFileName,
-									lineNumber: 808,
+									lineNumber: 816,
 									columnNumber: 15
 								}, this),
 								/* @__PURE__ */ (void 0)("h1", {
@@ -7303,7 +7311,7 @@ function Index() {
 										"One Word. Different Secrets. ",
 										/* @__PURE__ */ (void 0)("br", {}, void 0, false, {
 											fileName: _jsxFileName,
-											lineNumber: 813,
+											lineNumber: 821,
 											columnNumber: 46
 										}, this),
 										/* @__PURE__ */ (void 0)("span", {
@@ -7311,13 +7319,13 @@ function Index() {
 											children: "Who's the Imposter?"
 										}, void 0, false, {
 											fileName: _jsxFileName,
-											lineNumber: 814,
+											lineNumber: 822,
 											columnNumber: 17
 										}, this)
 									]
 								}, void 0, true, {
 									fileName: _jsxFileName,
-									lineNumber: 812,
+									lineNumber: 820,
 									columnNumber: 15
 								}, this),
 								/* @__PURE__ */ (void 0)("p", {
@@ -7325,7 +7333,7 @@ function Index() {
 									children: "Everyone gets the same word — except the imposter! Share clues, debate suspects, and vote out the bluffer."
 								}, void 0, false, {
 									fileName: _jsxFileName,
-									lineNumber: 817,
+									lineNumber: 825,
 									columnNumber: 15
 								}, this),
 								/* @__PURE__ */ (void 0)("div", {
@@ -7338,16 +7346,16 @@ function Index() {
 												children: "1"
 											}, void 0, false, {
 												fileName: _jsxFileName,
-												lineNumber: 824,
+												lineNumber: 832,
 												columnNumber: 19
 											}, this), /* @__PURE__ */ (void 0)("span", { children: "Peek at your secret word 🔍" }, void 0, false, {
 												fileName: _jsxFileName,
-												lineNumber: 827,
+												lineNumber: 835,
 												columnNumber: 19
 											}, this)]
 										}, void 0, true, {
 											fileName: _jsxFileName,
-											lineNumber: 823,
+											lineNumber: 831,
 											columnNumber: 17
 										}, this),
 										/* @__PURE__ */ (void 0)("div", {
@@ -7357,16 +7365,16 @@ function Index() {
 												children: "2"
 											}, void 0, false, {
 												fileName: _jsxFileName,
-												lineNumber: 830,
+												lineNumber: 838,
 												columnNumber: 19
 											}, this), /* @__PURE__ */ (void 0)("span", { children: "Give 1 clue (Text, Draw, Voice) 🎨" }, void 0, false, {
 												fileName: _jsxFileName,
-												lineNumber: 833,
+												lineNumber: 841,
 												columnNumber: 19
 											}, this)]
 										}, void 0, true, {
 											fileName: _jsxFileName,
-											lineNumber: 829,
+											lineNumber: 837,
 											columnNumber: 17
 										}, this),
 										/* @__PURE__ */ (void 0)("div", {
@@ -7376,16 +7384,16 @@ function Index() {
 												children: "3"
 											}, void 0, false, {
 												fileName: _jsxFileName,
-												lineNumber: 836,
+												lineNumber: 844,
 												columnNumber: 19
 											}, this), /* @__PURE__ */ (void 0)("span", { children: "Debate suspects in chat 🗣️" }, void 0, false, {
 												fileName: _jsxFileName,
-												lineNumber: 839,
+												lineNumber: 847,
 												columnNumber: 19
 											}, this)]
 										}, void 0, true, {
 											fileName: _jsxFileName,
-											lineNumber: 835,
+											lineNumber: 843,
 											columnNumber: 17
 										}, this),
 										/* @__PURE__ */ (void 0)("div", {
@@ -7395,22 +7403,22 @@ function Index() {
 												children: "4"
 											}, void 0, false, {
 												fileName: _jsxFileName,
-												lineNumber: 842,
+												lineNumber: 850,
 												columnNumber: 19
 											}, this), /* @__PURE__ */ (void 0)("span", { children: "Vote & catch the imposter! 🗳️" }, void 0, false, {
 												fileName: _jsxFileName,
-												lineNumber: 845,
+												lineNumber: 853,
 												columnNumber: 19
 											}, this)]
 										}, void 0, true, {
 											fileName: _jsxFileName,
-											lineNumber: 841,
+											lineNumber: 849,
 											columnNumber: 17
 										}, this)
 									]
 								}, void 0, true, {
 									fileName: _jsxFileName,
-									lineNumber: 822,
+									lineNumber: 830,
 									columnNumber: 15
 								}, this),
 								/* @__PURE__ */ (void 0)("div", {
@@ -7421,7 +7429,7 @@ function Index() {
 										children: "Create Room (3-14 Players)"
 									}, void 0, false, {
 										fileName: _jsxFileName,
-										lineNumber: 851,
+										lineNumber: 859,
 										columnNumber: 17
 									}, this), /* @__PURE__ */ (void 0)("div", {
 										className: "flex items-center gap-2 w-full sm:w-auto max-w-full",
@@ -7434,7 +7442,7 @@ function Index() {
 											className: "sketch flex-1 min-w-0 sm:w-36 bg-white px-2.5 sm:px-3 py-2 text-center text-base sm:text-lg font-bold uppercase tracking-wider focus:outline-none"
 										}, void 0, false, {
 											fileName: _jsxFileName,
-											lineNumber: 857,
+											lineNumber: 865,
 											columnNumber: 19
 										}, this), /* @__PURE__ */ (void 0)(Btn, {
 											variant: "secondary",
@@ -7443,23 +7451,23 @@ function Index() {
 											children: "Join"
 										}, void 0, false, {
 											fileName: _jsxFileName,
-											lineNumber: 858,
+											lineNumber: 866,
 											columnNumber: 19
 										}, this)]
 									}, void 0, true, {
 										fileName: _jsxFileName,
-										lineNumber: 856,
+										lineNumber: 864,
 										columnNumber: 17
 									}, this)]
 								}, void 0, true, {
 									fileName: _jsxFileName,
-									lineNumber: 850,
+									lineNumber: 858,
 									columnNumber: 15
 								}, this)
 							]
 						}, void 0, true, {
 							fileName: _jsxFileName,
-							lineNumber: 807,
+							lineNumber: 815,
 							columnNumber: 13
 						}, this), /* @__PURE__ */ (void 0)("div", {
 							className: "md:col-span-4 flex flex-col items-center justify-center text-center space-y-3 pt-2 md:pt-0",
@@ -7471,33 +7479,33 @@ function Index() {
 									className: "max-h-48 sm:max-h-64 md:max-h-72 w-auto object-contain drop-shadow-xl transition-transform group-hover:scale-105"
 								}, void 0, false, {
 									fileName: _jsxFileName,
-									lineNumber: 868,
+									lineNumber: 876,
 									columnNumber: 17
 								}, this), /* @__PURE__ */ (void 0)("div", { className: "tape absolute -bottom-2 left-1/2 -translate-x-1/2 h-4 sm:h-5 w-20 sm:w-24 rotate-[2deg]" }, void 0, false, {
 									fileName: _jsxFileName,
-									lineNumber: 869,
+									lineNumber: 877,
 									columnNumber: 17
 								}, this)]
 							}, void 0, true, {
 								fileName: _jsxFileName,
-								lineNumber: 867,
+								lineNumber: 875,
 								columnNumber: 15
 							}, this), /* @__PURE__ */ (void 0)("div", {
 								className: "text-[11px] sm:text-xs text-muted-foreground font-hand",
 								children: "\"Classroom Detective on duty. 100% Anti-Cheat Server.\""
 							}, void 0, false, {
 								fileName: _jsxFileName,
-								lineNumber: 871,
+								lineNumber: 879,
 								columnNumber: 15
 							}, this)]
 						}, void 0, true, {
 							fileName: _jsxFileName,
-							lineNumber: 866,
+							lineNumber: 874,
 							columnNumber: 13
 						}, this)]
 					}, void 0, true, {
 						fileName: _jsxFileName,
-						lineNumber: 805,
+						lineNumber: 813,
 						columnNumber: 11
 					}, this),
 					/* @__PURE__ */ (void 0)("div", {
@@ -7509,7 +7517,7 @@ function Index() {
 								className: "pointer-events-none absolute -top-6 right-2 sm:right-6 h-14 w-14 sm:h-18 sm:w-18 object-contain opacity-85 rotate-[-8deg] drop-shadow-xs"
 							}, void 0, false, {
 								fileName: _jsxFileName,
-								lineNumber: 879,
+								lineNumber: 887,
 								columnNumber: 13
 							}, this),
 							/* @__PURE__ */ (void 0)("div", {
@@ -7518,24 +7526,24 @@ function Index() {
 									className: "text-2xl sm:text-3xl font-display text-foreground flex items-center gap-2",
 									children: [/* @__PURE__ */ (void 0)(Compass, { className: "h-6 w-6 text-accent" }, void 0, false, {
 										fileName: _jsxFileName,
-										lineNumber: 882,
+										lineNumber: 890,
 										columnNumber: 17
 									}, this), " Play Another Way"]
 								}, void 0, true, {
 									fileName: _jsxFileName,
-									lineNumber: 881,
+									lineNumber: 889,
 									columnNumber: 15
 								}, this), /* @__PURE__ */ (void 0)("span", {
 									className: "text-xs text-muted-foreground font-bold uppercase tracking-wider hidden sm:inline",
 									children: "CHOOSE YOUR MODE"
 								}, void 0, false, {
 									fileName: _jsxFileName,
-									lineNumber: 884,
+									lineNumber: 892,
 									columnNumber: 15
 								}, this)]
 							}, void 0, true, {
 								fileName: _jsxFileName,
-								lineNumber: 880,
+								lineNumber: 888,
 								columnNumber: 13
 							}, this),
 							/* @__PURE__ */ (void 0)("div", {
@@ -7555,19 +7563,19 @@ function Index() {
 													children: "FRIEND"
 												}, void 0, false, {
 													fileName: _jsxFileName,
-													lineNumber: 898,
+													lineNumber: 906,
 													columnNumber: 19
 												}, this), /* @__PURE__ */ (void 0)("span", {
 													className: "text-lg group-hover:translate-x-1 transition-transform",
 													children: "›"
 												}, void 0, false, {
 													fileName: _jsxFileName,
-													lineNumber: 901,
+													lineNumber: 909,
 													columnNumber: 19
 												}, this)]
 											}, void 0, true, {
 												fileName: _jsxFileName,
-												lineNumber: 897,
+												lineNumber: 905,
 												columnNumber: 17
 											}, this),
 											/* @__PURE__ */ (void 0)("div", {
@@ -7575,7 +7583,7 @@ function Index() {
 												children: "Play with Friends"
 											}, void 0, false, {
 												fileName: _jsxFileName,
-												lineNumber: 903,
+												lineNumber: 911,
 												columnNumber: 17
 											}, this),
 											/* @__PURE__ */ (void 0)("p", {
@@ -7583,13 +7591,13 @@ function Index() {
 												children: "2-14 players invite with a private secret link"
 											}, void 0, false, {
 												fileName: _jsxFileName,
-												lineNumber: 904,
+												lineNumber: 912,
 												columnNumber: 17
 											}, this)
 										]
 									}, void 0, true, {
 										fileName: _jsxFileName,
-										lineNumber: 891,
+										lineNumber: 899,
 										columnNumber: 15
 									}, this),
 									/* @__PURE__ */ (void 0)("button", {
@@ -7606,19 +7614,19 @@ function Index() {
 													children: "NEW"
 												}, void 0, false, {
 													fileName: _jsxFileName,
-													lineNumber: 915,
+													lineNumber: 923,
 													columnNumber: 19
 												}, this), /* @__PURE__ */ (void 0)("span", {
 													className: "text-lg group-hover:translate-x-1 transition-transform",
 													children: "›"
 												}, void 0, false, {
 													fileName: _jsxFileName,
-													lineNumber: 918,
+													lineNumber: 926,
 													columnNumber: 19
 												}, this)]
 											}, void 0, true, {
 												fileName: _jsxFileName,
-												lineNumber: 914,
+												lineNumber: 922,
 												columnNumber: 17
 											}, this),
 											/* @__PURE__ */ (void 0)("div", {
@@ -7626,25 +7634,25 @@ function Index() {
 												children: "Tournament"
 											}, void 0, false, {
 												fileName: _jsxFileName,
-												lineNumber: 920,
+												lineNumber: 928,
 												columnNumber: 17
 											}, this),
 											/* @__PURE__ */ (void 0)("p", {
 												className: "text-xs text-muted-foreground",
 												children: ["Next one today (wed) • ", /* @__PURE__ */ (void 0)("strong", { children: [championName, " holds the belt"] }, void 0, true, {
 													fileName: _jsxFileName,
-													lineNumber: 922,
+													lineNumber: 930,
 													columnNumber: 42
 												}, this)]
 											}, void 0, true, {
 												fileName: _jsxFileName,
-												lineNumber: 921,
+												lineNumber: 929,
 												columnNumber: 17
 											}, this)
 										]
 									}, void 0, true, {
 										fileName: _jsxFileName,
-										lineNumber: 910,
+										lineNumber: 918,
 										columnNumber: 15
 									}, this),
 									/* @__PURE__ */ (void 0)("button", {
@@ -7661,19 +7669,19 @@ function Index() {
 													children: "SAVED"
 												}, void 0, false, {
 													fileName: _jsxFileName,
-													lineNumber: 932,
+													lineNumber: 940,
 													columnNumber: 19
 												}, this), /* @__PURE__ */ (void 0)("span", {
 													className: "text-lg group-hover:translate-x-1 transition-transform",
 													children: "›"
 												}, void 0, false, {
 													fileName: _jsxFileName,
-													lineNumber: 935,
+													lineNumber: 943,
 													columnNumber: 19
 												}, this)]
 											}, void 0, true, {
 												fileName: _jsxFileName,
-												lineNumber: 931,
+												lineNumber: 939,
 												columnNumber: 17
 											}, this),
 											/* @__PURE__ */ (void 0)("div", {
@@ -7681,7 +7689,7 @@ function Index() {
 												children: "Local Pass & Play"
 											}, void 0, false, {
 												fileName: _jsxFileName,
-												lineNumber: 937,
+												lineNumber: 945,
 												columnNumber: 17
 											}, this),
 											/* @__PURE__ */ (void 0)("p", {
@@ -7689,13 +7697,13 @@ function Index() {
 												children: "2-10 players on 1 phone • score 1-1"
 											}, void 0, false, {
 												fileName: _jsxFileName,
-												lineNumber: 938,
+												lineNumber: 946,
 												columnNumber: 17
 											}, this)
 										]
 									}, void 0, true, {
 										fileName: _jsxFileName,
-										lineNumber: 927,
+										lineNumber: 935,
 										columnNumber: 15
 									}, this),
 									/* @__PURE__ */ (void 0)("button", {
@@ -7709,19 +7717,19 @@ function Index() {
 													children: "INSTANT"
 												}, void 0, false, {
 													fileName: _jsxFileName,
-													lineNumber: 946,
+													lineNumber: 954,
 													columnNumber: 19
 												}, this), /* @__PURE__ */ (void 0)("span", {
 													className: "text-lg group-hover:translate-x-1 transition-transform",
 													children: "›"
 												}, void 0, false, {
 													fileName: _jsxFileName,
-													lineNumber: 947,
+													lineNumber: 955,
 													columnNumber: 19
 												}, this)]
 											}, void 0, true, {
 												fileName: _jsxFileName,
-												lineNumber: 945,
+												lineNumber: 953,
 												columnNumber: 17
 											}, this),
 											/* @__PURE__ */ (void 0)("div", {
@@ -7729,7 +7737,7 @@ function Index() {
 												children: "Instant Match"
 											}, void 0, false, {
 												fileName: _jsxFileName,
-												lineNumber: 949,
+												lineNumber: 957,
 												columnNumber: 17
 											}, this),
 											/* @__PURE__ */ (void 0)("p", {
@@ -7737,25 +7745,25 @@ function Index() {
 												children: "Find someone online and jump into class!"
 											}, void 0, false, {
 												fileName: _jsxFileName,
-												lineNumber: 950,
+												lineNumber: 958,
 												columnNumber: 17
 											}, this)
 										]
 									}, void 0, true, {
 										fileName: _jsxFileName,
-										lineNumber: 944,
+										lineNumber: 952,
 										columnNumber: 15
 									}, this)
 								]
 							}, void 0, true, {
 								fileName: _jsxFileName,
-								lineNumber: 889,
+								lineNumber: 897,
 								columnNumber: 13
 							}, this)
 						]
 					}, void 0, true, {
 						fileName: _jsxFileName,
-						lineNumber: 878,
+						lineNumber: 886,
 						columnNumber: 11
 					}, this),
 					/* @__PURE__ */ (void 0)("footer", {
@@ -7767,16 +7775,16 @@ function Index() {
 								children: "adi"
 							}, void 0, false, {
 								fileName: _jsxFileName,
-								lineNumber: 960,
+								lineNumber: 968,
 								columnNumber: 47
 							}, this)] }, void 0, true, {
 								fileName: _jsxFileName,
-								lineNumber: 960,
+								lineNumber: 968,
 								columnNumber: 15
 							}, this)
 						}, void 0, false, {
 							fileName: _jsxFileName,
-							lineNumber: 959,
+							lineNumber: 967,
 							columnNumber: 13
 						}, this), /* @__PURE__ */ (void 0)("div", {
 							className: "flex flex-wrap items-center justify-center gap-2 sm:gap-2.5 text-xs sm:text-sm text-primary font-bold",
@@ -7785,40 +7793,6 @@ function Index() {
 									to: "/how-to-play",
 									className: "underline hover:text-accent",
 									children: "How To Play Imposter World"
-								}, void 0, false, {
-									fileName: _jsxFileName,
-									lineNumber: 964,
-									columnNumber: 15
-								}, this),
-								/* @__PURE__ */ (void 0)("span", {
-									className: "text-muted-foreground/60",
-									children: "·"
-								}, void 0, false, {
-									fileName: _jsxFileName,
-									lineNumber: 967,
-									columnNumber: 15
-								}, this),
-								/* @__PURE__ */ (void 0)(Link, {
-									to: "/articles",
-									className: "underline hover:text-accent",
-									children: "Game Strategy Articles"
-								}, void 0, false, {
-									fileName: _jsxFileName,
-									lineNumber: 968,
-									columnNumber: 15
-								}, this),
-								/* @__PURE__ */ (void 0)("span", {
-									className: "text-muted-foreground/60",
-									children: "·"
-								}, void 0, false, {
-									fileName: _jsxFileName,
-									lineNumber: 971,
-									columnNumber: 15
-								}, this),
-								/* @__PURE__ */ (void 0)(Link, {
-									to: "/notice-board",
-									className: "underline hover:text-accent",
-									children: "Notice Board"
 								}, void 0, false, {
 									fileName: _jsxFileName,
 									lineNumber: 972,
@@ -7833,29 +7807,63 @@ function Index() {
 									columnNumber: 15
 								}, this),
 								/* @__PURE__ */ (void 0)(Link, {
+									to: "/articles",
+									className: "underline hover:text-accent",
+									children: "Game Strategy Articles"
+								}, void 0, false, {
+									fileName: _jsxFileName,
+									lineNumber: 976,
+									columnNumber: 15
+								}, this),
+								/* @__PURE__ */ (void 0)("span", {
+									className: "text-muted-foreground/60",
+									children: "·"
+								}, void 0, false, {
+									fileName: _jsxFileName,
+									lineNumber: 979,
+									columnNumber: 15
+								}, this),
+								/* @__PURE__ */ (void 0)(Link, {
+									to: "/notice-board",
+									className: "underline hover:text-accent",
+									children: "Notice Board"
+								}, void 0, false, {
+									fileName: _jsxFileName,
+									lineNumber: 980,
+									columnNumber: 15
+								}, this),
+								/* @__PURE__ */ (void 0)("span", {
+									className: "text-muted-foreground/60",
+									children: "·"
+								}, void 0, false, {
+									fileName: _jsxFileName,
+									lineNumber: 983,
+									columnNumber: 15
+								}, this),
+								/* @__PURE__ */ (void 0)(Link, {
 									to: "/support",
 									className: "underline hover:text-accent",
 									children: "Support the Dev"
 								}, void 0, false, {
 									fileName: _jsxFileName,
-									lineNumber: 976,
+									lineNumber: 984,
 									columnNumber: 15
 								}, this)
 							]
 						}, void 0, true, {
 							fileName: _jsxFileName,
-							lineNumber: 963,
+							lineNumber: 971,
 							columnNumber: 13
 						}, this)]
 					}, void 0, true, {
 						fileName: _jsxFileName,
-						lineNumber: 958,
+						lineNumber: 966,
 						columnNumber: 11
 					}, this)
 				]
 			}, void 0, true, {
 				fileName: _jsxFileName,
-				lineNumber: 802,
+				lineNumber: 810,
 				columnNumber: 38
 			}, this),
 			isLocalMode && /* @__PURE__ */ (void 0)("section", {
@@ -7863,7 +7871,7 @@ function Index() {
 				children: [
 					/* @__PURE__ */ (void 0)("div", { className: "tape absolute -top-4 left-1/2 h-7 w-36 -translate-x-1/2 rotate-[-1deg]" }, void 0, false, {
 						fileName: _jsxFileName,
-						lineNumber: 985,
+						lineNumber: 993,
 						columnNumber: 11
 					}, this),
 					/* @__PURE__ */ (void 0)("div", {
@@ -7876,7 +7884,7 @@ function Index() {
 								className: "h-8 w-8 sm:h-12 sm:w-12 object-contain shrink-0 drop-shadow-xs"
 							}, void 0, false, {
 								fileName: _jsxFileName,
-								lineNumber: 989,
+								lineNumber: 997,
 								columnNumber: 15
 							}, this), /* @__PURE__ */ (void 0)("div", {
 								className: "min-w-0",
@@ -7885,24 +7893,24 @@ function Index() {
 									children: "Single Device Mode"
 								}, void 0, false, {
 									fileName: _jsxFileName,
-									lineNumber: 991,
+									lineNumber: 999,
 									columnNumber: 17
 								}, this), /* @__PURE__ */ (void 0)("h2", {
 									className: "text-xl sm:text-3xl font-display text-foreground truncate",
 									children: "Local Pass & Play 📱"
 								}, void 0, false, {
 									fileName: _jsxFileName,
-									lineNumber: 992,
+									lineNumber: 1e3,
 									columnNumber: 17
 								}, this)]
 							}, void 0, true, {
 								fileName: _jsxFileName,
-								lineNumber: 990,
+								lineNumber: 998,
 								columnNumber: 15
 							}, this)]
 						}, void 0, true, {
 							fileName: _jsxFileName,
-							lineNumber: 988,
+							lineNumber: 996,
 							columnNumber: 13
 						}, this), /* @__PURE__ */ (void 0)("button", {
 							onClick: () => {
@@ -7913,12 +7921,12 @@ function Index() {
 							children: "Exit Local"
 						}, void 0, false, {
 							fileName: _jsxFileName,
-							lineNumber: 995,
+							lineNumber: 1003,
 							columnNumber: 13
 						}, this)]
 					}, void 0, true, {
 						fileName: _jsxFileName,
-						lineNumber: 987,
+						lineNumber: 995,
 						columnNumber: 11
 					}, this),
 					localPhase === "lobby" && /* @__PURE__ */ (void 0)("div", {
@@ -7929,7 +7937,7 @@ function Index() {
 								children: "Pass this single phone/laptop around your group. Each player views their secret word in private!"
 							}, void 0, false, {
 								fileName: _jsxFileName,
-								lineNumber: 1004,
+								lineNumber: 1012,
 								columnNumber: 15
 							}, this),
 							/* @__PURE__ */ (void 0)("div", {
@@ -7941,7 +7949,7 @@ function Index() {
 										children: name
 									}, void 0, false, {
 										fileName: _jsxFileName,
-										lineNumber: 1011,
+										lineNumber: 1019,
 										columnNumber: 21
 									}, this), /* @__PURE__ */ (void 0)("button", {
 										type: "button",
@@ -7951,17 +7959,17 @@ function Index() {
 										children: "×"
 									}, void 0, false, {
 										fileName: _jsxFileName,
-										lineNumber: 1012,
+										lineNumber: 1020,
 										columnNumber: 21
 									}, this)]
 								}, `${name}-${i}`, true, {
 									fileName: _jsxFileName,
-									lineNumber: 1010,
+									lineNumber: 1018,
 									columnNumber: 48
 								}, this))
 							}, void 0, false, {
 								fileName: _jsxFileName,
-								lineNumber: 1009,
+								lineNumber: 1017,
 								columnNumber: 15
 							}, this),
 							localPlayers.length < 12 && /* @__PURE__ */ (void 0)("div", {
@@ -7981,7 +7989,7 @@ function Index() {
 									maxLength: 15
 								}, void 0, false, {
 									fileName: _jsxFileName,
-									lineNumber: 1020,
+									lineNumber: 1028,
 									columnNumber: 19
 								}, this), /* @__PURE__ */ (void 0)(Btn, {
 									variant: "secondary",
@@ -7995,12 +8003,12 @@ function Index() {
 									children: "Add Player +"
 								}, void 0, false, {
 									fileName: _jsxFileName,
-									lineNumber: 1026,
+									lineNumber: 1034,
 									columnNumber: 19
 								}, this)]
 							}, void 0, true, {
 								fileName: _jsxFileName,
-								lineNumber: 1019,
+								lineNumber: 1027,
 								columnNumber: 44
 							}, this),
 							/* @__PURE__ */ (void 0)("div", {
@@ -8014,7 +8022,7 @@ function Index() {
 									]
 								}, void 0, true, {
 									fileName: _jsxFileName,
-									lineNumber: 1037,
+									lineNumber: 1045,
 									columnNumber: 45
 								}, this), /* @__PURE__ */ (void 0)(Btn, {
 									className: "w-full sm:w-auto justify-center",
@@ -8023,18 +8031,18 @@ function Index() {
 									children: "Start Pass & Play Round 🚀"
 								}, void 0, false, {
 									fileName: _jsxFileName,
-									lineNumber: 1040,
+									lineNumber: 1048,
 									columnNumber: 17
 								}, this)]
 							}, void 0, true, {
 								fileName: _jsxFileName,
-								lineNumber: 1036,
+								lineNumber: 1044,
 								columnNumber: 15
 							}, this)
 						]
 					}, void 0, true, {
 						fileName: _jsxFileName,
-						lineNumber: 1003,
+						lineNumber: 1011,
 						columnNumber: 38
 					}, this),
 					localPhase === "reveal" && localRound && /* @__PURE__ */ (void 0)("div", {
@@ -8050,7 +8058,7 @@ function Index() {
 								]
 							}, void 0, true, {
 								fileName: _jsxFileName,
-								lineNumber: 1047,
+								lineNumber: 1055,
 								columnNumber: 15
 							}, this),
 							/* @__PURE__ */ (void 0)("h3", {
@@ -8060,12 +8068,12 @@ function Index() {
 									children: localPlayers[localTurn]
 								}, void 0, false, {
 									fileName: _jsxFileName,
-									lineNumber: 1051,
+									lineNumber: 1059,
 									columnNumber: 32
 								}, this)]
 							}, void 0, true, {
 								fileName: _jsxFileName,
-								lineNumber: 1050,
+								lineNumber: 1058,
 								columnNumber: 15
 							}, this),
 							!localWordRevealed ? /* @__PURE__ */ (void 0)("div", {
@@ -8079,12 +8087,12 @@ function Index() {
 											className: "h-32 sm:h-36 w-auto object-contain drop-shadow-md transition-transform hover:scale-105"
 										}, void 0, false, {
 											fileName: _jsxFileName,
-											lineNumber: 1057,
+											lineNumber: 1065,
 											columnNumber: 21
 										}, this)
 									}, void 0, false, {
 										fileName: _jsxFileName,
-										lineNumber: 1056,
+										lineNumber: 1064,
 										columnNumber: 19
 									}, this),
 									/* @__PURE__ */ (void 0)("div", {
@@ -8098,26 +8106,26 @@ function Index() {
 													children: localPlayers[localTurn]
 												}, void 0, false, {
 													fileName: _jsxFileName,
-													lineNumber: 1061,
+													lineNumber: 1069,
 													columnNumber: 28
 												}, this),
 												" should look!"
 											]
 										}, void 0, true, {
 											fileName: _jsxFileName,
-											lineNumber: 1060,
+											lineNumber: 1068,
 											columnNumber: 21
 										}, this), /* @__PURE__ */ (void 0)("div", {
 											className: "text-xs text-muted-foreground",
 											children: "Detective has his eyes covered tight with both hands! Tap below to open eyes."
 										}, void 0, false, {
 											fileName: _jsxFileName,
-											lineNumber: 1063,
+											lineNumber: 1071,
 											columnNumber: 21
 										}, this)]
 									}, void 0, true, {
 										fileName: _jsxFileName,
-										lineNumber: 1059,
+										lineNumber: 1067,
 										columnNumber: 19
 									}, this),
 									/* @__PURE__ */ (void 0)("button", {
@@ -8129,18 +8137,18 @@ function Index() {
 										className: "sketch w-full flex items-center justify-center gap-2 bg-accent py-3 text-lg font-bold text-accent-foreground hover:brightness-110 shadow-sm animate-pulse",
 										children: [/* @__PURE__ */ (void 0)(Eye, { className: "h-5 w-5" }, void 0, false, {
 											fileName: _jsxFileName,
-											lineNumber: 1072,
+											lineNumber: 1080,
 											columnNumber: 21
 										}, this), " Open Eyes & Reveal Secret Word 👁️"]
 									}, void 0, true, {
 										fileName: _jsxFileName,
-										lineNumber: 1068,
+										lineNumber: 1076,
 										columnNumber: 19
 									}, this)
 								]
 							}, void 0, true, {
 								fileName: _jsxFileName,
-								lineNumber: 1055,
+								lineNumber: 1063,
 								columnNumber: 9
 							}, this) : /* @__PURE__ */ (void 0)("div", {
 								className: "sketch max-w-sm mx-auto bg-white p-6 border-2 border-accent space-y-4 shadow-md",
@@ -8153,12 +8161,12 @@ function Index() {
 											className: "h-32 sm:h-36 w-auto object-contain drop-shadow-md transition-transform scale-105"
 										}, void 0, false, {
 											fileName: _jsxFileName,
-											lineNumber: 1077,
+											lineNumber: 1085,
 											columnNumber: 21
 										}, this)
 									}, void 0, false, {
 										fileName: _jsxFileName,
-										lineNumber: 1076,
+										lineNumber: 1084,
 										columnNumber: 19
 									}, this),
 									localRound.category && /* @__PURE__ */ (void 0)("div", {
@@ -8166,7 +8174,7 @@ function Index() {
 										children: ["📁 Category: ", localRound.category]
 									}, void 0, true, {
 										fileName: _jsxFileName,
-										lineNumber: 1079,
+										lineNumber: 1087,
 										columnNumber: 43
 									}, this),
 									/* @__PURE__ */ (void 0)("span", {
@@ -8174,7 +8182,7 @@ function Index() {
 										children: "CONFIDENTIAL SECRET WORD"
 									}, void 0, false, {
 										fileName: _jsxFileName,
-										lineNumber: 1082,
+										lineNumber: 1090,
 										columnNumber: 19
 									}, this),
 									/* @__PURE__ */ (void 0)("div", {
@@ -8182,7 +8190,7 @@ function Index() {
 										children: localTurn === localRound.imposterIdx ? localRound.fake : localRound.word
 									}, void 0, false, {
 										fileName: _jsxFileName,
-										lineNumber: 1085,
+										lineNumber: 1093,
 										columnNumber: 19
 									}, this),
 									/* @__PURE__ */ (void 0)("div", {
@@ -8190,7 +8198,7 @@ function Index() {
 										children: localTurn === localRound.imposterIdx ? "🕵️ You are the Imposter! (Blend in and pretend you know the common word)" : "🔎 You are a Detective! (Spot the player whose clue sounds off)"
 									}, void 0, false, {
 										fileName: _jsxFileName,
-										lineNumber: 1088,
+										lineNumber: 1096,
 										columnNumber: 19
 									}, this),
 									/* @__PURE__ */ (void 0)("div", {
@@ -8206,29 +8214,29 @@ function Index() {
 											className: "sketch w-full flex items-center justify-center gap-2 bg-primary py-2.5 text-base font-bold text-primary-foreground hover:brightness-110 shadow-sm",
 											children: [/* @__PURE__ */ (void 0)(EyeOff, { className: "h-4 w-4" }, void 0, false, {
 												fileName: _jsxFileName,
-												lineNumber: 1102,
+												lineNumber: 1110,
 												columnNumber: 23
 											}, this), localTurn + 1 < localPlayers.length ? `Cover Eyes & Pass to ${localPlayers[localTurn + 1]} 🔒` : "Cover Eyes & Start Discussion! 🗣️"]
 										}, void 0, true, {
 											fileName: _jsxFileName,
-											lineNumber: 1093,
+											lineNumber: 1101,
 											columnNumber: 21
 										}, this)
 									}, void 0, false, {
 										fileName: _jsxFileName,
-										lineNumber: 1092,
+										lineNumber: 1100,
 										columnNumber: 19
 									}, this)
 								]
 							}, void 0, true, {
 								fileName: _jsxFileName,
-								lineNumber: 1075,
+								lineNumber: 1083,
 								columnNumber: 9
 							}, this)
 						]
 					}, void 0, true, {
 						fileName: _jsxFileName,
-						lineNumber: 1046,
+						lineNumber: 1054,
 						columnNumber: 53
 					}, this),
 					localPhase === "discuss" && localRound && /* @__PURE__ */ (void 0)("div", {
@@ -8239,7 +8247,7 @@ function Index() {
 								children: "Classroom Discussion! 🗣️"
 							}, void 0, false, {
 								fileName: _jsxFileName,
-								lineNumber: 1110,
+								lineNumber: 1118,
 								columnNumber: 15
 							}, this),
 							/* @__PURE__ */ (void 0)("p", {
@@ -8247,7 +8255,7 @@ function Index() {
 								children: "Each player speaks 1 clue out loud around the circle. Debate suspicious hints before casting your votes!"
 							}, void 0, false, {
 								fileName: _jsxFileName,
-								lineNumber: 1111,
+								lineNumber: 1119,
 								columnNumber: 15
 							}, this),
 							/* @__PURE__ */ (void 0)("div", {
@@ -8257,19 +8265,19 @@ function Index() {
 									children: "Finished Debate?"
 								}, void 0, false, {
 									fileName: _jsxFileName,
-									lineNumber: 1116,
+									lineNumber: 1124,
 									columnNumber: 17
 								}, this), /* @__PURE__ */ (void 0)("div", {
 									className: "text-sm",
 									children: "Proceed to interrogate and vote on who the imposter is!"
 								}, void 0, false, {
 									fileName: _jsxFileName,
-									lineNumber: 1117,
+									lineNumber: 1125,
 									columnNumber: 17
 								}, this)]
 							}, void 0, true, {
 								fileName: _jsxFileName,
-								lineNumber: 1115,
+								lineNumber: 1123,
 								columnNumber: 15
 							}, this),
 							/* @__PURE__ */ (void 0)(Btn, {
@@ -8281,13 +8289,13 @@ function Index() {
 								children: "Proceed to Vote 🗳️"
 							}, void 0, false, {
 								fileName: _jsxFileName,
-								lineNumber: 1120,
+								lineNumber: 1128,
 								columnNumber: 15
 							}, this)
 						]
 					}, void 0, true, {
 						fileName: _jsxFileName,
-						lineNumber: 1109,
+						lineNumber: 1117,
 						columnNumber: 54
 					}, this),
 					localPhase === "vote" && localRound && /* @__PURE__ */ (void 0)("div", {
@@ -8301,7 +8309,7 @@ function Index() {
 										children: "Phase 3: Interrogation"
 									}, void 0, false, {
 										fileName: _jsxFileName,
-										lineNumber: 1131,
+										lineNumber: 1139,
 										columnNumber: 17
 									}, this),
 									/* @__PURE__ */ (void 0)("h3", {
@@ -8309,7 +8317,7 @@ function Index() {
 										children: "Cast Classroom Votes! 🗳️"
 									}, void 0, false, {
 										fileName: _jsxFileName,
-										lineNumber: 1132,
+										lineNumber: 1140,
 										columnNumber: 17
 									}, this),
 									/* @__PURE__ */ (void 0)("p", {
@@ -8318,7 +8326,7 @@ function Index() {
 											"Every player in the circle gets ",
 											/* @__PURE__ */ (void 0)("strong", { children: "1 vote" }, void 0, false, {
 												fileName: _jsxFileName,
-												lineNumber: 1134,
+												lineNumber: 1142,
 												columnNumber: 51
 											}, this),
 											". Tap ",
@@ -8327,20 +8335,20 @@ function Index() {
 												children: "+ Vote"
 											}, void 0, false, {
 												fileName: _jsxFileName,
-												lineNumber: 1134,
+												lineNumber: 1142,
 												columnNumber: 80
 											}, this),
 											" on the player you suspect!"
 										]
 									}, void 0, true, {
 										fileName: _jsxFileName,
-										lineNumber: 1133,
+										lineNumber: 1141,
 										columnNumber: 17
 									}, this)
 								]
 							}, void 0, true, {
 								fileName: _jsxFileName,
-								lineNumber: 1130,
+								lineNumber: 1138,
 								columnNumber: 15
 							}, this),
 							(() => {
@@ -8357,7 +8365,7 @@ function Index() {
 												children: "Classroom Votes:"
 											}, void 0, false, {
 												fileName: _jsxFileName,
-												lineNumber: 1145,
+												lineNumber: 1153,
 												columnNumber: 23
 											}, this),
 											/* @__PURE__ */ (void 0)("span", {
@@ -8369,7 +8377,7 @@ function Index() {
 												]
 											}, void 0, true, {
 												fileName: _jsxFileName,
-												lineNumber: 1146,
+												lineNumber: 1154,
 												columnNumber: 23
 											}, this),
 											votesRemaining === 0 ? /* @__PURE__ */ (void 0)("span", {
@@ -8377,7 +8385,7 @@ function Index() {
 												children: "✅ All Voted"
 											}, void 0, false, {
 												fileName: _jsxFileName,
-												lineNumber: 1149,
+												lineNumber: 1157,
 												columnNumber: 47
 											}, this) : /* @__PURE__ */ (void 0)("span", {
 												className: "text-xs text-amber-800 font-bold",
@@ -8390,13 +8398,13 @@ function Index() {
 												]
 											}, void 0, true, {
 												fileName: _jsxFileName,
-												lineNumber: 1151,
+												lineNumber: 1159,
 												columnNumber: 35
 											}, this)
 										]
 									}, void 0, true, {
 										fileName: _jsxFileName,
-										lineNumber: 1144,
+										lineNumber: 1152,
 										columnNumber: 21
 									}, this), totalVotes > 0 && /* @__PURE__ */ (void 0)("button", {
 										type: "button",
@@ -8408,12 +8416,12 @@ function Index() {
 										children: "Reset 🔄"
 									}, void 0, false, {
 										fileName: _jsxFileName,
-										lineNumber: 1155,
+										lineNumber: 1163,
 										columnNumber: 40
 									}, this)]
 								}, void 0, true, {
 									fileName: _jsxFileName,
-									lineNumber: 1143,
+									lineNumber: 1151,
 									columnNumber: 18
 								}, this);
 							})(),
@@ -8432,7 +8440,7 @@ function Index() {
 													children: player
 												}, void 0, false, {
 													fileName: _jsxFileName,
-													lineNumber: 1172,
+													lineNumber: 1180,
 													columnNumber: 27
 												}, this),
 												/* @__PURE__ */ (void 0)("div", {
@@ -8447,19 +8455,19 @@ function Index() {
 														]
 													}, void 0, true, {
 														fileName: _jsxFileName,
-														lineNumber: 1176,
+														lineNumber: 1184,
 														columnNumber: 46
 													}, this) : /* @__PURE__ */ (void 0)("span", {
 														className: "text-muted-foreground",
 														children: "0 votes"
 													}, void 0, false, {
 														fileName: _jsxFileName,
-														lineNumber: 1178,
+														lineNumber: 1186,
 														columnNumber: 41
 													}, this)
 												}, void 0, false, {
 													fileName: _jsxFileName,
-													lineNumber: 1175,
+													lineNumber: 1183,
 													columnNumber: 27
 												}, this),
 												/* @__PURE__ */ (void 0)("div", {
@@ -8480,7 +8488,7 @@ function Index() {
 														children: "+ Vote"
 													}, void 0, false, {
 														fileName: _jsxFileName,
-														lineNumber: 1181,
+														lineNumber: 1189,
 														columnNumber: 29
 													}, this), voteCount > 0 && /* @__PURE__ */ (void 0)("button", {
 														type: "button",
@@ -8496,24 +8504,24 @@ function Index() {
 														children: "-"
 													}, void 0, false, {
 														fileName: _jsxFileName,
-														lineNumber: 1191,
+														lineNumber: 1199,
 														columnNumber: 47
 													}, this)]
 												}, void 0, true, {
 													fileName: _jsxFileName,
-													lineNumber: 1180,
+													lineNumber: 1188,
 													columnNumber: 27
 												}, this)
 											]
 										}, player, true, {
 											fileName: _jsxFileName,
-											lineNumber: 1171,
+											lineNumber: 1179,
 											columnNumber: 22
 										}, this);
 									})
 								}, void 0, false, {
 									fileName: _jsxFileName,
-									lineNumber: 1168,
+									lineNumber: 1176,
 									columnNumber: 18
 								}, this);
 							})(),
@@ -8534,7 +8542,7 @@ function Index() {
 												children: topSuspect[0]
 											}, void 0, false, {
 												fileName: _jsxFileName,
-												lineNumber: 1216,
+												lineNumber: 1224,
 												columnNumber: 81
 											}, this),
 											" (",
@@ -8542,7 +8550,7 @@ function Index() {
 											" votes)"
 										] }, void 0, true, {
 											fileName: _jsxFileName,
-											lineNumber: 1215,
+											lineNumber: 1223,
 											columnNumber: 70
 										}, this) : totalVotes > 0 && topSuspect && topSuspect[1] > 0 ? /* @__PURE__ */ (void 0)("span", { children: [
 											"🎯 Leading Suspect: ",
@@ -8551,7 +8559,7 @@ function Index() {
 												children: topSuspect[0]
 											}, void 0, false, {
 												fileName: _jsxFileName,
-												lineNumber: 1218,
+												lineNumber: 1226,
 												columnNumber: 47
 											}, this),
 											" with ",
@@ -8563,24 +8571,24 @@ function Index() {
 											" cast)"
 										] }, void 0, true, {
 											fileName: _jsxFileName,
-											lineNumber: 1217,
+											lineNumber: 1225,
 											columnNumber: 87
 										}, this) : /* @__PURE__ */ (void 0)("span", { children: [
 											"Each player taps ",
 											/* @__PURE__ */ (void 0)("strong", { children: "+ Vote" }, void 0, false, {
 												fileName: _jsxFileName,
-												lineNumber: 1219,
+												lineNumber: 1227,
 												columnNumber: 58
 											}, this),
 											" once for their main suspect!"
 										] }, void 0, true, {
 											fileName: _jsxFileName,
-											lineNumber: 1219,
+											lineNumber: 1227,
 											columnNumber: 35
 										}, this)
 									}, void 0, false, {
 										fileName: _jsxFileName,
-										lineNumber: 1214,
+										lineNumber: 1222,
 										columnNumber: 21
 									}, this), /* @__PURE__ */ (void 0)("div", {
 										className: "flex justify-center gap-2 pt-1",
@@ -8590,7 +8598,7 @@ function Index() {
 											children: "Back to Discuss"
 										}, void 0, false, {
 											fileName: _jsxFileName,
-											lineNumber: 1223,
+											lineNumber: 1231,
 											columnNumber: 23
 										}, this), /* @__PURE__ */ (void 0)(Btn, {
 											onClick: () => {
@@ -8600,24 +8608,24 @@ function Index() {
 											children: "Reveal the Imposter 🕵️"
 										}, void 0, false, {
 											fileName: _jsxFileName,
-											lineNumber: 1226,
+											lineNumber: 1234,
 											columnNumber: 23
 										}, this)]
 									}, void 0, true, {
 										fileName: _jsxFileName,
-										lineNumber: 1222,
+										lineNumber: 1230,
 										columnNumber: 21
 									}, this)]
 								}, void 0, true, {
 									fileName: _jsxFileName,
-									lineNumber: 1213,
+									lineNumber: 1221,
 									columnNumber: 18
 								}, this);
 							})()
 						]
 					}, void 0, true, {
 						fileName: _jsxFileName,
-						lineNumber: 1129,
+						lineNumber: 1137,
 						columnNumber: 51
 					}, this),
 					localPhase === "result" && localRound && /* @__PURE__ */ (void 0)("div", {
@@ -8636,7 +8644,7 @@ function Index() {
 											className: "h-20 w-20 object-contain drop-shadow-md animate-bounce"
 										}, void 0, false, {
 											fileName: _jsxFileName,
-											lineNumber: 1245,
+											lineNumber: 1253,
 											columnNumber: 23
 										}, this), /* @__PURE__ */ (void 0)("img", {
 											src: "/detective-jumping-win.png",
@@ -8644,12 +8652,12 @@ function Index() {
 											className: "h-24 w-auto object-contain drop-shadow-md"
 										}, void 0, false, {
 											fileName: _jsxFileName,
-											lineNumber: 1246,
+											lineNumber: 1254,
 											columnNumber: 23
 										}, this)]
 									}, void 0, true, {
 										fileName: _jsxFileName,
-										lineNumber: 1244,
+										lineNumber: 1252,
 										columnNumber: 21
 									}, this),
 									/* @__PURE__ */ (void 0)("div", {
@@ -8659,19 +8667,19 @@ function Index() {
 											children: caughtImposter ? "🎉 BUSTED! Classroom Caught the Imposter!" : "🤫 ESCAPED! The Imposter Fooled Everyone!"
 										}, void 0, false, {
 											fileName: _jsxFileName,
-											lineNumber: 1250,
+											lineNumber: 1258,
 											columnNumber: 23
 										}, this), /* @__PURE__ */ (void 0)("p", {
 											className: "text-xs sm:text-sm font-hand mt-1",
 											children: caughtImposter ? `Great deduction! ${actualImposter} was correctly voted out.` : `${actualImposter} was the real imposter and fooled the class!`
 										}, void 0, false, {
 											fileName: _jsxFileName,
-											lineNumber: 1253,
+											lineNumber: 1261,
 											columnNumber: 23
 										}, this)]
 									}, void 0, true, {
 										fileName: _jsxFileName,
-										lineNumber: 1249,
+										lineNumber: 1257,
 										columnNumber: 21
 									}, this),
 									/* @__PURE__ */ (void 0)("div", {
@@ -8683,14 +8691,14 @@ function Index() {
 												children: actualImposter
 											}, void 0, false, {
 												fileName: _jsxFileName,
-												lineNumber: 1259,
+												lineNumber: 1267,
 												columnNumber: 46
 											}, this),
 											"!"
 										]
 									}, void 0, true, {
 										fileName: _jsxFileName,
-										lineNumber: 1258,
+										lineNumber: 1266,
 										columnNumber: 21
 									}, this),
 									Object.keys(localVotes).length > 0 && /* @__PURE__ */ (void 0)("div", {
@@ -8700,7 +8708,7 @@ function Index() {
 											children: "Classroom Vote Tally:"
 										}, void 0, false, {
 											fileName: _jsxFileName,
-											lineNumber: 1264,
+											lineNumber: 1272,
 											columnNumber: 25
 										}, this), /* @__PURE__ */ (void 0)("div", {
 											className: "flex flex-wrap justify-center gap-2",
@@ -8714,22 +8722,22 @@ function Index() {
 												]
 											}, p, true, {
 												fileName: _jsxFileName,
-												lineNumber: 1266,
+												lineNumber: 1274,
 												columnNumber: 50
 											}, this))
 										}, void 0, false, {
 											fileName: _jsxFileName,
-											lineNumber: 1265,
+											lineNumber: 1273,
 											columnNumber: 25
 										}, this)]
 									}, void 0, true, {
 										fileName: _jsxFileName,
-										lineNumber: 1263,
+										lineNumber: 1271,
 										columnNumber: 60
 									}, this)
 								] }, void 0, true, {
 									fileName: _jsxFileName,
-									lineNumber: 1243,
+									lineNumber: 1251,
 									columnNumber: 18
 								}, this);
 							})(),
@@ -8738,7 +8746,7 @@ function Index() {
 								children: ["📁 Category: ", localRound.category]
 							}, void 0, true, {
 								fileName: _jsxFileName,
-								lineNumber: 1274,
+								lineNumber: 1282,
 								columnNumber: 39
 							}, this),
 							/* @__PURE__ */ (void 0)("div", {
@@ -8750,19 +8758,19 @@ function Index() {
 										children: "COMMON WORD"
 									}, void 0, false, {
 										fileName: _jsxFileName,
-										lineNumber: 1280,
+										lineNumber: 1288,
 										columnNumber: 19
 									}, this), /* @__PURE__ */ (void 0)("span", {
 										className: "text-2xl font-display text-primary font-bold",
 										children: localRound.word
 									}, void 0, false, {
 										fileName: _jsxFileName,
-										lineNumber: 1281,
+										lineNumber: 1289,
 										columnNumber: 19
 									}, this)]
 								}, void 0, true, {
 									fileName: _jsxFileName,
-									lineNumber: 1279,
+									lineNumber: 1287,
 									columnNumber: 17
 								}, this), /* @__PURE__ */ (void 0)("div", {
 									className: "sketch bg-white p-3",
@@ -8771,24 +8779,24 @@ function Index() {
 										children: "IMPOSTER WORD"
 									}, void 0, false, {
 										fileName: _jsxFileName,
-										lineNumber: 1284,
+										lineNumber: 1292,
 										columnNumber: 19
 									}, this), /* @__PURE__ */ (void 0)("span", {
 										className: "text-2xl font-display text-accent font-bold",
 										children: localRound.fake
 									}, void 0, false, {
 										fileName: _jsxFileName,
-										lineNumber: 1285,
+										lineNumber: 1293,
 										columnNumber: 19
 									}, this)]
 								}, void 0, true, {
 									fileName: _jsxFileName,
-									lineNumber: 1283,
+									lineNumber: 1291,
 									columnNumber: 17
 								}, this)]
 							}, void 0, true, {
 								fileName: _jsxFileName,
-								lineNumber: 1278,
+								lineNumber: 1286,
 								columnNumber: 15
 							}, this),
 							/* @__PURE__ */ (void 0)("div", {
@@ -8798,7 +8806,7 @@ function Index() {
 									children: "Next Round 🚀"
 								}, void 0, false, {
 									fileName: _jsxFileName,
-									lineNumber: 1290,
+									lineNumber: 1298,
 									columnNumber: 17
 								}, this), /* @__PURE__ */ (void 0)(Btn, {
 									variant: "secondary",
@@ -8806,24 +8814,24 @@ function Index() {
 									children: "Back to Setup"
 								}, void 0, false, {
 									fileName: _jsxFileName,
-									lineNumber: 1291,
+									lineNumber: 1299,
 									columnNumber: 17
 								}, this)]
 							}, void 0, true, {
 								fileName: _jsxFileName,
-								lineNumber: 1289,
+								lineNumber: 1297,
 								columnNumber: 15
 							}, this)
 						]
 					}, void 0, true, {
 						fileName: _jsxFileName,
-						lineNumber: 1237,
+						lineNumber: 1245,
 						columnNumber: 53
 					}, this)
 				]
 			}, void 0, true, {
 				fileName: _jsxFileName,
-				lineNumber: 984,
+				lineNumber: 992,
 				columnNumber: 23
 			}, this),
 			roomState && roomState.phase === "lobby" && /* @__PURE__ */ (void 0)("section", {
@@ -8831,7 +8839,7 @@ function Index() {
 				children: [
 					/* @__PURE__ */ (void 0)("div", { className: "tape absolute -top-4 left-1/2 h-7 w-36 -translate-x-1/2 rotate-[-1deg]" }, void 0, false, {
 						fileName: _jsxFileName,
-						lineNumber: 1300,
+						lineNumber: 1308,
 						columnNumber: 11
 					}, this),
 					/* @__PURE__ */ (void 0)("div", {
@@ -8844,7 +8852,7 @@ function Index() {
 									children: roomState.settings.isPublic ? "🟢 Public Room" : "🔒 Private Room"
 								}, void 0, false, {
 									fileName: _jsxFileName,
-									lineNumber: 1306,
+									lineNumber: 1314,
 									columnNumber: 17
 								}, this),
 								/* @__PURE__ */ (void 0)("span", {
@@ -8852,7 +8860,7 @@ function Index() {
 									children: "Classroom Lobby"
 								}, void 0, false, {
 									fileName: _jsxFileName,
-									lineNumber: 1309,
+									lineNumber: 1317,
 									columnNumber: 17
 								}, this),
 								lobbyTimeLeft !== null && /* @__PURE__ */ (void 0)("span", {
@@ -8860,7 +8868,7 @@ function Index() {
 									children: [
 										/* @__PURE__ */ (void 0)(Clock, { className: "h-3.5 w-3.5 animate-pulse text-amber-700" }, void 0, false, {
 											fileName: _jsxFileName,
-											lineNumber: 1311,
+											lineNumber: 1319,
 											columnNumber: 21
 										}, this),
 										"Auto-closes in ",
@@ -8870,24 +8878,24 @@ function Index() {
 									]
 								}, void 0, true, {
 									fileName: _jsxFileName,
-									lineNumber: 1310,
+									lineNumber: 1318,
 									columnNumber: 44
 								}, this)
 							]
 						}, void 0, true, {
 							fileName: _jsxFileName,
-							lineNumber: 1305,
+							lineNumber: 1313,
 							columnNumber: 15
 						}, this), /* @__PURE__ */ (void 0)("h2", {
 							className: "text-4xl md:text-5xl font-display text-foreground",
 							children: ["Room #", roomState.roomCode]
 						}, void 0, true, {
 							fileName: _jsxFileName,
-							lineNumber: 1315,
+							lineNumber: 1323,
 							columnNumber: 15
 						}, this)] }, void 0, true, {
 							fileName: _jsxFileName,
-							lineNumber: 1304,
+							lineNumber: 1312,
 							columnNumber: 13
 						}, this), /* @__PURE__ */ (void 0)("div", {
 							className: "flex flex-wrap items-center gap-3",
@@ -8897,16 +8905,16 @@ function Index() {
 									className: "sketch flex items-center gap-1.5 bg-secondary px-4 py-2 font-bold text-base hover:bg-secondary/80",
 									children: [copiedLink ? /* @__PURE__ */ (void 0)(Check, { className: "h-4 w-4" }, void 0, false, {
 										fileName: _jsxFileName,
-										lineNumber: 1322,
+										lineNumber: 1330,
 										columnNumber: 31
 									}, this) : /* @__PURE__ */ (void 0)(Copy, { className: "h-4 w-4" }, void 0, false, {
 										fileName: _jsxFileName,
-										lineNumber: 1322,
+										lineNumber: 1330,
 										columnNumber: 63
 									}, this), copiedLink ? "Link Copied!" : "Copy Invite Link"]
 								}, void 0, true, {
 									fileName: _jsxFileName,
-									lineNumber: 1321,
+									lineNumber: 1329,
 									columnNumber: 15
 								}, this),
 								/* @__PURE__ */ (void 0)("button", {
@@ -8917,12 +8925,12 @@ function Index() {
 									className: "sketch flex items-center gap-1.5 bg-card px-4 py-2 font-bold text-base hover:bg-secondary",
 									children: [/* @__PURE__ */ (void 0)(Settings, { className: "h-4 w-4 text-accent" }, void 0, false, {
 										fileName: _jsxFileName,
-										lineNumber: 1330,
+										lineNumber: 1338,
 										columnNumber: 17
 									}, this), "Settings"]
 								}, void 0, true, {
 									fileName: _jsxFileName,
-									lineNumber: 1326,
+									lineNumber: 1334,
 									columnNumber: 15
 								}, this),
 								/* @__PURE__ */ (void 0)("button", {
@@ -8931,18 +8939,18 @@ function Index() {
 									children: "Leave"
 								}, void 0, false, {
 									fileName: _jsxFileName,
-									lineNumber: 1334,
+									lineNumber: 1342,
 									columnNumber: 15
 								}, this)
 							]
 						}, void 0, true, {
 							fileName: _jsxFileName,
-							lineNumber: 1320,
+							lineNumber: 1328,
 							columnNumber: 13
 						}, this)]
 					}, void 0, true, {
 						fileName: _jsxFileName,
-						lineNumber: 1303,
+						lineNumber: 1311,
 						columnNumber: 11
 					}, this),
 					/* @__PURE__ */ (void 0)("div", {
@@ -8955,7 +8963,7 @@ function Index() {
 									children: "CAPACITY"
 								}, void 0, false, {
 									fileName: _jsxFileName,
-									lineNumber: 1343,
+									lineNumber: 1351,
 									columnNumber: 15
 								}, this), /* @__PURE__ */ (void 0)("span", {
 									className: "text-xl font-bold font-display text-primary",
@@ -8966,12 +8974,12 @@ function Index() {
 									]
 								}, void 0, true, {
 									fileName: _jsxFileName,
-									lineNumber: 1344,
+									lineNumber: 1352,
 									columnNumber: 15
 								}, this)]
 							}, void 0, true, {
 								fileName: _jsxFileName,
-								lineNumber: 1342,
+								lineNumber: 1350,
 								columnNumber: 13
 							}, this),
 							/* @__PURE__ */ (void 0)("div", {
@@ -8981,19 +8989,19 @@ function Index() {
 									children: "HINT / DRAW TIME"
 								}, void 0, false, {
 									fileName: _jsxFileName,
-									lineNumber: 1349,
+									lineNumber: 1357,
 									columnNumber: 15
 								}, this), /* @__PURE__ */ (void 0)("span", {
 									className: "text-xl font-bold font-display text-accent",
 									children: [roomState.settings.drawTime, "s"]
 								}, void 0, true, {
 									fileName: _jsxFileName,
-									lineNumber: 1350,
+									lineNumber: 1358,
 									columnNumber: 15
 								}, this)]
 							}, void 0, true, {
 								fileName: _jsxFileName,
-								lineNumber: 1348,
+								lineNumber: 1356,
 								columnNumber: 13
 							}, this),
 							/* @__PURE__ */ (void 0)("div", {
@@ -9003,19 +9011,19 @@ function Index() {
 									children: "ROUNDS"
 								}, void 0, false, {
 									fileName: _jsxFileName,
-									lineNumber: 1355,
+									lineNumber: 1363,
 									columnNumber: 15
 								}, this), /* @__PURE__ */ (void 0)("span", {
 									className: "text-xl font-bold font-display text-foreground",
 									children: roomState.settings.rounds
 								}, void 0, false, {
 									fileName: _jsxFileName,
-									lineNumber: 1356,
+									lineNumber: 1364,
 									columnNumber: 15
 								}, this)]
 							}, void 0, true, {
 								fileName: _jsxFileName,
-								lineNumber: 1354,
+								lineNumber: 1362,
 								columnNumber: 13
 							}, this),
 							/* @__PURE__ */ (void 0)("div", {
@@ -9025,25 +9033,25 @@ function Index() {
 									children: "MODE"
 								}, void 0, false, {
 									fileName: _jsxFileName,
-									lineNumber: 1361,
+									lineNumber: 1369,
 									columnNumber: 15
 								}, this), /* @__PURE__ */ (void 0)("span", {
 									className: "text-lg font-bold font-display text-foreground capitalize",
 									children: roomState.settings.gameMode.replace("_", " ")
 								}, void 0, false, {
 									fileName: _jsxFileName,
-									lineNumber: 1362,
+									lineNumber: 1370,
 									columnNumber: 15
 								}, this)]
 							}, void 0, true, {
 								fileName: _jsxFileName,
-								lineNumber: 1360,
+								lineNumber: 1368,
 								columnNumber: 13
 							}, this)
 						]
 					}, void 0, true, {
 						fileName: _jsxFileName,
-						lineNumber: 1341,
+						lineNumber: 1349,
 						columnNumber: 11
 					}, this),
 					/* @__PURE__ */ (void 0)("div", {
@@ -9054,7 +9062,7 @@ function Index() {
 							className: "h-16 w-16 sm:h-20 sm:w-20 object-contain shrink-0 drop-shadow-xs"
 						}, void 0, false, {
 							fileName: _jsxFileName,
-							lineNumber: 1370,
+							lineNumber: 1378,
 							columnNumber: 13
 						}, this), /* @__PURE__ */ (void 0)("div", {
 							className: "font-hand space-y-0.5",
@@ -9063,24 +9071,24 @@ function Index() {
 								children: "Welcome to Class! 👋"
 							}, void 0, false, {
 								fileName: _jsxFileName,
-								lineNumber: 1372,
+								lineNumber: 1380,
 								columnNumber: 15
 							}, this), /* @__PURE__ */ (void 0)("p", {
 								className: "text-xs sm:text-sm text-foreground",
 								children: roomState.players.length < 3 ? "Share room code or invite link with friends. Match can start once 3 detectives arrive!" : "All desks are ready! Host can start the round anytime."
 							}, void 0, false, {
 								fileName: _jsxFileName,
-								lineNumber: 1375,
+								lineNumber: 1383,
 								columnNumber: 15
 							}, this)]
 						}, void 0, true, {
 							fileName: _jsxFileName,
-							lineNumber: 1371,
+							lineNumber: 1379,
 							columnNumber: 13
 						}, this)]
 					}, void 0, true, {
 						fileName: _jsxFileName,
-						lineNumber: 1369,
+						lineNumber: 1377,
 						columnNumber: 11
 					}, this),
 					/* @__PURE__ */ (void 0)("div", {
@@ -9092,7 +9100,7 @@ function Index() {
 								children: [
 									/* @__PURE__ */ (void 0)(Users, { className: "h-5 w-5 text-primary" }, void 0, false, {
 										fileName: _jsxFileName,
-										lineNumber: 1385,
+										lineNumber: 1393,
 										columnNumber: 17
 									}, this),
 									" Who's in Class? (",
@@ -9101,19 +9109,19 @@ function Index() {
 								]
 							}, void 0, true, {
 								fileName: _jsxFileName,
-								lineNumber: 1384,
+								lineNumber: 1392,
 								columnNumber: 15
 							}, this), roomState.players.length < 3 && /* @__PURE__ */ (void 0)("span", {
 								className: "text-sm font-bold text-destructive",
 								children: "⚠️ Need at least 3 players to start"
 							}, void 0, false, {
 								fileName: _jsxFileName,
-								lineNumber: 1387,
+								lineNumber: 1395,
 								columnNumber: 48
 							}, this)]
 						}, void 0, true, {
 							fileName: _jsxFileName,
-							lineNumber: 1383,
+							lineNumber: 1391,
 							columnNumber: 13
 						}, this), /* @__PURE__ */ (void 0)("div", {
 							className: "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3",
@@ -9126,7 +9134,7 @@ function Index() {
 										children: p.displayName.charAt(0).toUpperCase()
 									}, void 0, false, {
 										fileName: _jsxFileName,
-										lineNumber: 1395,
+										lineNumber: 1403,
 										columnNumber: 21
 									}, this), /* @__PURE__ */ (void 0)("div", {
 										className: "truncate",
@@ -9139,7 +9147,7 @@ function Index() {
 													children: "HOST"
 												}, void 0, false, {
 													fileName: _jsxFileName,
-													lineNumber: 1401,
+													lineNumber: 1409,
 													columnNumber: 38
 												}, this),
 												p.userId?.startsWith("guest_") && /* @__PURE__ */ (void 0)("span", {
@@ -9147,7 +9155,7 @@ function Index() {
 													children: "GUEST"
 												}, void 0, false, {
 													fileName: _jsxFileName,
-													lineNumber: 1404,
+													lineNumber: 1412,
 													columnNumber: 60
 												}, this),
 												p.socketId === currentSocketId && /* @__PURE__ */ (void 0)("span", {
@@ -9155,45 +9163,45 @@ function Index() {
 													children: "(You)"
 												}, void 0, false, {
 													fileName: _jsxFileName,
-													lineNumber: 1407,
+													lineNumber: 1415,
 													columnNumber: 60
 												}, this)
 											]
 										}, void 0, true, {
 											fileName: _jsxFileName,
-											lineNumber: 1399,
+											lineNumber: 1407,
 											columnNumber: 23
 										}, this), /* @__PURE__ */ (void 0)("div", {
 											className: "text-xs text-muted-foreground",
 											children: "Ready to play ✏️"
 										}, void 0, false, {
 											fileName: _jsxFileName,
-											lineNumber: 1409,
+											lineNumber: 1417,
 											columnNumber: 23
 										}, this)]
 									}, void 0, true, {
 										fileName: _jsxFileName,
-										lineNumber: 1398,
+										lineNumber: 1406,
 										columnNumber: 21
 									}, this)]
 								}, void 0, true, {
 									fileName: _jsxFileName,
-									lineNumber: 1394,
+									lineNumber: 1402,
 									columnNumber: 19
 								}, this)
 							}, p.socketId, false, {
 								fileName: _jsxFileName,
-								lineNumber: 1393,
+								lineNumber: 1401,
 								columnNumber: 50
 							}, this))
 						}, void 0, false, {
 							fileName: _jsxFileName,
-							lineNumber: 1392,
+							lineNumber: 1400,
 							columnNumber: 13
 						}, this)]
 					}, void 0, true, {
 						fileName: _jsxFileName,
-						lineNumber: 1382,
+						lineNumber: 1390,
 						columnNumber: 11
 					}, this),
 					/* @__PURE__ */ (void 0)("div", {
@@ -9203,7 +9211,7 @@ function Index() {
 							children: isHost ? "You are the host. Configure settings above and start when ready." : "Waiting for the host to start the match..."
 						}, void 0, false, {
 							fileName: _jsxFileName,
-							lineNumber: 1418,
+							lineNumber: 1426,
 							columnNumber: 13
 						}, this), isHost && /* @__PURE__ */ (void 0)(Btn, {
 							disabled: roomState.players.length < 3,
@@ -9216,18 +9224,18 @@ function Index() {
 							]
 						}, void 0, true, {
 							fileName: _jsxFileName,
-							lineNumber: 1422,
+							lineNumber: 1430,
 							columnNumber: 24
 						}, this)]
 					}, void 0, true, {
 						fileName: _jsxFileName,
-						lineNumber: 1417,
+						lineNumber: 1425,
 						columnNumber: 11
 					}, this)
 				]
 			}, void 0, true, {
 				fileName: _jsxFileName,
-				lineNumber: 1299,
+				lineNumber: 1307,
 				columnNumber: 52
 			}, this),
 			roomState && roomState.phase !== "lobby" && /* @__PURE__ */ (void 0)("section", {
@@ -9235,7 +9243,7 @@ function Index() {
 				children: [
 					/* @__PURE__ */ (void 0)("div", { className: "tape absolute -top-4 left-1/2 h-7 w-36 -translate-x-1/2 rotate-[-1deg]" }, void 0, false, {
 						fileName: _jsxFileName,
-						lineNumber: 1430,
+						lineNumber: 1438,
 						columnNumber: 11
 					}, this),
 					/* @__PURE__ */ (void 0)("div", {
@@ -9252,7 +9260,7 @@ function Index() {
 								]
 							}, void 0, true, {
 								fileName: _jsxFileName,
-								lineNumber: 1435,
+								lineNumber: 1443,
 								columnNumber: 15
 							}, this), /* @__PURE__ */ (void 0)("span", {
 								className: "sketch bg-highlight px-2.5 sm:px-3 py-1 text-sm sm:text-base font-bold text-foreground capitalize",
@@ -9265,7 +9273,7 @@ function Index() {
 										roomState.skipDiscussionVotesCount > 0 && ` • ${roomState.skipDiscussionVotesCount}/${roomState.skipDiscussionRequired} Skip`
 									] }, void 0, true, {
 										fileName: _jsxFileName,
-										lineNumber: 1441,
+										lineNumber: 1449,
 										columnNumber: 54
 									}, this),
 									roomState.phase === "answer_submission" && "Secret Vote",
@@ -9273,32 +9281,32 @@ function Index() {
 								]
 							}, void 0, true, {
 								fileName: _jsxFileName,
-								lineNumber: 1439,
+								lineNumber: 1447,
 								columnNumber: 15
 							}, this)]
 						}, void 0, true, {
 							fileName: _jsxFileName,
-							lineNumber: 1434,
+							lineNumber: 1442,
 							columnNumber: 13
 						}, this), remainingTime > 0 && roomState.phase !== "results" && /* @__PURE__ */ (void 0)("div", {
 							className: "sketch bg-accent px-3 sm:px-4 py-1 text-accent-foreground font-bold text-base sm:text-lg flex items-center gap-1.5 sm:gap-2",
 							children: [/* @__PURE__ */ (void 0)(Clock, { className: "h-4 w-4 sm:h-5 sm:w-5 animate-pulse" }, void 0, false, {
 								fileName: _jsxFileName,
-								lineNumber: 1452,
+								lineNumber: 1460,
 								columnNumber: 17
 							}, this), /* @__PURE__ */ (void 0)("span", { children: [remainingTime, "s"] }, void 0, true, {
 								fileName: _jsxFileName,
-								lineNumber: 1453,
+								lineNumber: 1461,
 								columnNumber: 17
 							}, this)]
 						}, void 0, true, {
 							fileName: _jsxFileName,
-							lineNumber: 1451,
+							lineNumber: 1459,
 							columnNumber: 68
 						}, this)]
 					}, void 0, true, {
 						fileName: _jsxFileName,
-						lineNumber: 1433,
+						lineNumber: 1441,
 						columnNumber: 11
 					}, this),
 					secretInfo && /* @__PURE__ */ (void 0)("div", {
@@ -9311,7 +9319,7 @@ function Index() {
 								className: "h-9 w-9 sm:h-11 sm:w-11 object-contain shrink-0 drop-shadow-xs"
 							}, void 0, false, {
 								fileName: _jsxFileName,
-								lineNumber: 1460,
+								lineNumber: 1468,
 								columnNumber: 17
 							}, this), /* @__PURE__ */ (void 0)("div", {
 								className: "min-w-0",
@@ -9322,36 +9330,36 @@ function Index() {
 										children: showSecretWord ? "YOUR WORD:" : "SECRET WORD:"
 									}, void 0, false, {
 										fileName: _jsxFileName,
-										lineNumber: 1463,
+										lineNumber: 1471,
 										columnNumber: 21
 									}, this), showSecretWord && /* @__PURE__ */ (void 0)("span", {
 										className: `text-[10px] font-bold px-1.5 py-0.2 rounded font-mono ${secretInfo.role === "imposter" ? "bg-accent/20 text-accent border border-accent/30" : "bg-primary/20 text-primary border border-primary/30"}`,
 										children: secretInfo.role === "imposter" ? "🕵️ IMPOSTER" : "🔎 DETECTIVE"
 									}, void 0, false, {
 										fileName: _jsxFileName,
-										lineNumber: 1466,
+										lineNumber: 1474,
 										columnNumber: 40
 									}, this)]
 								}, void 0, true, {
 									fileName: _jsxFileName,
-									lineNumber: 1462,
+									lineNumber: 1470,
 									columnNumber: 19
 								}, this), /* @__PURE__ */ (void 0)("div", {
 									className: "text-xl sm:text-2xl md:text-3xl font-display text-accent font-bold truncate leading-tight",
 									children: showSecretWord ? secretInfo.word : "🔒 • • • • • • 🔒"
 								}, void 0, false, {
 									fileName: _jsxFileName,
-									lineNumber: 1470,
+									lineNumber: 1478,
 									columnNumber: 19
 								}, this)]
 							}, void 0, true, {
 								fileName: _jsxFileName,
-								lineNumber: 1461,
+								lineNumber: 1469,
 								columnNumber: 17
 							}, this)]
 						}, void 0, true, {
 							fileName: _jsxFileName,
-							lineNumber: 1459,
+							lineNumber: 1467,
 							columnNumber: 15
 						}, this), /* @__PURE__ */ (void 0)("div", {
 							className: "shrink-0",
@@ -9364,30 +9372,30 @@ function Index() {
 								className: `sketch flex items-center gap-1.5 px-3 py-1.5 text-xs sm:text-sm font-bold transition-all shadow-xs ${showSecretWord ? "bg-secondary text-foreground hover:bg-secondary/80" : "bg-accent text-accent-foreground hover:brightness-110"}`,
 								children: [showSecretWord ? /* @__PURE__ */ (void 0)(EyeOff, { className: "h-3.5 w-3.5" }, void 0, false, {
 									fileName: _jsxFileName,
-									lineNumber: 1481,
+									lineNumber: 1489,
 									columnNumber: 37
 								}, this) : /* @__PURE__ */ (void 0)(Eye, { className: "h-3.5 w-3.5" }, void 0, false, {
 									fileName: _jsxFileName,
-									lineNumber: 1481,
+									lineNumber: 1489,
 									columnNumber: 74
 								}, this), /* @__PURE__ */ (void 0)("span", { children: showSecretWord ? "Hide 🔒" : "Peek 👁️" }, void 0, false, {
 									fileName: _jsxFileName,
-									lineNumber: 1482,
+									lineNumber: 1490,
 									columnNumber: 19
 								}, this)]
 							}, void 0, true, {
 								fileName: _jsxFileName,
-								lineNumber: 1477,
+								lineNumber: 1485,
 								columnNumber: 17
 							}, this)
 						}, void 0, false, {
 							fileName: _jsxFileName,
-							lineNumber: 1476,
+							lineNumber: 1484,
 							columnNumber: 15
 						}, this)]
 					}, void 0, true, {
 						fileName: _jsxFileName,
-						lineNumber: 1458,
+						lineNumber: 1466,
 						columnNumber: 26
 					}, this),
 					/* @__PURE__ */ (void 0)("div", {
@@ -9403,16 +9411,16 @@ function Index() {
 											className: "font-bold text-accent flex items-center gap-1.5 font-display text-lg sm:text-xl",
 											children: [/* @__PURE__ */ (void 0)(Flame, { className: "h-4 w-4 sm:h-5 sm:w-5 text-accent animate-pulse" }, void 0, false, {
 												fileName: _jsxFileName,
-												lineNumber: 1496,
+												lineNumber: 1504,
 												columnNumber: 27
 											}, this), /* @__PURE__ */ (void 0)("span", { children: "Your Turn to Give a Clue!" }, void 0, false, {
 												fileName: _jsxFileName,
-												lineNumber: 1497,
+												lineNumber: 1505,
 												columnNumber: 27
 											}, this)]
 										}, void 0, true, {
 											fileName: _jsxFileName,
-											lineNumber: 1495,
+											lineNumber: 1503,
 											columnNumber: 25
 										}, this), /* @__PURE__ */ (void 0)("div", {
 											className: "flex items-center gap-1 bg-muted/60 p-0.5 rounded border border-foreground/20 font-hand",
@@ -9427,7 +9435,7 @@ function Index() {
 													children: "✏️ Text"
 												}, void 0, false, {
 													fileName: _jsxFileName,
-													lineNumber: 1502,
+													lineNumber: 1510,
 													columnNumber: 27
 												}, this),
 												/* @__PURE__ */ (void 0)("button", {
@@ -9440,7 +9448,7 @@ function Index() {
 													children: "🎨 Sketch"
 												}, void 0, false, {
 													fileName: _jsxFileName,
-													lineNumber: 1508,
+													lineNumber: 1516,
 													columnNumber: 27
 												}, this),
 												/* @__PURE__ */ (void 0)("button", {
@@ -9453,18 +9461,18 @@ function Index() {
 													children: "🎙️ Voice"
 												}, void 0, false, {
 													fileName: _jsxFileName,
-													lineNumber: 1514,
+													lineNumber: 1522,
 													columnNumber: 27
 												}, this)
 											]
 										}, void 0, true, {
 											fileName: _jsxFileName,
-											lineNumber: 1501,
+											lineNumber: 1509,
 											columnNumber: 25
 										}, this)]
 									}, void 0, true, {
 										fileName: _jsxFileName,
-										lineNumber: 1494,
+										lineNumber: 1502,
 										columnNumber: 23
 									}, this), clueType === "text" ? /* @__PURE__ */ (void 0)("div", {
 										className: "space-y-3 font-hand pt-1",
@@ -9477,7 +9485,7 @@ function Index() {
 											maxLength: 100
 										}, void 0, false, {
 											fileName: _jsxFileName,
-											lineNumber: 1524,
+											lineNumber: 1532,
 											columnNumber: 27
 										}, this), /* @__PURE__ */ (void 0)("div", {
 											className: "flex justify-end",
@@ -9487,35 +9495,35 @@ function Index() {
 												children: "Submit Clue ✏️"
 											}, void 0, false, {
 												fileName: _jsxFileName,
-												lineNumber: 1526,
+												lineNumber: 1534,
 												columnNumber: 29
 											}, this)
 										}, void 0, false, {
 											fileName: _jsxFileName,
-											lineNumber: 1525,
+											lineNumber: 1533,
 											columnNumber: 27
 										}, this)]
 									}, void 0, true, {
 										fileName: _jsxFileName,
-										lineNumber: 1523,
+										lineNumber: 1531,
 										columnNumber: 46
 									}, this) : clueType === "draw" ? /* @__PURE__ */ (void 0)(DrawPad, {
 										onDone: handleSubmitDrawingClue,
 										onCancel: () => setClueType("text")
 									}, void 0, false, {
 										fileName: _jsxFileName,
-										lineNumber: 1530,
+										lineNumber: 1538,
 										columnNumber: 56
 									}, this) : /* @__PURE__ */ (void 0)(VoiceClueRecorder, { onSubmit: (audioUrl, transcript) => {
 										handleSubmitVoiceClue(audioUrl, transcript);
 									} }, void 0, false, {
 										fileName: _jsxFileName,
-										lineNumber: 1530,
+										lineNumber: 1538,
 										columnNumber: 140
 									}, this)]
 								}, void 0, true, {
 									fileName: _jsxFileName,
-									lineNumber: 1492,
+									lineNumber: 1500,
 									columnNumber: 31
 								}, this) : /* @__PURE__ */ (void 0)("div", {
 									className: "sketch bg-white/90 p-5 sm:p-6 text-center space-y-2.5 font-hand flex flex-col items-center justify-center border-2 border-foreground/30 shadow-xs",
@@ -9526,7 +9534,7 @@ function Index() {
 											className: "h-20 sm:h-24 w-auto object-contain drop-shadow-xs animate-pulse"
 										}, void 0, false, {
 											fileName: _jsxFileName,
-											lineNumber: 1534,
+											lineNumber: 1542,
 											columnNumber: 23
 										}, this),
 										/* @__PURE__ */ (void 0)("div", {
@@ -9538,7 +9546,7 @@ function Index() {
 											]
 										}, void 0, true, {
 											fileName: _jsxFileName,
-											lineNumber: 1535,
+											lineNumber: 1543,
 											columnNumber: 23
 										}, this),
 										/* @__PURE__ */ (void 0)("p", {
@@ -9546,17 +9554,17 @@ function Index() {
 											children: "Watch closely or inspect their drawing to determine if their clue fits the secret word!"
 										}, void 0, false, {
 											fileName: _jsxFileName,
-											lineNumber: 1538,
+											lineNumber: 1546,
 											columnNumber: 23
 										}, this)
 									]
 								}, void 0, true, {
 									fileName: _jsxFileName,
-									lineNumber: 1533,
+									lineNumber: 1541,
 									columnNumber: 30
 								}, this) }, void 0, false, {
 									fileName: _jsxFileName,
-									lineNumber: 1491,
+									lineNumber: 1499,
 									columnNumber: 51
 								}, this),
 								roomState.phase === "discussion" && /* @__PURE__ */ (void 0)(VoiceDiscussionFloor, {
@@ -9572,7 +9580,7 @@ function Index() {
 									onVoteSkip: handleVoteSkipDiscussion
 								}, void 0, false, {
 									fileName: _jsxFileName,
-									lineNumber: 1545,
+									lineNumber: 1553,
 									columnNumber: 52
 								}, this),
 								/* @__PURE__ */ (void 0)("div", {
@@ -9585,19 +9593,19 @@ function Index() {
 											")"
 										] }, void 0, true, {
 											fileName: _jsxFileName,
-											lineNumber: 1550,
+											lineNumber: 1558,
 											columnNumber: 19
 										}, this)
 									}, void 0, false, {
 										fileName: _jsxFileName,
-										lineNumber: 1549,
+										lineNumber: 1557,
 										columnNumber: 17
 									}, this), !roomState.hints || roomState.hints.length === 0 ? /* @__PURE__ */ (void 0)("div", {
 										className: "sketch bg-card/40 p-6 text-center text-muted-foreground text-sm",
 										children: "No clues shared yet. The first clue will appear here! 📋"
 									}, void 0, false, {
 										fileName: _jsxFileName,
-										lineNumber: 1553,
+										lineNumber: 1561,
 										columnNumber: 69
 									}, this) : /* @__PURE__ */ (void 0)("div", {
 										className: "grid grid-cols-1 sm:grid-cols-2 gap-3",
@@ -9606,7 +9614,7 @@ function Index() {
 											children: [
 												/* @__PURE__ */ (void 0)("div", { className: "tape absolute -top-2 left-4 h-4 w-16 rotate-[-2deg]" }, void 0, false, {
 													fileName: _jsxFileName,
-													lineNumber: 1557,
+													lineNumber: 1565,
 													columnNumber: 25
 												}, this),
 												/* @__PURE__ */ (void 0)("div", {
@@ -9614,7 +9622,7 @@ function Index() {
 													children: hint.playerName
 												}, void 0, false, {
 													fileName: _jsxFileName,
-													lineNumber: 1558,
+													lineNumber: 1566,
 													columnNumber: 25
 												}, this),
 												hint.type === "text" ? /* @__PURE__ */ (void 0)("div", {
@@ -9626,14 +9634,14 @@ function Index() {
 													]
 												}, void 0, true, {
 													fileName: _jsxFileName,
-													lineNumber: 1560,
+													lineNumber: 1568,
 													columnNumber: 49
 												}, this) : hint.type === "voice" ? /* @__PURE__ */ (void 0)(VoiceCluePlayer, {
 													audioUrl: hint.content,
 													transcript: hint.transcript
 												}, void 0, false, {
 													fileName: _jsxFileName,
-													lineNumber: 1562,
+													lineNumber: 1570,
 													columnNumber: 60
 												}, this) : /* @__PURE__ */ (void 0)("div", {
 													className: "rounded border bg-white p-1",
@@ -9643,28 +9651,28 @@ function Index() {
 														className: "h-32 w-full object-contain"
 													}, void 0, false, {
 														fileName: _jsxFileName,
-														lineNumber: 1563,
+														lineNumber: 1571,
 														columnNumber: 29
 													}, this)
 												}, void 0, false, {
 													fileName: _jsxFileName,
-													lineNumber: 1562,
+													lineNumber: 1570,
 													columnNumber: 135
 												}, this)
 											]
 										}, idx, true, {
 											fileName: _jsxFileName,
-											lineNumber: 1556,
+											lineNumber: 1564,
 											columnNumber: 70
 										}, this))
 									}, void 0, false, {
 										fileName: _jsxFileName,
-										lineNumber: 1555,
+										lineNumber: 1563,
 										columnNumber: 28
 									}, this)]
 								}, void 0, true, {
 									fileName: _jsxFileName,
-									lineNumber: 1548,
+									lineNumber: 1556,
 									columnNumber: 15
 								}, this),
 								roomState.phase === "results" && roomState.lastResult && /* @__PURE__ */ (void 0)("div", {
@@ -9678,7 +9686,7 @@ function Index() {
 												className: "h-20 sm:h-24 w-auto object-contain drop-shadow-md hover:scale-110 transition-transform"
 											}, void 0, false, {
 												fileName: _jsxFileName,
-												lineNumber: 1572,
+												lineNumber: 1580,
 												columnNumber: 21
 											}, this), /* @__PURE__ */ (void 0)("img", {
 												src: "/detective-jumping-win.png",
@@ -9686,12 +9694,12 @@ function Index() {
 												className: "h-24 sm:h-28 w-auto object-contain drop-shadow-md hover:scale-110 transition-transform animate-bounce"
 											}, void 0, false, {
 												fileName: _jsxFileName,
-												lineNumber: 1573,
+												lineNumber: 1581,
 												columnNumber: 21
 											}, this)]
 										}, void 0, true, {
 											fileName: _jsxFileName,
-											lineNumber: 1571,
+											lineNumber: 1579,
 											columnNumber: 19
 										}, this),
 										/* @__PURE__ */ (void 0)("div", {
@@ -9699,7 +9707,7 @@ function Index() {
 											children: roomState.lastResult.banner
 										}, void 0, false, {
 											fileName: _jsxFileName,
-											lineNumber: 1576,
+											lineNumber: 1584,
 											columnNumber: 19
 										}, this),
 										/* @__PURE__ */ (void 0)("div", {
@@ -9711,19 +9719,19 @@ function Index() {
 													children: "COMMON WORD"
 												}, void 0, false, {
 													fileName: _jsxFileName,
-													lineNumber: 1582,
+													lineNumber: 1590,
 													columnNumber: 23
 												}, this), /* @__PURE__ */ (void 0)("span", {
 													className: "text-2xl font-display text-primary font-bold",
 													children: roomState.lastResult.commonWord
 												}, void 0, false, {
 													fileName: _jsxFileName,
-													lineNumber: 1583,
+													lineNumber: 1591,
 													columnNumber: 23
 												}, this)]
 											}, void 0, true, {
 												fileName: _jsxFileName,
-												lineNumber: 1581,
+												lineNumber: 1589,
 												columnNumber: 21
 											}, this), /* @__PURE__ */ (void 0)("div", {
 												className: "sketch bg-white p-3",
@@ -9732,24 +9740,24 @@ function Index() {
 													children: "IMPOSTER WORD"
 												}, void 0, false, {
 													fileName: _jsxFileName,
-													lineNumber: 1589,
+													lineNumber: 1597,
 													columnNumber: 23
 												}, this), /* @__PURE__ */ (void 0)("span", {
 													className: "text-2xl font-display text-accent font-bold",
 													children: roomState.lastResult.imposterWord
 												}, void 0, false, {
 													fileName: _jsxFileName,
-													lineNumber: 1590,
+													lineNumber: 1598,
 													columnNumber: 23
 												}, this)]
 											}, void 0, true, {
 												fileName: _jsxFileName,
-												lineNumber: 1588,
+												lineNumber: 1596,
 												columnNumber: 21
 											}, this)]
 										}, void 0, true, {
 											fileName: _jsxFileName,
-											lineNumber: 1580,
+											lineNumber: 1588,
 											columnNumber: 19
 										}, this),
 										/* @__PURE__ */ (void 0)("div", {
@@ -9761,7 +9769,7 @@ function Index() {
 											]
 										}, void 0, true, {
 											fileName: _jsxFileName,
-											lineNumber: 1596,
+											lineNumber: 1604,
 											columnNumber: 19
 										}, this),
 										isHost && /* @__PURE__ */ (void 0)("div", {
@@ -9771,24 +9779,24 @@ function Index() {
 												children: roomState.currentRound >= roomState.totalRounds ? "Finish Match & View Rankings 🏆" : "Start Next Round 🚀"
 											}, void 0, false, {
 												fileName: _jsxFileName,
-												lineNumber: 1601,
+												lineNumber: 1609,
 												columnNumber: 23
 											}, this)
 										}, void 0, false, {
 											fileName: _jsxFileName,
-											lineNumber: 1600,
+											lineNumber: 1608,
 											columnNumber: 30
 										}, this)
 									]
 								}, void 0, true, {
 									fileName: _jsxFileName,
-									lineNumber: 1570,
+									lineNumber: 1578,
 									columnNumber: 73
 								}, this)
 							]
 						}, void 0, true, {
 							fileName: _jsxFileName,
-							lineNumber: 1490,
+							lineNumber: 1498,
 							columnNumber: 13
 						}, this), /* @__PURE__ */ (void 0)("div", {
 							className: "lg:col-span-5",
@@ -9804,23 +9812,23 @@ function Index() {
 								totalEligible: roomState.totalEligibleAnswers || roomState.players?.length || 0
 							}, void 0, false, {
 								fileName: _jsxFileName,
-								lineNumber: 1610,
+								lineNumber: 1618,
 								columnNumber: 15
 							}, this)
 						}, void 0, false, {
 							fileName: _jsxFileName,
-							lineNumber: 1609,
+							lineNumber: 1617,
 							columnNumber: 13
 						}, this)]
 					}, void 0, true, {
 						fileName: _jsxFileName,
-						lineNumber: 1488,
+						lineNumber: 1496,
 						columnNumber: 11
 					}, this)
 				]
 			}, void 0, true, {
 				fileName: _jsxFileName,
-				lineNumber: 1429,
+				lineNumber: 1437,
 				columnNumber: 52
 			}, this),
 			showSettings && /* @__PURE__ */ (void 0)(RoomSettingsModal, {
@@ -9850,7 +9858,7 @@ function Index() {
 				onClose: () => setShowSettings(false)
 			}, void 0, false, {
 				fileName: _jsxFileName,
-				lineNumber: 1616,
+				lineNumber: 1624,
 				columnNumber: 24
 			}, this),
 			showPublicRooms && /* @__PURE__ */ (void 0)(PublicRoomsModal, {
@@ -9861,7 +9869,7 @@ function Index() {
 				onClose: () => setShowPublicRooms(false)
 			}, void 0, false, {
 				fileName: _jsxFileName,
-				lineNumber: 1635,
+				lineNumber: 1643,
 				columnNumber: 27
 			}, this),
 			showNoticeBoard && /* @__PURE__ */ (void 0)(NoticeBoardModal, {
@@ -9869,7 +9877,7 @@ function Index() {
 				championName
 			}, void 0, false, {
 				fileName: _jsxFileName,
-				lineNumber: 1639,
+				lineNumber: 1647,
 				columnNumber: 27
 			}, this),
 			showAccount && /* @__PURE__ */ (void 0)(AccountModal, {
@@ -9926,18 +9934,18 @@ function Index() {
 				}
 			}, void 0, false, {
 				fileName: _jsxFileName,
-				lineNumber: 1641,
+				lineNumber: 1649,
 				columnNumber: 23
 			}, this),
 			showLeaderboard && /* @__PURE__ */ (void 0)(LeaderboardModal, { onClose: () => setShowLeaderboard(false) }, void 0, false, {
 				fileName: _jsxFileName,
-				lineNumber: 1702,
+				lineNumber: 1710,
 				columnNumber: 27
 			}, this)
 		]
 	}, void 0, true, {
 		fileName: _jsxFileName,
-		lineNumber: 716,
+		lineNumber: 724,
 		columnNumber: 10
 	}, this);
 }
