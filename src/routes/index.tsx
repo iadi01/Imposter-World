@@ -9,6 +9,8 @@ import { LeaderboardModal } from "@/components/LeaderboardModal";
 import { PublicRoomsModal, PublicRoomItem } from "@/components/PublicRoomsModal";
 import { NoticeBoardModal } from "@/components/NoticeBoardModal";
 import { VoiceClueRecorder, VoiceCluePlayer } from "@/components/VoiceClue";
+import { VoiceDiscussionFloor } from "@/components/VoiceDiscussionFloor";
+import { ClassroomJoiningOverlay } from "@/components/ClassroomJoiningOverlay";
 import { getSocket } from "@/lib/socket";
 import { sound } from "@/lib/sound";
 import { API_BASE } from "@/lib/api";
@@ -206,6 +208,12 @@ function Index() {
       ? new URLSearchParams(window.location.search).get("room")?.trim().toUpperCase() || null
       : null
   );
+  const [joiningCode, setJoiningCode] = useState<string | null>(() => {
+    if (typeof window !== "undefined") {
+      return new URLSearchParams(window.location.search).get("room")?.trim().toUpperCase() || null;
+    }
+    return null;
+  });
   const [lobbyTimeLeft, setLobbyTimeLeft] = useState<number | null>(null);
 
   // Synchronize browser URL query param (?room=CODE) with active roomState
@@ -357,6 +365,7 @@ function Index() {
 
     socket.on("room:state", (state: any) => {
       setRoomState(state);
+      setJoiningCode(null);
       if (state.phase === "hint_turn") {
         setHasSubmittedAnswer(false);
       }
@@ -527,39 +536,50 @@ function Index() {
     if (!code || !code.trim()) return;
     const cleanCode = code.trim().toUpperCase();
     if (roomState && roomState.roomCode === cleanCode) {
+      setJoiningCode(null);
       return;
     }
     sound.playPop();
+    setJoiningCode(cleanCode);
     const socket = socketRef.current;
-    if (!socket.connected) {
-      socket.connect();
-    }
-    const joinUser = user || getInitialUser() || {
-      id: getInstantGuestId() || socket.id || `guest-${Math.random().toString(36).substring(2, 9)}`,
-      displayName: getInstantGuestName(),
-      avatarUrl: "",
+
+    const emitJoin = () => {
+      const joinUser = user || getInitialUser() || {
+        id: getInstantGuestId() || socket.id || `guest-${Math.random().toString(36).substring(2, 9)}`,
+        displayName: getInstantGuestName(),
+        avatarUrl: "",
+      };
+
+      socket.emit(
+        "room:join",
+        {
+          roomCode: cleanCode,
+          user: { id: joinUser.id, displayName: joinUser.displayName, avatarUrl: joinUser.avatarUrl },
+        },
+        (res: any) => {
+          if (res && res.success && res.roomCode) {
+            if (res.roomState) {
+              setRoomState(res.roomState);
+            }
+            setJoiningCode(null);
+            const url = new URL(window.location.href);
+            url.searchParams.set("room", res.roomCode);
+            window.history.replaceState({}, "", `${url.pathname}?${url.searchParams.toString()}`);
+          } else if (res && !res.success) {
+            setJoiningCode(null);
+            toast.error(res.error || "Failed to join room");
+            pendingInviteCode.current = null;
+          }
+        }
+      );
     };
 
-    socket.emit(
-      "room:join",
-      {
-        roomCode: cleanCode,
-        user: { id: joinUser.id, displayName: joinUser.displayName, avatarUrl: joinUser.avatarUrl },
-      },
-      (res: any) => {
-        if (res && res.success && res.roomCode) {
-          if (res.roomState) {
-            setRoomState(res.roomState);
-          }
-          const url = new URL(window.location.href);
-          url.searchParams.set("room", res.roomCode);
-          window.history.replaceState({}, "", `${url.pathname}?${url.searchParams.toString()}`);
-        } else if (res && !res.success) {
-          toast.error(res.error || "Failed to join room");
-          pendingInviteCode.current = null;
-        }
-      }
-    );
+    if (!socket.connected) {
+      socket.connect();
+      socket.once("connect", emitJoin);
+    } else {
+      emitJoin();
+    }
   };
 
   const handleInstantMatch = () => {
@@ -763,7 +783,8 @@ function Index() {
   };
 
   const currentSocketId = socketRef.current?.id || "";
-  const isHost = Boolean(roomState?.players?.find((p: any) => p.socketId === currentSocketId)?.isHost);
+  const myPlayer = roomState?.players?.find((p: any) => p.socketId === currentSocketId);
+  const isHost = Boolean(myPlayer?.isHost);
   const isMyTurn =
     roomState?.phase === "hint_turn" && roomState?.activePlayerSocketId === currentSocketId;
   const hasVotedSkipDiscussion = Boolean(
@@ -772,6 +793,20 @@ function Index() {
 
   return (
     <main className="min-h-screen px-2.5 sm:px-6 md:px-8 py-3 sm:py-6 md:py-10">
+      {/* Classroom Instant Joining Transition Screen */}
+      {joiningCode && !roomState && (
+        <ClassroomJoiningOverlay
+          roomCode={joiningCode}
+          onCancel={() => {
+            setJoiningCode(null);
+            if (typeof window !== "undefined") {
+              const url = new URL(window.location.href);
+              url.searchParams.delete("room");
+              window.history.replaceState({}, "", url.pathname);
+            }
+          }}
+        />
+      )}
       {/* Top Header Navigation */}
       <header className="sketch mx-auto mb-4 sm:mb-6 flex max-w-5xl items-center justify-between border-2 border-foreground bg-white/90 backdrop-blur-md px-2.5 sm:px-5 py-2 sm:py-3 shadow-lg">
         {/* Brand */}
@@ -1932,50 +1967,23 @@ function Index() {
                 </div>
               )}
 
-              {/* Discussion Interrogation Card with Majority Skip Option */}
+              {/* Turn-Based Discussion Floor & Live WebRTC Mic */}
               {roomState.phase === "discussion" && (
-                <div className="sketch bg-white/95 p-3.5 sm:p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-2 border-primary shadow-xs font-hand">
-                  <div className="flex items-center gap-3">
-                    <img
-                      src="/detective-magnifier.png"
-                      alt="Detective Investigating Clues"
-                      className="h-12 w-auto object-contain shrink-0 drop-shadow-xs"
-                    />
-                    <div className="space-y-0.5">
-                      <div className="font-bold text-base sm:text-lg font-display text-primary flex items-center gap-2">
-                        <span>Classroom Debate & Discussion! 🗣️</span>
-                      </div>
-                      <p className="text-xs sm:text-sm text-foreground/90">
-                        Debate clues in chat, or vote to skip to start secret voting immediately!
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* Skip Discussion Action Button (Majority Rule) */}
-                  <div className="flex items-center gap-2 shrink-0 self-start sm:self-auto">
-                    <button
-                      type="button"
-                      onClick={handleVoteSkipDiscussion}
-                      disabled={hasVotedSkipDiscussion}
-                      className={`sketch flex items-center gap-2 px-3.5 py-1.5 text-xs sm:text-sm font-bold transition-all shadow-xs ${
-                        hasVotedSkipDiscussion
-                          ? "bg-secondary text-foreground/60 border-foreground/30 cursor-not-allowed"
-                          : "bg-accent text-accent-foreground hover:brightness-110 animate-pulse"
-                      }`}
-                      title={
-                        hasVotedSkipDiscussion
-                          ? "You have already voted to skip discussion."
-                          : "Vote to skip discussion (requires majority of players)"
-                      }
-                    >
-                      <span>{hasVotedSkipDiscussion ? "✓ Voted to Skip" : "⏭️ Skip Discussion"}</span>
-                      <span className="bg-black/15 text-[11px] px-2 py-0.5 rounded-full font-mono font-bold">
-                        {roomState.skipDiscussionVotesCount || 0}/
-                        {roomState.skipDiscussionRequired || Math.floor((roomState.players?.filter((p: any) => p.isConnected).length || 3) / 2) + 1}
-                      </span>
-                    </button>
-                  </div>
-                </div>
+                <VoiceDiscussionFloor
+                  socket={socketRef.current}
+                  roomCode={roomState.roomCode}
+                  myPlayer={myPlayer}
+                  players={roomState.players || []}
+                  speakerFloor={roomState.speakerFloor}
+                  remainingTime={remainingTime}
+                  skipDiscussionVotesCount={roomState.skipDiscussionVotesCount || 0}
+                  skipDiscussionRequired={
+                    roomState.skipDiscussionRequired ||
+                    Math.floor(((roomState.players?.filter((p: any) => p.isConnected).length || 3) / 2) + 1)
+                  }
+                  hasVotedSkip={hasVotedSkipDiscussion}
+                  onVoteSkip={handleVoteSkipDiscussion}
+                />
               )}
 
               {/* Pinboard: List of All Clues Given This Round */}

@@ -278,4 +278,64 @@ describe("Imposter World Core Game Rules & Security", () => {
     const state = room.getPublicState();
     expect(state.players.find((p) => p.socketId === "p2")?.isHost).toBe(true);
   });
+
+  it("orchestrates turn-based speaker floor and raise-hand in discussion phase", () => {
+    const host = createMockPlayer("p1", "Aadi", true);
+    const room = new Room("SPEAK1", host);
+    const p2 = createMockPlayer("p2", "Riya");
+    const p3 = createMockPlayer("p3", "Kabir");
+    room.players.set("p2", p2);
+    room.players.set("p3", p3);
+
+    const mockIo: any = { to: () => ({ emit: () => {} }) };
+    room.startDiscussionPhase(mockIo);
+
+    // Initial speaker is the first player (p1 - Aadi)
+    expect(room.phase).toBe("discussion");
+    expect(room.speakerFloor?.currentSpeakerSocketId).toBe("p1");
+    expect(room.speakerFloor?.currentSpeakerName).toBe("Aadi");
+    expect(room.speakerFloor?.speakerIndex).toBe(0);
+    expect(room.speakerFloor?.isOpenFloor).toBe(false);
+
+    // Non-active speaker p3 cannot pass floor (not current speaker and not host)
+    const invalidPass = room.passSpeakerFloor(mockIo, "p3");
+    expect(invalidPass.success).toBe(false);
+    expect(room.speakerFloor?.currentSpeakerSocketId).toBe("p1");
+
+    // p2 raises hand to speak
+    const raiseRes = room.toggleRaiseHand(mockIo, "p2");
+    expect(raiseRes.success).toBe(true);
+    expect(raiseRes.raised).toBe(true);
+    expect(room.speakerFloor?.handsRaised.has("p2")).toBe(true);
+
+    // Public state includes handsRaised and currentSpeaker
+    const publicState1 = room.getPublicState();
+    expect(publicState1.speakerFloor?.currentSpeakerSocketId).toBe("p1");
+    expect(publicState1.speakerFloor?.handsRaised).toContain("p2");
+
+    // Current speaker p1 clicks "Done" / passes floor
+    const pass1 = room.passSpeakerFloor(mockIo, "p1");
+    expect(pass1.success).toBe(true);
+    expect(room.speakerFloor?.currentSpeakerSocketId).toBe("p2");
+    expect(room.speakerFloor?.currentSpeakerName).toBe("Riya");
+    expect(room.speakerFloor?.speakerIndex).toBe(1);
+
+    // Speaker p2 clicks "Done" / passes floor
+    const pass2 = room.passSpeakerFloor(mockIo, "p2");
+    expect(pass2.success).toBe(true);
+    expect(room.speakerFloor?.currentSpeakerSocketId).toBe("p3");
+    expect(room.speakerFloor?.currentSpeakerName).toBe("Kabir");
+
+    // Speaker p3 clicks "Done" / passes floor -> All finished, becomes Open Floor!
+    const pass3 = room.passSpeakerFloor(mockIo, "p3");
+    expect(pass3.success).toBe(true);
+    expect(room.speakerFloor?.isOpenFloor).toBe(true);
+    expect(room.speakerFloor?.currentSpeakerSocketId).toBeNull();
+
+    const publicState2 = room.getPublicState();
+    expect(publicState2.speakerFloor?.isOpenFloor).toBe(true);
+    expect(publicState2.speakerFloor?.currentSpeakerSocketId).toBeNull();
+
+    room.clearTimer();
+  });
 });

@@ -80,6 +80,15 @@ export interface PublicRoomState {
   skipDiscussionVotesCount?: number | undefined;
   skipDiscussionRequired?: number | undefined;
   skipDiscussionVoters?: string[] | undefined;
+  speakerFloor?: {
+    currentSpeakerSocketId: string | null;
+    currentSpeakerName: string | null;
+    speakerIndex: number;
+    totalSpeakers: number;
+    speakerDeadline: number | null; // epoch ms
+    handsRaised: string[]; // array of socketIds
+    isOpenFloor: boolean;
+  } | undefined;
   lastResult?: {
     winnerTeam: "detectives" | "imposters" | "tie";
     banner: string;

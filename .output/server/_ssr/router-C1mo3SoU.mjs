@@ -3,9 +3,9 @@ import { S as useRouter, _ as lazyRouteComponent, b as Link, f as Scripts, g as 
 import { t as require_jsx_dev_runtime } from "../_libs/react.mjs";
 import { t as ARTICLES } from "./articles-data-BkRX9pQa.mjs";
 import { t as QueryClient } from "../_libs/tanstack__query-core.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/router-Cgfcl6cN.js
+//#region node_modules/.nitro/vite/services/ssr/assets/router-C1mo3SoU.js
 var import_jsx_dev_runtime = require_jsx_dev_runtime();
-var styles_default = "/assets/styles-cXzavuhb.css";
+var styles_default = "/assets/styles-BRfY4O4V.css";
 var _jsxFileName = "/Users/aadi/Downloads/f8225c15-5378-482e-bfe4-be001f84d384/src/routes/__root.tsx";
 function NotFoundComponent() {
 	return /* @__PURE__ */ (0, import_jsx_dev_runtime.jsxDEV)("div", {
@@ -393,7 +393,7 @@ function RootComponent() {
 		columnNumber: 5
 	}, this);
 }
-var $$splitComponentImporter$14 = () => import("./routes-Bmd1H5uc.mjs");
+var $$splitComponentImporter$14 = () => import("./routes-DnmykWHC.mjs");
 var Route$14 = createFileRoute("/")({
 	head: () => ({
 		meta: [{ title: "Imposter World — Real-Time Multiplayer Party Game" }, {

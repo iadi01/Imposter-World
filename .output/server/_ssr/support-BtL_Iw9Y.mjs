@@ -4,7 +4,7 @@ import { r as require_react } from "../_libs/react+tanstack__react-query.mjs";
 import { b as Link } from "../_libs/@tanstack/react-router+[...].mjs";
 import { t as require_jsx_dev_runtime } from "../_libs/react.mjs";
 import { t as toast } from "../_libs/sonner.mjs";
-import { $ as Check, K as Copy, S as QrCode, U as ExternalLink, X as CircleCheck, _ as Send, c as TriangleAlert, f as Smartphone, m as ShieldCheck, rt as ArrowLeft, t as X } from "../_libs/lucide-react.mjs";
+import { $ as CircleCheck, K as ExternalLink, S as QrCode, Y as Copy, _ as Send, c as TriangleAlert, f as Smartphone, m as ShieldCheck, nt as Check, ot as ArrowLeft, t as X } from "../_libs/lucide-react.mjs";
 import { t as require_lib } from "../_libs/qrcode.mjs";
 //#region node_modules/.nitro/vite/services/ssr/assets/support-BtL_Iw9Y.js
 var import_react = /* @__PURE__ */ __toESM(require_react());

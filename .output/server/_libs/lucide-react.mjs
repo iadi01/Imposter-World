@@ -419,6 +419,19 @@ var Eye = createLucideIcon("eye", [["path", {
 * This source code is licensed under the ISC license.
 * See the LICENSE file in the root directory of this source tree.
 */
+var FastForward = createLucideIcon("fast-forward", [["path", {
+	d: "M12 6a2 2 0 0 1 3.414-1.414l6 6a2 2 0 0 1 0 2.828l-6 6A2 2 0 0 1 12 18z",
+	key: "b19h5q"
+}], ["path", {
+	d: "M2 6a2 2 0 0 1 3.414-1.414l6 6a2 2 0 0 1 0 2.828l-6 6A2 2 0 0 1 2 18z",
+	key: "h7h5ge"
+}]]);
+/**
+* @license lucide-react v0.575.0 - ISC
+*
+* This source code is licensed under the ISC license.
+* See the LICENSE file in the root directory of this source tree.
+*/
 var Flag = createLucideIcon("flag", [["path", {
 	d: "M4 22V4a1 1 0 0 1 .4-.8A6 6 0 0 1 8 2c3 0 5 2 7.333 2q2 0 3.067-.8A1 1 0 0 1 20 4v10a1 1 0 0 1-.4.8A6 6 0 0 1 16 16c-3 0-5-2-8-2a6 6 0 0 0-4 1.528",
 	key: "1jaruq"
@@ -453,6 +466,30 @@ var Globe = createLucideIcon("globe", [
 	["path", {
 		d: "M2 12h20",
 		key: "9i4pu4"
+	}]
+]);
+/**
+* @license lucide-react v0.575.0 - ISC
+*
+* This source code is licensed under the ISC license.
+* See the LICENSE file in the root directory of this source tree.
+*/
+var Hand = createLucideIcon("hand", [
+	["path", {
+		d: "M18 11V6a2 2 0 0 0-2-2a2 2 0 0 0-2 2",
+		key: "1fvzgz"
+	}],
+	["path", {
+		d: "M14 10V4a2 2 0 0 0-2-2a2 2 0 0 0-2 2v2",
+		key: "1kc0my"
+	}],
+	["path", {
+		d: "M10 10.5V6a2 2 0 0 0-2-2a2 2 0 0 0-2 2v8",
+		key: "10h0bg"
+	}],
+	["path", {
+		d: "M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15",
+		key: "1s1gnw"
 	}]
 ]);
 /**
@@ -548,6 +585,38 @@ var MapPin = createLucideIcon("map-pin", [["path", {
 	r: "3",
 	key: "ilqhr7"
 }]]);
+/**
+* @license lucide-react v0.575.0 - ISC
+*
+* This source code is licensed under the ISC license.
+* See the LICENSE file in the root directory of this source tree.
+*/
+var MicOff = createLucideIcon("mic-off", [
+	["path", {
+		d: "M12 19v3",
+		key: "npa21l"
+	}],
+	["path", {
+		d: "M15 9.34V5a3 3 0 0 0-5.68-1.33",
+		key: "1gzdoj"
+	}],
+	["path", {
+		d: "M16.95 16.95A7 7 0 0 1 5 12v-2",
+		key: "cqa7eg"
+	}],
+	["path", {
+		d: "M18.89 13.23A7 7 0 0 0 19 12v-2",
+		key: "16hl24"
+	}],
+	["path", {
+		d: "m2 2 20 20",
+		key: "1ooewy"
+	}],
+	["path", {
+		d: "M9 9v3a3 3 0 0 0 5.12 2.12",
+		key: "r2i35w"
+	}]
+]);
 /**
 * @license lucide-react v0.575.0 - ISC
 *
@@ -1197,4 +1266,4 @@ var X = createLucideIcon("x", [["path", {
 	key: "d8bk6v"
 }]]);
 //#endregion
-export { Check as $, Music as A, Flag as B, Plus as C, Pause as D, PenLine as E, LoaderCircle as F, Download as G, EyeOff as H, Lightbulb as I, Clock as J, Copy as K, Heart as L, MapPin as M, LogOut as N, Paintbrush as O, Lock as P, ChevronDown as Q, Globe as R, QrCode as S, Pin as T, ExternalLink as U, Eye as V, Eraser as W, CircleCheck as X, CircleQuestionMark as Y, CircleAlert as Z, Send as _, UserCheck as a, RefreshCw as b, TriangleAlert as c, Square as d, Building2 as et, Smartphone as f, Server as g, Settings as h, Users as i, Activity as it, Mic as j, PaintBucket as k, Trash2 as l, ShieldCheck as m, VolumeX as n, AtSign as nt, Undo2 as o, Shield as p, Compass as q, Volume2 as r, ArrowLeft as rt, Trophy as s, X as t, BookOpen as tt, Terminal as u, Search as v, Play as w, Radio as x, RotateCcw as y, Flame as z };
+export { CircleCheck as $, Music as A, Globe as B, Plus as C, Pause as D, PenLine as E, Lock as F, EyeOff as G, Flag as H, LoaderCircle as I, Download as J, ExternalLink as K, Lightbulb as L, MicOff as M, MapPin as N, Paintbrush as O, LogOut as P, CircleQuestionMark as Q, Heart as R, QrCode as S, Pin as T, FastForward as U, Flame as V, Eye as W, Compass as X, Copy as Y, Clock as Z, Send as _, UserCheck as a, AtSign as at, RefreshCw as b, TriangleAlert as c, Square as d, CircleAlert as et, Smartphone as f, Server as g, Settings as h, Users as i, BookOpen as it, Mic as j, PaintBucket as k, Trash2 as l, ShieldCheck as m, VolumeX as n, Check as nt, Undo2 as o, ArrowLeft as ot, Shield as p, Eraser as q, Volume2 as r, Building2 as rt, Trophy as s, Activity as st, X as t, ChevronDown as tt, Terminal as u, Search as v, Play as w, Radio as x, RotateCcw as y, Hand as z };

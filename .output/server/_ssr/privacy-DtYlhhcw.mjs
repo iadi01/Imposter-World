@@ -1,6 +1,6 @@
 import { b as Link } from "../_libs/@tanstack/react-router+[...].mjs";
 import { t as require_jsx_dev_runtime } from "../_libs/react.mjs";
-import { rt as ArrowLeft } from "../_libs/lucide-react.mjs";
+import { ot as ArrowLeft } from "../_libs/lucide-react.mjs";
 //#region node_modules/.nitro/vite/services/ssr/assets/privacy-DtYlhhcw.js
 var import_jsx_dev_runtime = require_jsx_dev_runtime();
 var _jsxFileName = "/Users/aadi/Downloads/f8225c15-5378-482e-bfe4-be001f84d384/src/routes/privacy.tsx?tsr-split=component";

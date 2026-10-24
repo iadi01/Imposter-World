@@ -36,6 +36,18 @@ export class Room {
   // 30-second accidental disconnect grace timers
   public disconnectTimeouts: Map<string, NodeJS.Timeout> = new Map();
 
+  // Turn-based discussion speaker floor ("The Hotseat")
+  public speakerFloor: {
+    currentSpeakerSocketId: string | null;
+    currentSpeakerName: string | null;
+    speakerIndex: number;
+    speakerOrder: string[];
+    speakerDeadline: number | null;
+    handsRaised: Set<string>;
+    isOpenFloor: boolean;
+  } | null = null;
+  public speakerTimer: NodeJS.Timeout | null = null;
+
   // Protected private state — never sent to public clients!
   public privateData: PrivateRoundData = {
     commonWord: "",
@@ -108,6 +120,18 @@ export class Room {
       skipDiscussionVotesCount: this.skipDiscussionVotes ? this.skipDiscussionVotes.size : 0,
       skipDiscussionRequired: requiredSkipVotes,
       skipDiscussionVoters: this.skipDiscussionVotes ? Array.from(this.skipDiscussionVotes) : [],
+      speakerFloor:
+        this.phase === "discussion" && this.speakerFloor
+          ? {
+              currentSpeakerSocketId: this.speakerFloor.currentSpeakerSocketId,
+              currentSpeakerName: this.speakerFloor.currentSpeakerName,
+              speakerIndex: this.speakerFloor.speakerIndex,
+              totalSpeakers: this.speakerFloor.speakerOrder.length,
+              speakerDeadline: this.speakerFloor.speakerDeadline,
+              handsRaised: Array.from(this.speakerFloor.handsRaised),
+              isOpenFloor: this.speakerFloor.isOpenFloor,
+            }
+          : undefined,
       lastResult: this.lastResult,
     };
   }
@@ -116,6 +140,10 @@ export class Room {
     if (this.timer) {
       clearTimeout(this.timer);
       this.timer = null;
+    }
+    if (this.speakerTimer) {
+      clearTimeout(this.speakerTimer);
+      this.speakerTimer = null;
     }
   }
 
@@ -249,6 +277,9 @@ export class Room {
 
       // 2. If in discussion phase, check if remaining votes meet majority:
       if (this.phase === "discussion") {
+        if (this.speakerFloor && this.speakerFloor.currentSpeakerSocketId === socketId) {
+          this.advanceSpeakerFloor(io);
+        }
         const connectedCount = this.getPlayerList().filter((p) => p.isConnected).length;
         const requiredVotes = Math.floor(Math.max(1, connectedCount) / 2) + 1;
         if (this.skipDiscussionVotes.size >= requiredVotes) {
@@ -446,7 +477,7 @@ export class Room {
     this.startHintTurn(io);
   }
 
-  // --- DISCUSSION PHASE (120s) ---
+  // --- DISCUSSION PHASE (Turn-Based Hotseat + Open Mic) ---
   public startDiscussionPhase(io: Server) {
     this.clearTimer();
     this.phase = "discussion";
@@ -454,18 +485,136 @@ export class Room {
     const duration = this.settings.discussionTime || 120;
     this.phaseDeadline = Date.now() + duration * 1000;
 
+    const activePlayers = this.getPlayerList().filter((p) => p.isConnected);
+    const speakerOrder = activePlayers.map((p) => p.socketId);
+
+    this.speakerFloor = {
+      currentSpeakerSocketId: speakerOrder[0] || null,
+      currentSpeakerName: activePlayers[0]?.displayName || null,
+      speakerIndex: 0,
+      speakerOrder,
+      speakerDeadline: speakerOrder.length > 0 ? Date.now() + 35000 : null,
+      handsRaised: new Set<string>(),
+      isOpenFloor: speakerOrder.length === 0,
+    };
+
+    this.scheduleSpeakerTurn(io);
     this.broadcastState(io);
 
+    const firstSpeaker = activePlayers[0]?.displayName;
     this.addChatMessage(io, {
       playerId: "system",
       playerName: "System",
-      content: `Discussion Time! Debate clues for ${duration}s to find the imposter, or vote to skip.`,
+      content: firstSpeaker
+        ? `🎙️ Classroom Debate! On the floor: ${firstSpeaker}. Speak or click "Done" to pass the floor!`
+        : `Discussion Time! Debate clues for ${duration}s to find the imposter, or vote to skip.`,
       isSystem: true,
     });
 
     this.timer = setTimeout(() => {
       this.startAnswerPhase(io);
     }, duration * 1000);
+  }
+
+  public scheduleSpeakerTurn(io: Server) {
+    if (this.speakerTimer) {
+      clearTimeout(this.speakerTimer);
+      this.speakerTimer = null;
+    }
+    if (!this.speakerFloor || this.speakerFloor.isOpenFloor) return;
+
+    // 35 seconds allocated for current speaker turn
+    this.speakerFloor.speakerDeadline = Date.now() + 35000;
+    this.speakerTimer = setTimeout(() => {
+      this.advanceSpeakerFloor(io);
+    }, 35000);
+  }
+
+  public advanceSpeakerFloor(io: Server) {
+    if (this.phase !== "discussion" || !this.speakerFloor) return;
+    if (this.speakerTimer) {
+      clearTimeout(this.speakerTimer);
+      this.speakerTimer = null;
+    }
+
+    const nextIndex = this.speakerFloor.speakerIndex + 1;
+    if (nextIndex < this.speakerFloor.speakerOrder.length) {
+      this.speakerFloor.speakerIndex = nextIndex;
+      const nextSocketId = this.speakerFloor.speakerOrder[nextIndex];
+      const nextPlayer = this.players.get(nextSocketId);
+
+      if (!nextPlayer || !nextPlayer.isConnected) {
+        // Skip disconnected player
+        this.advanceSpeakerFloor(io);
+        return;
+      }
+
+      this.speakerFloor.currentSpeakerSocketId = nextSocketId;
+      this.speakerFloor.currentSpeakerName = nextPlayer.displayName;
+      this.scheduleSpeakerTurn(io);
+
+      this.addChatMessage(io, {
+        playerId: "system",
+        playerName: "System",
+        content: `🎙️ Floor passed to ${nextPlayer.displayName}! You now have the spotlight.`,
+        isSystem: true,
+      });
+      this.broadcastState(io);
+    } else {
+      // All players completed their turn; open floor for rest of discussion
+      this.speakerFloor.isOpenFloor = true;
+      this.speakerFloor.currentSpeakerSocketId = null;
+      this.speakerFloor.currentSpeakerName = null;
+      this.speakerFloor.speakerDeadline = null;
+
+      this.addChatMessage(io, {
+        playerId: "system",
+        playerName: "System",
+        content: `🗣️ All students have had their turn! Floor is now OPEN for debate.`,
+        isSystem: true,
+      });
+      this.broadcastState(io);
+    }
+  }
+
+  public passSpeakerFloor(io: Server, socketId: string): { success: boolean; error?: string } {
+    if (this.phase !== "discussion" || !this.speakerFloor) {
+      return { success: false, error: "Discussion floor is not active." };
+    }
+    const player = this.players.get(socketId);
+    if (!player) return { success: false, error: "Player not found." };
+
+    if (socketId !== this.speakerFloor.currentSpeakerSocketId && !player.isHost) {
+      return { success: false, error: "Only the active speaker or host can pass the floor." };
+    }
+
+    this.advanceSpeakerFloor(io);
+    return { success: true };
+  }
+
+  public toggleRaiseHand(io: Server, socketId: string): { success: boolean; raised: boolean } {
+    if (this.phase !== "discussion" || !this.speakerFloor) {
+      return { success: false, raised: false };
+    }
+    const player = this.players.get(socketId);
+    if (!player) return { success: false, raised: false };
+
+    let raised = false;
+    if (this.speakerFloor.handsRaised.has(socketId)) {
+      this.speakerFloor.handsRaised.delete(socketId);
+      raised = false;
+    } else {
+      this.speakerFloor.handsRaised.add(socketId);
+      raised = true;
+      this.addChatMessage(io, {
+        playerId: "system",
+        playerName: "System",
+        content: `🙋 ${player.displayName} raised hand to speak!`,
+        isSystem: true,
+      });
+    }
+    this.broadcastState(io);
+    return { success: true, raised };
   }
 
   // --- VOTE TO SKIP DISCUSSION (Majority Rule) ---

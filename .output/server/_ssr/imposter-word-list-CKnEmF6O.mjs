@@ -2,7 +2,7 @@ import { o as __toESM } from "../_runtime.mjs";
 import { r as require_react } from "../_libs/react+tanstack__react-query.mjs";
 import { b as Link } from "../_libs/@tanstack/react-router+[...].mjs";
 import { t as require_jsx_dev_runtime } from "../_libs/react.mjs";
-import { rt as ArrowLeft, w as Play } from "../_libs/lucide-react.mjs";
+import { ot as ArrowLeft, w as Play } from "../_libs/lucide-react.mjs";
 //#region node_modules/.nitro/vite/services/ssr/assets/imposter-word-list-CKnEmF6O.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_dev_runtime = require_jsx_dev_runtime();

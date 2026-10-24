@@ -117,7 +117,7 @@ export function setupSocketServer(httpServer: HttpServer) {
       ({ roomCode, user }: { roomCode: string; user: { id: string; displayName: string; avatarUrl?: string } }, callback) => {
         try {
           const now = Date.now();
-          if (now - lastActionTimestamp < 300) {
+          if (now - lastActionTimestamp < 50) {
             if (callback) callback({ success: false, error: "Please wait a moment." });
             return;
           }
@@ -457,6 +457,55 @@ export function setupSocketServer(httpServer: HttpServer) {
         if (callback) callback(result);
       } catch (err: any) {
         if (callback) callback({ success: false, error: err.message });
+      }
+    });
+
+    // Pass Speaker Floor ("Done / Pass Mic")
+    socket.on("game:pass-speaker-floor", (_, callback) => {
+      if (!currentRoomCode) return;
+      const room = roomManager.getRoom(currentRoomCode);
+      if (!room) return;
+
+      try {
+        const result = room.passSpeakerFloor(io, socket.id);
+        if (callback) callback(result);
+      } catch (err: any) {
+        if (callback) callback({ success: false, error: err.message });
+      }
+    });
+
+    // Toggle Raise Hand ("Objection / Want to Speak")
+    socket.on("game:raise-hand", (_, callback) => {
+      if (!currentRoomCode) return;
+      const room = roomManager.getRoom(currentRoomCode);
+      if (!room) return;
+
+      try {
+        const result = room.toggleRaiseHand(io, socket.id);
+        if (callback) callback(result);
+      } catch (err: any) {
+        if (callback) callback({ success: false, error: err.message });
+      }
+    });
+
+    // WebRTC Live Voice Signaling
+    socket.on("voice:signal", ({ to, signal, type }: { to: string; signal: any; type: string }) => {
+      if (to && currentRoomCode) {
+        io.to(to).emit("voice:signal", { from: socket.id, signal, type });
+      }
+    });
+
+    // Voice speaking activity detection broadcast (for live wave rings around player avatars)
+    socket.on("voice:speaking", ({ isSpeaking }: { isSpeaking: boolean }) => {
+      if (currentRoomCode) {
+        socket.to(currentRoomCode).emit("voice:speaking", { socketId: socket.id, isSpeaking });
+      }
+    });
+
+    // Voice mic mute state
+    socket.on("voice:state-change", ({ isMuted }: { isMuted: boolean }) => {
+      if (currentRoomCode) {
+        socket.to(currentRoomCode).emit("voice:state-change", { socketId: socket.id, isMuted });
       }
     });
 
